@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>01 — World Map</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  body {
+    background:
+      radial-gradient(700px 500px at 50% 45%, #f1d9dc 0%, rgba(241, 217, 220, 0) 70%),
+      linear-gradient(180deg, #efd6cf 0%, #ecd5dd 45%, #e3d0e2 100%);
+  }
+  .world {
+    position: absolute; left: 288px; top: 40px; width: 860px; height: 860px;
+    background: url(assets/world-map.jpg) center / cover no-repeat;
+    -webkit-mask-image:
+      linear-gradient(to right, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%),
+      linear-gradient(to bottom, transparent 0, #000 70px, #000 calc(100% - 50px), transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+  .labels { position: absolute; left: 288px; top: 40px; width: 860px; height: 860px; z-index: 5; }
+  .ilabel {
+    position: absolute; transform: translate(-50%, -50%);
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 10px 6px 6px; border-radius: 14px;
+    background: rgba(255, 255, 255, 0.94); border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 14px rgba(30, 36, 64, 0.16); white-space: nowrap;
+  }
+  .ilabel .ringwrap { position: relative; width: 30px; height: 30px; flex: none; }
+  .ilabel .ringwrap .ico { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .ilabel .ringwrap svg.ic { width: 14px; height: 14px; }
+  .ilabel .name { font-family: "Fredoka"; font-weight: 600; font-size: 14.5px; line-height: 1.1; }
+  .ilabel .meta { font-size: 11px; color: var(--ink-3); font-weight: 500; }
+  .ilabel .badge {
+    margin-left: 2px; height: 20px; padding: 0 7px; border-radius: 10px; font-size: 11px; font-weight: 700;
+    display: inline-flex; align-items: center; gap: 4px; background: var(--primary); color: #fff;
+  }
+  .ilabel .badge.red { background: var(--red); }
+  .ilabel::after { /* pointer */
+    content: ""; position: absolute; left: 50%; bottom: -6px; width: 12px; height: 12px;
+    background: inherit; transform: translateX(-50%) rotate(45deg); border-radius: 2px;
+    box-shadow: 3px 3px 6px rgba(30, 36, 64, 0.08); z-index: -1;
+  }
+  .ilabel.down::after { bottom: auto; top: -6px; box-shadow: none; }
+  .ilabel.selected { background: #fff; border: 2px solid var(--s-maths); box-shadow: 0 0 0 5px rgba(76, 125, 240, 0.22), 0 6px 18px rgba(30, 36, 64, 0.2); }
+  .ilabel.empty {
+    background: rgba(255, 255, 255, 0.55); border: 1.5px dashed rgba(30, 36, 64, 0.35);
+    padding: 6px 12px; color: var(--ink-2); font-weight: 600; font-size: 12.5px; gap: 6px; box-shadow: none;
+  }
+  .ilabel.empty::after { display: none; }
+  .sel-ring {
+    position: absolute; left: 31%; top: 43.5%; width: 39%; height: 17%; border-radius: 50%;
+    border: 3px solid rgba(118, 160, 255, 0.95);
+    box-shadow: 0 0 26px rgba(76, 125, 240, 0.65), inset 0 0 22px rgba(76, 125, 240, 0.35);
+  }
+  .panel { position: absolute; z-index: 10; }
+  .left { left: 24px; top: 90px; width: 290px; display: flex; flex-direction: column; gap: 12px; }
+  .right { right: 24px; top: 90px; width: 300px; }
+  .stat { display: flex; align-items: center; gap: 10px; padding: 8px 0; }
+  .stat + .stat { border-top: 1px dashed var(--line); }
+  .stat .ico { width: 30px; height: 30px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+  .qa { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 11px; border: 1px solid var(--line); background: var(--soft); font-weight: 600; font-size: 13px; }
+  .qa .ico { width: 28px; height: 28px; border-radius: 8px; background: #fff; display: inline-flex; align-items: center; justify-content: center; color: var(--primary); border: 1px solid var(--line); }
+  .stack { display: flex; height: 10px; border-radius: 6px; overflow: hidden; gap: 2px; }
+  .stack span { display: block; height: 100%; }
+  .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; font-size: 12px; color: var(--ink-2); }
+  .legend div { display: flex; align-items: center; gap: 6px; }
+  .legend b { margin-left: auto; color: var(--ink); }
+  .todo { display: flex; align-items: center; gap: 9px; padding: 8px 0; font-size: 13px; }
+  .todo + .todo { border-top: 1px dashed var(--line); }
+  .controls {
+    position: absolute; right: 24px; bottom: 22px; z-index: 10;
+    display: flex; align-items: center; gap: 6px; padding: 6px; border-radius: 14px;
+    background: rgba(255, 255, 255, 0.92); box-shadow: var(--shadow);
+  }
+  .controls .sep { width: 1px; height: 24px; background: var(--line); margin: 0 2px; }
+  .hint {
+    position: absolute; left: 50%; transform: translateX(-50%); bottom: 22px; z-index: 10;
+    display: flex; align-items: center; gap: 14px; padding: 8px 14px; border-radius: 12px;
+    background: rgba(30, 36, 64, 0.72); color: #fff; font-size: 12px; font-weight: 500;
+  }
+  .hint span { display: inline-flex; align-items: center; gap: 6px; opacity: 0.95; }
+  .kbd { display: inline-flex; align-items: center; height: 18px; padding: 0 5px; border-radius: 5px; background: rgba(255,255,255,.18); font-size: 11px; font-weight: 600; }
+</style>
+</head>
+<body>
+  <div class="world"></div>
+
+  <div class="labels">
+    <div class="sel-ring"></div>
+
+    <!-- SSC Mathematics (selected, centre island) -->
+    <div class="ilabel selected" style="left:50%; top:24.5%">
+      <span class="ringwrap"><span data-ring="86,var(--s-maths),30,4"></span><span class="ico" style="color:var(--s-maths)"><i data-icon="calculator"></i></span></span>
+      <span class="col"><span class="name">SSC Mathematics</span><span class="meta">6 of 7 topics learned</span></span>
+      <span class="badge">3 today</span>
+    </div>
+
+    <!-- SSC Reasoning (maze) -->
+    <div class="ilabel" style="left:60.5%; top:9.2%">
+      <span class="ringwrap"><span data-ring="56,var(--s-reason),30,4"></span><span class="ico" style="color:var(--s-reason)"><i data-icon="puzzle"></i></span></span>
+      <span class="col"><span class="name">SSC Reasoning</span><span class="meta">5 of 9 learned</span></span>
+      <span class="badge red">1 overdue</span>
+    </div>
+
+    <!-- English (book tower) -->
+    <div class="ilabel" style="left:85%; top:14%">
+      <span class="ringwrap"><span data-ring="50,var(--s-english),30,4"></span><span class="ico" style="color:var(--s-english)"><i data-icon="book-open"></i></span></span>
+      <span class="col"><span class="name">English &amp; Vocab</span><span class="meta">6 of 12 learned</span></span>
+      <span class="badge">2</span>
+    </div>
+
+    <!-- Software Development (workshop) -->
+    <div class="ilabel down" style="left:83%; top:86%">
+      <span class="ringwrap"><span data-ring="50,var(--s-soft),30,4"></span><span class="ico" style="color:var(--s-soft)"><i data-icon="code"></i></span></span>
+      <span class="col"><span class="name">Software Dev</span><span class="meta">3 of 6 learned</span></span>
+      <span class="badge">1</span>
+    </div>
+
+    <!-- GK (globe) -->
+    <div class="ilabel down" style="left:52%; top:88%">
+      <span class="ringwrap"><span data-ring="30,var(--s-gk),30,4"></span><span class="ico" style="color:var(--s-gk)"><i data-icon="globe"></i></span></span>
+      <span class="col"><span class="name">GK &amp; General Studies</span><span class="meta">3 of 10 learned</span></span>
+      <span class="badge">1</span>
+    </div>
+
+    <!-- DSA (node tree) -->
+    <div class="ilabel down" style="left:19%; top:88%">
+      <span class="ringwrap"><span data-ring="25,var(--s-dsa),30,4"></span><span class="ico" style="color:var(--s-dsa)"><i data-icon="network"></i></span></span>
+      <span class="col"><span class="name">DSA</span><span class="meta">2 of 8 learned</span></span>
+      <span class="badge">1</span>
+    </div>
+
+    <!-- Empty islands: room for new subjects -->
+    <div class="ilabel empty" style="left:14%; top:14%"><i data-icon="plus"></i>New subject</div>
+    <div class="ilabel empty" style="left:36%; top:6.5%"><i data-icon="plus"></i>New subject</div>
+  </div>
+
+  <div data-topbar="world" data-floating></div>
+
+  <!-- Left: today at a glance -->
+  <div class="panel left">
+    <div class="card pad">
+      <div class="row between" style="margin-bottom:10px">
+        <div><h2>Today</h2><div class="small muted">Thursday, 15 October</div></div>
+        <a class="small bold row gap4">Open <i data-icon="arrow-right" class="sm"></i></a>
+      </div>
+      <div class="row between small" style="margin-bottom:6px">
+        <span class="ink2"><b class="mono" style="color:var(--ink)">4h 10m</b> planned · 3h 30m free</span>
+        <span class="pill red">40m over</span>
+      </div>
+      <div class="bar" style="margin-bottom:10px"><span style="width:84%;background:var(--primary)"></span><span style="width:16%;background:var(--red);border-radius:0 6px 6px 0"></span></div>
+      <div class="stat"><span class="ico" style="background:var(--gold-soft);color:#c27c00"><i data-icon="star"></i></span><span class="grow">Priority</span><b>2</b></div>
+      <div class="stat"><span class="ico" style="background:var(--blue-soft);color:var(--blue)"><i data-icon="refresh-ccw"></i></span><span class="grow">Revisions due <span class="pill red" style="margin-left:4px">1 overdue</span></span><b>4</b></div>
+      <div class="stat"><span class="ico" style="background:var(--amber-soft);color:var(--amber)"><i data-icon="corner-down-right"></i></span><span class="grow">Carried forward</span><b>1</b></div>
+      <div class="stat"><span class="ico" style="background:var(--green-soft);color:var(--green)"><i data-icon="sprout"></i></span><span class="grow">New tasks</span><b>2</b></div>
+      <button class="btn primary" style="width:100%;margin-top:10px"><i data-icon="sun"></i>Start today's plan</button>
+    </div>
+
+    <div class="card pad">
+      <div class="section-label" style="margin-bottom:10px">Quick actions</div>
+      <div class="col gap8">
+        <div class="qa"><span class="ico"><i data-icon="clipboard-paste"></i></span>Paste today's targets</div>
+        <div class="qa"><span class="ico"><i data-icon="plus"></i></span>Add a subject (new island)</div>
+        <div class="qa"><span class="ico"><i data-icon="clipboard-check"></i></span>Record a test result</div>
+      </div>
+    </div>
+
+    <div class="card pad">
+      <div class="row between" style="margin-bottom:8px"><div class="section-label">Ready for a test</div><span class="pill gold">3</span></div>
+      <div class="col gap6 small">
+        <div class="row gap8"><span class="subj" data-s="maths"></span><span class="grow bold">Simple Interest</span></div>
+        <div class="row gap8"><span class="subj" data-s="reason"></span><span class="grow bold">Coding-Decoding</span></div>
+        <div class="row gap8"><span class="subj" data-s="english"></span><span class="grow bold">Vocab 1–50</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: selected island -->
+  <div class="panel right card">
+    <div class="pad" style="padding:18px 18px 14px">
+      <div class="row gap10" style="margin-bottom:12px">
+        <span data-subject-icon="maths" data-size="40" data-radius="12"></span>
+        <div class="grow"><h2>SSC Mathematics</h2><div class="small muted">7 topics · selected island</div></div>
+        <button class="btn icon sm ghost"><i data-icon="x"></i></button>
+      </div>
+      <div class="section-label" style="margin-bottom:8px">Topic plots on this island</div>
+      <div class="stack" style="margin-bottom:10px">
+        <span style="flex:1;background:var(--green)"></span>
+        <span style="flex:1;background:var(--gold)"></span>
+        <span style="flex:3;background:var(--blue)"></span>
+        <span style="flex:1;background:var(--red)"></span>
+        <span style="flex:1;background:#d9d3c8"></span>
+      </div>
+      <div class="legend">
+        <div><span class="dot" style="background:var(--green)"></span>Strong<b>1</b></div>
+        <div><span class="dot" style="background:var(--gold)"></span>Ready for test<b>1</b></div>
+        <div><span class="dot" style="background:var(--blue)"></span>In revision<b>3</b></div>
+        <div><span class="dot" style="background:var(--red)"></span>Weak<b>1</b></div>
+        <div><span class="dot" style="background:#d9d3c8"></span>Not started<b>1</b></div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="pad" style="padding:12px 18px">
+      <div class="section-label" style="margin-bottom:4px">Today on this island</div>
+      <div class="todo"><span class="check"></span><span class="grow">Solve 30 Percentage questions</span><i data-icon="star" style="color:#e0a21b;fill:#f2b84b"></i></div>
+      <div class="todo"><span class="check"></span><span class="grow">Revise Percentage</span><span class="pill blue">step 2/6</span></div>
+      <div class="todo"><span class="check"></span><span class="grow">Watch Percentage videos 4–5</span><span class="pill amber">carried</span></div>
+    </div>
+    <div class="divider"></div>
+    <div class="pad" style="padding:12px 18px 18px">
+      <div class="row between small" style="margin-bottom:12px">
+        <span class="ink2">Last test · Online mock #12</span><b>71%</b>
+      </div>
+      <div class="col gap8">
+        <button class="btn primary" style="width:100%"><i data-icon="arrow-right"></i>Enter island</button>
+        <button class="btn soft" style="width:100%"><i data-icon="clipboard-paste"></i>Paste targets for Maths</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="hint">
+    <span><i data-icon="mouse-pointer-click" class="sm"></i>Click an island</span>
+    <span><i data-icon="hand" class="sm"></i>Drag to rotate · scroll to zoom</span>
+    <span><span class="kbd">Tab</span> move between islands</span>
+  </div>
+
+  <div class="controls">
+    <button class="btn icon sm ghost"><i data-icon="zoom-out"></i></button>
+    <button class="btn icon sm ghost"><i data-icon="zoom-in"></i></button>
+    <button class="btn icon sm ghost"><i data-icon="house"></i></button>
+    <span class="sep"></span>
+    <button class="btn sm ghost"><i data-icon="layout-grid"></i>2D map</button>
+  </div>
+
+  <script src="icons.js"></script>
+  <script src="common.js"></script>
+</body>
+</html>

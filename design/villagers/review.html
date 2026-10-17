@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Study World · animated villagers</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        color: #354657;
+        font: 13px/1.5 system-ui;
+        background: #eee7df;
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100dvh;
+        background: radial-gradient(
+          ellipse at 70% 20%,
+          #fff3d9,
+          #e8d9db 60%,
+          #d0d3df
+        );
+        touch-action: none;
+      }
+      header {
+        position: fixed;
+        top: 28px;
+        left: 32px;
+        pointer-events: none;
+      }
+      small {
+        font-size: 10px;
+        color: #6c815f;
+        letter-spacing: 2.5px;
+      }
+      h1 {
+        font-size: 30px;
+        letter-spacing: -0.8px;
+        margin: 7px 0;
+      }
+      p {
+        color: #78807e;
+        font-size: 12px;
+        margin: 0;
+      }
+      nav {
+        position: fixed;
+        bottom: 22px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #fffdf5ed;
+        border-radius: 15px;
+        padding: 10px;
+        display: flex;
+        gap: 8px;
+        max-width: 95%;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      button,
+      select,
+      input {
+        font: inherit;
+        color: inherit;
+      }
+      button,
+      select {
+        background: #fffdf6;
+        border: 1px solid #d6d8ce;
+        border-radius: 8px;
+        padding: 9px 12px;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:focus-visible,
+      select:focus-visible,
+      input:focus-visible {
+        outline: 3px solid #94a3cd;
+      }
+      label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11px;
+      }
+      #status {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        font-size: 10px;
+        color: #6d797c;
+        max-width: 155px;
+        pointer-events: none;
+      }
+      @media (max-width: 640px) {
+        header {
+          left: 18px;
+          top: 18px;
+        }
+        h1 {
+          font-size: 23px;
+        }
+        nav {
+          min-width: 300px;
+          bottom: 14px;
+        }
+        #status {
+          display: none;
+        }
+        input {
+          width: 100px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas aria-label="Three actual rigged 3D villagers"></canvas>
+    <header>
+      <small>STUDY WORLD / ORIGINAL 3D CHARACTERS</small>
+      <h1>A little life in your learning world.</h1>
+      <p>
+        Three stylized villagers · real joint animation · no image stand-ins<br />Drag
+        to orbit. Walk, pause, look around, read.
+      </p>
+    </header>
+    <nav aria-label="Villager review">
+      <button id="play" aria-pressed="true">Pause</button
+      ><select id="clip" aria-label="Animation">
+        <option>Walk</option>
+        <option>Idle</option>
+        <option>LookAround</option>
+        <option>Study</option></select
+      ><label
+        >Pose<input
+          id="time"
+          type="range"
+          min="0"
+          max="1.4"
+          step=".01"
+          value="0" /></label
+      ><select id="scene" aria-label="Scene">
+        <option value="portrait">Character close-up</option>
+        <option value="garden">Maths garden</option>
+      </select>
+    </nav>
+    <span id="status">Loading actual rigged models…</span>
+    <script type="module" src="./review.js"></script>
+  </body>
+</html>

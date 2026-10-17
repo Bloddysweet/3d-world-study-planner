@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "name": "Cinder — wild obsidian wyvern",
+  "original": true,
+  "asset": "cinder_wild_dragon_v1.glb",
+  "generator": "scripts/build-wild-dragon.mjs",
+  "bytes": 1420376,
+  "sha256": "34575440cf4ae74bb459dd9fffc951b73eeed9c7b7133632fa7211b3ee255f88",
+  "meshes": 1,
+  "materials": 1,
+  "bones": 16,
+  "triangles": 8882,
+  "textures": 0,
+  "populationCap": 1,
+  "bounds": {
+    "min": [
+      -5.651828765869141,
+      -0.7640076875686646,
+      -5.2015790939331055
+    ],
+    "max": [
+      5.651828765869141,
+      1.2300000557303434,
+      2.8609120845794678
+    ]
+  },
+  "clips": [
+    {
+      "name": "Wingbeat",
+      "duration": 5.120000000000001
+    },
+    {
+      "name": "Glide",
+      "duration": 9.600000000000001
+    },
+    {
+      "name": "TailSway",
+      "duration": 7.68
+    }
+  ],
+  "parts": [
+    "Body",
+    "Neck",
+    "Head",
+    "Face",
+    "Head_Fins",
+    "Folded_Legs",
+    "Tail",
+    "Dorsal_Crest",
+    "Wing_Left",
+    "Wing_Right"
+  ]
+}

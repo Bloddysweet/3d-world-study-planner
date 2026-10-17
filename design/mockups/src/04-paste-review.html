@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>04 — Paste review (check before saving)</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  body { background: url(../03-today.png) 0 0 / 1440px 900px no-repeat; }
+  .modal {
+    position: absolute; z-index: 40; left: 110px; top: 34px; width: 1220px; height: 832px;
+    background: #fff; border-radius: 22px; box-shadow: var(--shadow-lg); display: flex; flex-direction: column; overflow: hidden;
+  }
+  .mh { display: flex; align-items: center; gap: 12px; padding: 18px 22px; border-bottom: 1px solid var(--line); }
+  .mb { flex: 1; display: grid; grid-template-columns: 372px 1fr; min-height: 0; }
+  .src { padding: 18px 20px; background: var(--soft); border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px; }
+  .srcbox { background: #fff; border: 1px solid var(--line-2); border-radius: 14px; padding: 14px 16px; font-size: 14px; line-height: 2.05; }
+  .hl { border-radius: 6px; padding: 2px 4px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  .hl sup { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; font-size: 10px; font-weight: 700; color: #fff; margin-right: 4px; vertical-align: 1px; }
+  .items { padding: 14px 20px; display: flex; flex-direction: column; gap: 9px; overflow: hidden; }
+  .item { border: 1px solid var(--line); border-radius: 14px; padding: 8px 12px; background: #fff; }
+  .item.warn { border-color: #f3d29b; }
+  .item .top { display: flex; align-items: center; gap: 10px; }
+  .num { width: 24px; height: 24px; border-radius: 50%; color: #fff; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+  .ttl-input { flex: 1; height: 32px; border-radius: 9px; border: 1px solid transparent; padding: 0 8px; font-weight: 600; font-size: 14px; display: flex; align-items: center; background: var(--soft); }
+  .fields { display: flex; gap: 8px; margin: 6px 0 0 34px; flex-wrap: wrap; }
+  .sel { height: 28px; border-radius: 8px; border: 1px solid var(--line-2); padding: 0 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 500; background: #fff; color: var(--ink); }
+  .sel .k { color: var(--ink-3); font-weight: 500; }
+  .sel.bad { border-color: var(--red); background: var(--red-soft); color: var(--red); }
+  .note { margin: 6px 0 0 34px; padding: 6px 10px; border-radius: 10px; display: flex; align-items: center; gap: 8px; font-size: 12.5px; }
+  .note.amber { background: var(--amber-soft); color: #8a5a06; }
+  .note.info { background: var(--blue-soft); color: #2c4fa0; }
+  .ok { color: var(--green); font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+  .alt { border: 1.5px dashed #e7b25d; border-radius: 16px; padding: 8px 10px 10px; background: #fffaf1; display: flex; flex-direction: column; gap: 8px; }
+  .radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line-2); flex: none; background: #fff; }
+  .radio.on { border: 5px solid var(--primary); }
+  .mf { display: flex; align-items: center; gap: 12px; padding: 14px 22px; border-top: 1px solid var(--line); background: #fff; }
+  .iconbtn { width: 28px; height: 28px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: var(--ink-3); }
+</style>
+</head>
+<body>
+  <div class="scrim"></div>
+  <div class="modal">
+    <div class="mh">
+      <span style="width:38px;height:38px;border-radius:11px;background:var(--primary-soft);color:var(--primary);display:inline-flex;align-items:center;justify-content:center"><i data-icon="scan-text"></i></span>
+      <div class="grow">
+        <h2 style="font-size:21px">Check your plan before saving</h2>
+        <div class="small ink2">Fix anything that's wrong. Nothing is saved until you press "Add to today".</div>
+      </div>
+      <span class="pill green" style="height:28px;padding:0 10px"><i data-icon="shield"></i>Read on this device · no AI</span>
+      <button class="btn icon sm ghost"><i data-icon="x"></i></button>
+    </div>
+
+    <div class="mb">
+      <div class="src">
+        <div class="row between"><div class="section-label">What you pasted</div><a class="tiny bold row gap4"><i data-icon="pencil" class="sm"></i>Edit text</a></div>
+        <div class="srcbox">
+          SSC Maths: <span class="hl" style="background:#e3ecff"><sup style="background:var(--s-maths)">1</sup>Complete percentage videos 1–5.</span>
+          <span class="hl" style="background:#e3ecff"><sup style="background:var(--s-maths)">2</sup>Solve 30 questions from the practice site (priority).</span>
+          <span class="hl" style="background:#fdebc8"><sup style="background:var(--s-english)">3</sup>Revise vocabulary words 101–150.</span>
+          <span class="hl" style="background:#dff3e2"><sup style="background:var(--s-dsa)">4</sup>Learn DSA Day 1 of 5.</span>
+          <span class="hl" style="background:#fde3df"><sup style="background:var(--s-soft)">5</sup>OR complete one Java collection topic.</span>
+          <span class="hl" style="background:#ece8e1"><sup style="background:#9a948a">6</sup>Watch this video: https://example.com/video</span>
+        </div>
+        <div class="card pad" style="box-shadow:none;padding:14px">
+          <div class="row between" style="margin-bottom:8px"><b>6 items found</b><span class="pill amber">3 need a quick check</span></div>
+          <div class="col gap6 small ink2">
+            <div class="row gap8"><i data-icon="circle-check" class="sm" style="color:var(--green)"></i>Subjects, topics, ranges and times were detected</div>
+            <div class="row gap8"><i data-icon="triangle-alert" class="sm" style="color:var(--amber)"></i>Unclear parts are asked, never guessed</div>
+            <div class="row gap8"><i data-icon="star" class="sm" style="color:#d79a14"></i>"(priority)" puts a task on top</div>
+          </div>
+        </div>
+        <div class="tiny muted" style="margin-top:auto">Tip: one target per sentence or line reads best. Links stay clickable.</div>
+      </div>
+
+      <div class="items">
+        <!-- 1 -->
+        <div class="item">
+          <div class="top">
+            <span class="num" style="background:var(--s-maths)">1</span>
+            <span class="ttl-input">Watch Percentage videos 1–5</span>
+            <span class="ok"><i data-icon="circle-check" class="sm"></i>Looks right</span>
+            <span class="sel" title="Switch off for tasks that never need revision"><i data-icon="refresh-ccw" class="sm muted"></i>Revise later<span class="toggle on" style="transform:scale(.75);margin-right:-6px"></span></span>
+            <span class="iconbtn"><i data-icon="star"></i></span><span class="iconbtn"><i data-icon="trash-2"></i></span>
+          </div>
+          <div class="fields">
+            <span class="sel"><span class="dot" style="background:var(--s-maths)"></span>SSC Mathematics<i data-icon="chevron-down" class="sm muted"></i></span>
+            <span class="sel"><span class="k">Topic</span>Percentage<i data-icon="chevron-down" class="sm muted"></i></span>
+            <span class="sel"><i data-icon="video" class="sm muted"></i>Video</span>
+            <span class="sel"><span class="k">Range</span>videos 1–5</span>
+            <span class="sel"><i data-icon="clock" class="sm muted"></i>50 min</span>
+          </div>
+        </div>
+        <!-- 2 -->
+        <div class="item">
+          <div class="top">
+            <span class="num" style="background:var(--s-maths)">2</span>
+            <span class="ttl-input">Solve 30 Percentage questions</span>
+            <span class="pill gold"><i data-icon="star"></i>Priority</span>
+            <span class="iconbtn"><i data-icon="trash-2"></i></span>
+          </div>
+          <div class="fields">
+            <span class="sel"><span class="dot" style="background:var(--s-maths)"></span>SSC Mathematics<i data-icon="chevron-down" class="sm muted"></i></span>
+            <span class="sel"><span class="k">Topic</span>Percentage<i data-icon="chevron-down" class="sm muted"></i></span>
+            <span class="sel"><i data-icon="target" class="sm muted"></i>Practice</span>
+            <span class="sel"><span class="k">Target</span>30 questions</span>
+            <span class="sel"><i data-icon="clock" class="sm muted"></i>45 min</span>
+          </div>
+          <div class="note info"><i data-icon="link" class="sm"></i>"the practice site" has no link. Add one so it's one click away? <a class="bold" style="margin-left:auto">Add link</a></div>
+        </div>
+        <!-- 3 -->
+        <div class="item warn">
+          <div class="top">
+            <span class="num" style="background:var(--s-english)">3</span>
+            <span class="ttl-input">Vocabulary words 101–150</span>
+            <span class="iconbtn"><i data-icon="star"></i></span><span class="iconbtn"><i data-icon="trash-2"></i></span>
+          </div>
+          <div class="fields">
+            <span class="sel"><span class="dot" style="background:var(--s-english)"></span>English &amp; Vocabulary<i data-icon="chevron-down" class="sm muted"></i></span>
+            <span class="sel"><i data-icon="brain" class="sm muted"></i>Memorise</span>
+            <span class="sel"><span class="k">Range</span>words 101–150</span>
+            <span class="sel"><i data-icon="clock" class="sm muted"></i>30 min</span>
+          </div>
+          <div class="note amber"><i data-icon="triangle-alert" class="sm"></i>It says "Revise". Is this new learning, or a revision of words you studied before?
+            <span style="margin-left:auto" class="row gap6"><button class="btn xs">New learning</button><button class="btn xs">It's a revision</button></span></div>
+        </div>
+        <!-- 4 / 5 alternatives -->
+        <div class="alt">
+          <div class="row gap8 small" style="color:#8a5a06;font-weight:600"><i data-icon="split" class="sm"></i>You wrote "OR", so pick one. The other one is not added.</div>
+          <div class="item" style="border-color:#c9d3fb">
+            <div class="top">
+              <span class="radio on"></span>
+              <span class="num" style="background:var(--s-dsa)">4</span>
+              <span class="ttl-input">DSA Day 1 of 5</span>
+              <span class="sel"><span class="dot" style="background:var(--s-dsa)"></span>DSA</span>
+              <span class="sel"><span class="k">Plan</span>day 1 of 5</span>
+              <span class="sel"><i data-icon="clock" class="sm muted"></i>50 min</span>
+            </div>
+          </div>
+          <div class="item">
+            <div class="top">
+              <span class="radio"></span>
+              <span class="num" style="background:var(--s-soft)">5</span>
+              <span class="ttl-input">One Java Collections topic</span>
+              <span class="sel"><span class="dot" style="background:var(--s-soft)"></span>Software Dev</span>
+              <span class="sel"><i data-icon="file-text" class="sm muted"></i>Reading</span>
+              <span class="sel"><i data-icon="clock" class="sm muted"></i>40 min</span>
+            </div>
+          </div>
+        </div>
+        <!-- 6 -->
+        <div class="item warn">
+          <div class="top">
+            <span class="num" style="background:#9a948a">6</span>
+            <span class="ttl-input">Watch video <span class="small" style="color:var(--primary);font-weight:500;margin-left:8px">example.com/video</span></span>
+            <span class="iconbtn"><i data-icon="star"></i></span><span class="iconbtn"><i data-icon="trash-2"></i></span>
+          </div>
+          <div class="fields">
+            <span class="sel bad"><i data-icon="circle-help" class="sm"></i>Pick a subject<i data-icon="chevron-down" class="sm"></i></span>
+            <span class="sel"><i data-icon="video" class="sm muted"></i>Video</span>
+            <span class="sel"><i data-icon="clock" class="sm muted"></i>20 min <span class="k">(default)</span></span>
+          </div>
+          <div class="note amber"><i data-icon="triangle-alert" class="sm"></i>Which subject is this video for? The link alone doesn't say.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mf">
+      <div class="grow">
+        <div class="bold">Adds 5 tasks to today · about 3h 15m</div>
+        <div class="small" style="color:var(--amber)">Today will then be over your free time. You can move things after saving.</div>
+      </div>
+      <button class="btn">Cancel</button>
+      <button class="btn primary"><i data-icon="check"></i>Add 5 tasks to today</button>
+    </div>
+  </div>
+  <script src="icons.js"></script>
+  <script src="common.js"></script>
+</body>
+</html>

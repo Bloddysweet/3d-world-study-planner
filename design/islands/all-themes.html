@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Study World · seven island designs</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f5f0e9;
+        color: #344453;
+        font-family: system-ui, sans-serif;
+        padding: 42px 48px;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        margin-bottom: 26px;
+      }
+      small {
+        color: #6f815e;
+        letter-spacing: 3px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      h1 {
+        font-size: 37px;
+        letter-spacing: -1.2px;
+        line-height: 1.1;
+        margin: 10px 0;
+      }
+      header p {
+        max-width: 375px;
+        font-size: 13px;
+        color: #727a7c;
+        line-height: 1.7;
+        margin: 0 0 5px;
+      }
+      main {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+      }
+      article,
+      .notes {
+        border-radius: 19px;
+        overflow: hidden;
+        background: #fffaf2;
+        border: 1px solid #e2d9cd;
+      }
+      article a {
+        color: inherit;
+        text-decoration: none;
+        display: block;
+      }
+      article a:focus-visible {
+        outline: 4px solid #8c9e78;
+        outline-offset: -4px;
+      }
+      img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+      }
+      h2 {
+        font-size: 16px;
+        margin: 15px 18px 5px;
+        letter-spacing: -0.25px;
+      }
+      article p {
+        font-size: 11px;
+        color: #737c78;
+        margin: 0 18px 19px;
+        line-height: 1.5;
+      }
+      .notes {
+        padding: 30px;
+        background: #e6eadc;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .notes h2 {
+        font-size: 26px;
+        margin: 0 0 17px;
+        line-height: 1.2;
+      }
+      .notes p {
+        font-size: 13px;
+        line-height: 1.9;
+        margin: 0 0 20px;
+        color: #64705b;
+      }
+      .notes span {
+        font-size: 10px;
+        letter-spacing: 1.4px;
+        color: #68775d;
+        text-transform: uppercase;
+      }
+      footer {
+        font-size: 11px;
+        color: #85897e;
+        margin-top: 24px;
+        display: flex;
+        justify-content: space-between;
+      }
+      a:hover h2 {
+        text-decoration: underline;
+      }
+      @media (max-width: 900px) {
+        body {
+          padding: 24px;
+        }
+        main {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        header {
+          display: block;
+        }
+        header p {
+          margin-top: 15px;
+        }
+      }
+      @media (max-width: 450px) {
+        main {
+          grid-template-columns: 1fr;
+        }
+        h1 {
+          font-size: 29px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <small>STUDY WORLD / ISLAND ARTWORK</small>
+        <h1>Seven gardens. One learning world.</h1>
+      </div>
+      <p>
+        Original, fully three-dimensional islands.<br />These are real renders
+        of the models used in the app—not painted mockups.
+      </p>
+    </header>
+    <main>
+      <article>
+        <a href="review.html?theme=maths"
+          ><img
+            src="maths-v2-render.png"
+            alt="Mathematics floating island with blue crystal and abacus"
+          />
+          <h2>Mathematics</h2>
+          <p>Approved crystal &amp; abacus · mineral garden</p></a
+        >
+      </article>
+      <article>
+        <a href="review.html?theme=reasoning"
+          ><img
+            src="reasoning-v2-render.png"
+            alt="Reasoning floating island with stacked logic cubes and hedge maze"
+          />
+          <h2>Reasoning</h2>
+          <p>Turning logic cubes · miniature hedge maze</p></a
+        >
+      </article>
+      <article>
+        <a href="review.html?theme=english"
+          ><img
+            src="english-v2-render.png"
+            alt="English floating island with book stack, open pages and reading lamp"
+          />
+          <h2>English &amp; Vocabulary</h2>
+          <p>Open-book library · warm autumn planting</p></a
+        >
+      </article>
+      <article>
+        <a href="review.html?theme=gk"
+          ><img
+            src="gk-v2-render.png"
+            alt="General Knowledge floating island with globe and compass terrace"
+          />
+          <h2>General Knowledge</h2>
+          <p>Globe observatory · compass terrace</p></a
+        >
+      </article>
+      <article>
+        <a href="review.html?theme=dsa"
+          ><img
+            src="dsa-v2-render.png"
+            alt="DSA floating island with binary-tree node monument and conifer grove"
+          />
+          <h2>Data Structures &amp; Algorithms</h2>
+          <p>Binary-tree monument · evergreen grove</p></a
+        >
+      </article>
+      <article>
+        <a href="review.html?theme=software"
+          ><img
+            src="software-v2-render.png"
+            alt="Software floating island with code workbench and small roofed studio"
+          />
+          <h2>Software Development</h2>
+          <p>Code workbench · terracotta-roofed studio</p></a
+        >
+      </article>
+      <article>
+        <a href="review.html?theme=generic"
+          ><img
+            src="generic-v2-render.png"
+            alt="Custom subject floating island with giant seedling and planted arbor"
+          />
+          <h2>Custom subjects</h2>
+          <p>Seedling arbor · welcoming learning grove</p></a
+        >
+      </article>
+      <div class="notes">
+        <h2>A place for<br />every subject.</h2>
+        <p>
+          Shared, usable garden layout.<br />Distinct landmarks and planting.<br />Real
+          topic plots stay live in the app.<br />Custom subjects keep their own
+          theme.
+        </p>
+        <span>Next stage / animated villagers</span>
+      </div>
+    </main>
+    <footer>
+      <span
+        >Static artwork only here. The app adds clickable topic plots, evidence
+        and progress.</span
+      ><span>Seven batched GLBs · no textures · 360° geometry</span>
+    </footer>
+  </body>
+</html>

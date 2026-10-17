@@ -1,0 +1,180 @@
+{
+  "ready": true,
+  "testedIn": "Headless Chromium 153 / WebGL software renderer",
+  "modelsLoaded": 20,
+  "drawChecks": [
+    {
+      "file": "island_base_01.glb",
+      "calls": 9,
+      "triangles": 570,
+      "geometries": 9,
+      "glError": 0,
+      "current": "island_base_01.glb"
+    },
+    {
+      "file": "island_base_02.glb",
+      "calls": 9,
+      "triangles": 570,
+      "geometries": 18,
+      "glError": 0,
+      "current": "island_base_02.glb"
+    },
+    {
+      "file": "island_base_03.glb",
+      "calls": 9,
+      "triangles": 570,
+      "geometries": 27,
+      "glError": 0,
+      "current": "island_base_03.glb"
+    },
+    {
+      "file": "landmark_reasoning.glb",
+      "calls": 9,
+      "triangles": 708,
+      "geometries": 36,
+      "glError": 0,
+      "current": "landmark_reasoning.glb"
+    },
+    {
+      "file": "landmark_maths.glb",
+      "calls": 10,
+      "triangles": 2038,
+      "geometries": 46,
+      "glError": 0,
+      "current": "landmark_maths.glb"
+    },
+    {
+      "file": "landmark_english.glb",
+      "calls": 13,
+      "triangles": 688,
+      "geometries": 59,
+      "glError": 0,
+      "current": "landmark_english.glb"
+    },
+    {
+      "file": "landmark_dsa.glb",
+      "calls": 8,
+      "triangles": 908,
+      "geometries": 67,
+      "glError": 0,
+      "current": "landmark_dsa.glb"
+    },
+    {
+      "file": "landmark_gk.glb",
+      "calls": 7,
+      "triangles": 4964,
+      "geometries": 74,
+      "glError": 0,
+      "current": "landmark_gk.glb"
+    },
+    {
+      "file": "landmark_software.glb",
+      "calls": 12,
+      "triangles": 1332,
+      "geometries": 86,
+      "glError": 0,
+      "current": "landmark_software.glb"
+    },
+    {
+      "file": "topic_plot_not_started.glb",
+      "calls": 5,
+      "triangles": 234,
+      "geometries": 91,
+      "glError": 0,
+      "current": "topic_plot_not_started.glb"
+    },
+    {
+      "file": "topic_plot_in_revision.glb",
+      "calls": 6,
+      "triangles": 240,
+      "geometries": 97,
+      "glError": 0,
+      "current": "topic_plot_in_revision.glb"
+    },
+    {
+      "file": "topic_plot_ready_for_test.glb",
+      "calls": 6,
+      "triangles": 242,
+      "geometries": 103,
+      "glError": 0,
+      "current": "topic_plot_ready_for_test.glb"
+    },
+    {
+      "file": "topic_plot_strong.glb",
+      "calls": 8,
+      "triangles": 1210,
+      "geometries": 111,
+      "glError": 0,
+      "current": "topic_plot_strong.glb"
+    },
+    {
+      "file": "topic_plot_weak.glb",
+      "calls": 6,
+      "triangles": 236,
+      "geometries": 117,
+      "glError": 0,
+      "current": "topic_plot_weak.glb"
+    },
+    {
+      "file": "bridge.glb",
+      "calls": 3,
+      "triangles": 3384,
+      "geometries": 120,
+      "glError": 0,
+      "current": "bridge.glb"
+    },
+    {
+      "file": "scenery_tree_round.glb",
+      "calls": 3,
+      "triangles": 96,
+      "geometries": 123,
+      "glError": 0,
+      "current": "scenery_tree_round.glb"
+    },
+    {
+      "file": "scenery_tree_pine.glb",
+      "calls": 3,
+      "triangles": 72,
+      "geometries": 126,
+      "glError": 0,
+      "current": "scenery_tree_pine.glb"
+    },
+    {
+      "file": "scenery_cloud.glb",
+      "calls": 1,
+      "triangles": 80,
+      "geometries": 127,
+      "glError": 0,
+      "current": "scenery_cloud.glb"
+    },
+    {
+      "file": "scenery_rocks.glb",
+      "calls": 1,
+      "triangles": 60,
+      "geometries": 128,
+      "glError": 0,
+      "current": "scenery_rocks.glb"
+    },
+    {
+      "file": "path_stone.glb",
+      "calls": 1,
+      "triangles": 20,
+      "geometries": 129,
+      "glError": 0,
+      "current": "path_stone.glb"
+    }
+  ],
+  "kit": {
+    "calls": 129,
+    "triangles": 18222,
+    "geometries": 129,
+    "glError": 0,
+    "current": null
+  },
+  "responsive": {
+    "width": 390,
+    "documentWidth": 390
+  },
+  "errors": [],
+  "failures": []
+}

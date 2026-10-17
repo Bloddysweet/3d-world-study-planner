@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aurel · Sky creature model study</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        color: #223f3a;
+        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+        background: #e9eee9;
+      }
+      #stage {
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at 54% 42%,
+          #fcf5df 0%,
+          #e8eeea 60%,
+          #c9ded9 100%
+        );
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+      }
+      .intro {
+        position: absolute;
+        top: 40px;
+        left: 46px;
+        pointer-events: none;
+        max-width: 440px;
+      }
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: 0.19em;
+        text-transform: uppercase;
+        font-weight: 650;
+        color: #54746b;
+      }
+      h1 {
+        font-family: Georgia, serif;
+        letter-spacing: -0.045em;
+        font-size: 64px;
+        font-weight: 400;
+        margin: 11px 0 10px;
+        line-height: 1.05;
+      }
+      p {
+        font-size: 14px;
+        line-height: 1.6;
+        margin: 0;
+        color: #567369;
+      }
+      .tag {
+        display: inline-block;
+        font-size: 11px;
+        border: 1px solid #9caf9f;
+        border-radius: 20px;
+        padding: 5px 10px;
+        margin-top: 16px;
+        background: #fafaf388;
+      }
+      .notes {
+        position: absolute;
+        right: 40px;
+        top: 45px;
+        width: 210px;
+        padding-left: 18px;
+        border-left: 1px solid #a5b8ad;
+      }
+      .notes p {
+        font-size: 12px;
+      }
+      .notes h2 {
+        font-size: 13px;
+        font-weight: 600;
+        margin: 0 0 7px;
+      }
+      .palette {
+        display: flex;
+        gap: 6px;
+        margin: 13px 0;
+      }
+      .swatch {
+        width: 27px;
+        height: 7px;
+        border-radius: 8px;
+      }
+      .hint {
+        position: absolute;
+        right: 40px;
+        bottom: 112px;
+        font-size: 11px;
+        max-width: 190px;
+        text-align: right;
+        color: #658078;
+        pointer-events: none;
+      }
+      footer {
+        position: absolute;
+        bottom: 29px;
+        left: 40px;
+        right: 40px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .stats {
+        font-size: 11px;
+        line-height: 1.8;
+        color: #5e7b70;
+      }
+      .stats strong {
+        font-size: 13px;
+        font-weight: 600;
+        color: #2c5147;
+      }
+      .controls {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 560px;
+      }
+      button {
+        font: inherit;
+        font-size: 12px;
+        border: 1px solid #a8bdb1;
+        border-radius: 20px;
+        padding: 9px 14px;
+        color: #35594c;
+        background: #ffffffa8;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #fff;
+      }
+      button:focus-visible {
+        outline: 3px solid #268775;
+        outline-offset: 3px;
+      }
+      button[aria-pressed="true"] {
+        background: #285c4f;
+        color: #fff;
+        border-color: #285c4f;
+      }
+      .edition {
+        font-size: 11px;
+        color: #6a8478;
+        text-align: right;
+      }
+      .error {
+        position: absolute;
+        inset: 40% 10% auto;
+        padding: 25px;
+        border-radius: 16px;
+        background: #fff4e7;
+        z-index: 5;
+      }
+      #loading {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 14px;
+        color: #567369;
+      }
+      @media (max-width: 680px) {
+        .intro {
+          top: 28px;
+          left: 23px;
+          max-width: 300px;
+        }
+        h1 {
+          font-size: 48px;
+        }
+        .intro p {
+          font-size: 12px;
+          max-width: 260px;
+        }
+        .notes,
+        .edition {
+          display: none;
+        }
+        footer {
+          bottom: 20px;
+          left: 18px;
+          right: 18px;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+        }
+        .stats {
+          text-align: center;
+          font-size: 10px;
+        }
+        .controls {
+          gap: 5px;
+          max-width: 355px;
+        }
+        button {
+          padding: 8px 12px;
+          font-size: 11px;
+        }
+        .hint {
+          bottom: 164px;
+          right: 24px;
+          font-size: 10px;
+          max-width: 145px;
+        }
+        .tag {
+          font-size: 10px;
+        }
+        .eyebrow {
+          font-size: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main aria-label="Interactive Aurel sky drake model review">
+      <div id="stage"></div>
+      <div id="loading" role="status">Preparing your sky companion…</div>
+      <header class="intro">
+        <div class="eyebrow">Study World · Creature study 01</div>
+        <h1>Meet Aurel.</h1>
+        <p>
+          A gentle guardian for the open sky.<br />Broad wings. A curling tail.
+          A little wonder.
+        </p>
+        <span class="tag">Static model · awaiting your approval</span>
+      </header>
+      <aside class="notes">
+        <h2>Made for our world</h2>
+        <p>
+          An original, stylized sky wyvern with warm wing membranes and a soft,
+          curious face.
+        </p>
+        <div
+          class="palette"
+          aria-label="Teal, jade, sand and muted coral palette"
+        >
+          <span class="swatch" style="background: #235e61"></span
+          ><span class="swatch" style="background: #68b19e"></span
+          ><span class="swatch" style="background: #e3bc7a"></span
+          ><span class="swatch" style="background: #da8e78"></span>
+        </div>
+        <p>Model first.<br />Rigging and flight come next.</p>
+      </aside>
+      <div class="hint">
+        Drag to explore · scroll / pinch to zoom<br />No automatic movement
+      </div>
+      <footer>
+        <div class="stats">
+          <strong>Original low-poly sky creature</strong><br /><span id="stats"
+            >Loading model…</span
+          ><br />No textures · no animation · no study-data access
+        </div>
+        <nav class="controls" aria-label="Creature camera views">
+          <button data-view="hero" aria-pressed="true">Hero</button
+          ><button data-view="front" aria-pressed="false">Front</button
+          ><button data-view="back" aria-pressed="false">Back</button
+          ><button data-view="above" aria-pressed="false">Above</button
+          ><button data-view="below" aria-pressed="false">Below</button
+          ><button data-view="head" aria-pressed="false">Head</button
+          ><button id="wire" aria-pressed="false">Wireframe</button>
+        </nav>
+        <div class="edition">AUREL / v1<br />SCRIPT 17</div>
+      </footer>
+    </main>
+    <script type="module" src="./review.js"></script>
+  </body>
+</html>

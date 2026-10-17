@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>02 — Subject (island) view</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .wrap { display: flex; gap: 20px; padding: 22px 28px 0; }
+  .art {
+    position: relative; width: 798px; height: 798px; flex: none; border-radius: 24px; overflow: hidden;
+    background: url(assets/island-maths.jpg) center / cover no-repeat; box-shadow: var(--shadow-lg);
+  }
+  .art .lines { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .head {
+    position: absolute; left: 18px; top: 18px; padding: 14px 18px; border-radius: 16px;
+    background: rgba(255, 255, 255, 0.88); box-shadow: var(--shadow);
+  }
+  .art-tools { position: absolute; right: 18px; top: 18px; display: flex; gap: 8px; }
+  .art-tools .btn { background: rgba(255, 255, 255, 0.92); border-color: rgba(255, 255, 255, 0.9); }
+  .marker {
+    position: absolute; width: 18px; height: 18px; border-radius: 50%; transform: translate(-50%, -50%);
+    border: 3px solid #fff; box-shadow: 0 2px 6px rgba(30, 36, 64, 0.35);
+  }
+  .tlabel {
+    position: absolute; transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; gap: 3px; padding: 7px 11px 8px; border-radius: 12px;
+    background: rgba(255, 255, 255, 0.95); box-shadow: 0 4px 14px rgba(30, 36, 64, 0.18); white-space: nowrap;
+  }
+  .tlabel b { font-family: "Fredoka"; font-weight: 600; font-size: 14px; line-height: 1.1; }
+  .tlabel.sel { outline: 2px solid var(--s-maths); outline-offset: 0; box-shadow: 0 0 0 5px rgba(76, 125, 240, 0.2), 0 6px 18px rgba(30, 36, 64, 0.2); }
+  .legend-card {
+    position: absolute; left: 18px; bottom: 18px; padding: 12px 14px; border-radius: 14px; width: 360px;
+    background: rgba(255, 255, 255, 0.9); box-shadow: var(--shadow);
+  }
+  .legend-card .lg { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px 12px; font-size: 12px; color: var(--ink-2); margin-top: 8px; }
+  .legend-card .lg div { display: flex; align-items: center; gap: 7px; }
+  .addplot {
+    position: absolute; right: 18px; bottom: 18px; padding: 10px 14px; border-radius: 14px;
+    border: 1.5px dashed rgba(30, 36, 64, 0.35); background: rgba(255, 255, 255, 0.6);
+    font-weight: 600; font-size: 13px; color: var(--ink-2); display: flex; align-items: center; gap: 8px;
+  }
+  .side { flex: 1; min-width: 0; height: 798px; display: flex; flex-direction: column; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 14px 0 14px; }
+  .stats .s { padding: 10px 12px; border-radius: 12px; background: #fff; border: 1px solid var(--line); }
+  .stats .s b { font-family: "Fredoka"; font-size: 22px; font-weight: 600; display: block; line-height: 1.1; }
+  .stats .s span { font-size: 11.5px; color: var(--ink-3); font-weight: 600; }
+  .group { padding: 10px 16px 4px; }
+  .topic { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-top: 1px solid var(--line); }
+  .topic .gem { width: 30px; height: 30px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+  .topic .t { font-weight: 600; font-size: 14px; }
+  .topic .m { font-size: 12px; color: var(--ink-3); margin-top: 1px; }
+  .topic .nx { text-align: right; font-size: 12px; color: var(--ink-2); white-space: nowrap; }
+  .topic .nx b { display: block; font-size: 12.5px; color: var(--ink); }
+  .topic.sel { background: #f5f8ff; box-shadow: inset 3px 0 0 var(--s-maths); }
+</style>
+</head>
+<body class="page">
+  <div data-topbar="world"></div>
+  <div class="wrap">
+    <div class="art">
+      <svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <g stroke="rgba(255,255,255,.95)" stroke-width="1.6" vector-effect="non-scaling-stroke" fill="none">
+          <line x1="28" y1="41.5" x2="22" y2="31" vector-effect="non-scaling-stroke"/>
+          <line x1="71.5" y1="41" x2="78" y2="31" vector-effect="non-scaling-stroke"/>
+          <line x1="20.5" y1="53.5" x2="11" y2="47" vector-effect="non-scaling-stroke"/>
+          <line x1="80.8" y1="53.5" x2="89" y2="47" vector-effect="non-scaling-stroke"/>
+          <line x1="30" y1="62.5" x2="13" y2="68" vector-effect="non-scaling-stroke"/>
+          <line x1="70" y1="62" x2="84" y2="72" vector-effect="non-scaling-stroke"/>
+          <line x1="50.3" y1="68" x2="55" y2="79" vector-effect="non-scaling-stroke"/>
+        </g>
+      </svg>
+
+      <!-- plot markers (status colour) -->
+      <span class="marker" style="left:28%;top:41.5%;background:var(--green)"></span>
+      <span class="marker" style="left:20.5%;top:53.5%;background:#a9a39a"></span>
+      <span class="marker" style="left:30%;top:62.5%;background:var(--blue)"></span>
+      <span class="marker" style="left:50.3%;top:68%;background:var(--gold)"></span>
+      <span class="marker" style="left:70%;top:62%;background:var(--blue)"></span>
+      <span class="marker" style="left:80.8%;top:53.5%;background:var(--red)"></span>
+      <span class="marker" style="left:71.5%;top:41%;background:var(--blue)"></span>
+
+      <!-- topic labels -->
+      <div class="tlabel" style="left:22%;top:28.5%"><b>Time &amp; Work</b><span class="pill green">Strong · step 5/6</span></div>
+      <div class="tlabel" style="left:78%;top:28.5%"><b>Triangles</b><span class="pill blue">In revision · 1/6</span></div>
+      <div class="tlabel" style="left:11.5%;top:45%"><b>Profit &amp; Loss</b><span class="pill">Not started</span></div>
+      <div class="tlabel" style="left:88.5%;top:45%"><b>Ratio &amp; Proportion</b><span class="pill red">Weak · test 45%</span></div>
+      <div class="tlabel" style="left:12.5%;top:68%"><b>Linear Equations</b><span class="pill blue">In revision · 3/6</span></div>
+      <div class="tlabel sel" style="left:84%;top:74%"><b>Percentage</b><span class="pill blue">Revise today · 2/6</span></div>
+      <div class="tlabel" style="left:56%;top:81.5%"><b>Simple Interest</b><span class="pill gold">Ready for test</span></div>
+
+      <div class="head">
+        <div class="crumbs" style="margin-bottom:4px"><i data-icon="map" class="sm"></i>World <i data-icon="chevron-right" class="sm"></i><span style="color:var(--ink-2)">SSC Mathematics</span></div>
+        <div class="row gap10">
+          <span data-subject-icon="maths" data-size="38" data-radius="11"></span>
+          <div><h1 style="font-size:26px">SSC Mathematics</h1><div class="small ink2">7 topics · 3 groups · crystal island</div></div>
+        </div>
+      </div>
+
+      <div class="art-tools">
+        <button class="btn sm"><i data-icon="house"></i>Back to world</button>
+        <button class="btn sm icon"><i data-icon="rotate-3d"></i></button>
+      </div>
+
+      <div class="legend-card">
+        <div class="small bold">Each topic is a plot on the island</div>
+        <div class="tiny muted">Crystals glow and flowers grow only from real progress.</div>
+        <div class="lg">
+          <div><span class="dot" style="background:#a9a39a"></span>Not started</div>
+          <div><span class="dot" style="background:var(--blue)"></span>In revision</div>
+          <div><span class="dot" style="background:var(--gold)"></span>Ready for test</div>
+          <div><span class="dot" style="background:var(--green)"></span>Strong</div>
+          <div><span class="dot" style="background:var(--red)"></span>Weak</div>
+        </div>
+      </div>
+      <div class="addplot"><i data-icon="plus"></i>New topic = new plot</div>
+    </div>
+
+    <div class="side">
+      <div class="row gap8">
+        <h2 class="grow" style="font-size:22px">Topics</h2>
+        <button class="btn sm soft"><i data-icon="clipboard-paste"></i>Paste for Maths</button>
+        <button class="btn sm primary"><i data-icon="plus"></i>Add topic</button>
+        <button class="btn sm icon"><i data-icon="ellipsis"></i></button>
+      </div>
+      <div class="stats">
+        <div class="s"><b>6/7</b><span>Topics learned</span></div>
+        <div class="s"><b style="color:var(--blue)">3</b><span>In revision</span></div>
+        <div class="s"><b style="color:#c08200">1</b><span>Ready for test</span></div>
+        <div class="s"><b style="color:var(--red)">1</b><span>Weak</span></div>
+      </div>
+
+      <div class="card" style="overflow:hidden">
+        <div class="group section-label">Arithmetic</div>
+        <div class="topic sel">
+          <span class="gem" style="background:var(--blue-soft);color:var(--blue)"><i data-icon="gem"></i></span>
+          <div class="grow"><div class="t">Percentage</div><div class="m">In revision · step 2 of 6 · last test 82%</div></div>
+          <div class="nx"><b style="color:var(--blue)">Today</b>next revision</div>
+          <i data-icon="chevron-right" class="sm muted"></i>
+        </div>
+        <div class="topic">
+          <span class="gem" style="background:var(--red-soft);color:var(--red)"><i data-icon="gem"></i></span>
+          <div class="grow"><div class="t">Ratio &amp; Proportion</div><div class="m">Weak · test 45%, schedule restarted</div></div>
+          <div class="nx"><b>Tomorrow</b>next revision</div>
+          <i data-icon="chevron-right" class="sm muted"></i>
+        </div>
+        <div class="topic">
+          <span class="gem" style="background:var(--gold-soft);color:#c08200"><i data-icon="gem"></i></span>
+          <div class="grow"><div class="t">Simple Interest</div><div class="m">Ready for test · 3 revisions done</div></div>
+          <div class="nx"><b>Sun 18 Oct</b>next revision</div>
+          <i data-icon="chevron-right" class="sm muted"></i>
+        </div>
+        <div class="topic">
+          <span class="gem" style="background:var(--green-soft);color:var(--green)"><i data-icon="gem"></i></span>
+          <div class="grow"><div class="t">Time &amp; Work</div><div class="m">Strong · step 5 of 6 · last test 91%</div></div>
+          <div class="nx"><b>Thu 12 Nov</b>next revision</div>
+          <i data-icon="chevron-right" class="sm muted"></i>
+        </div>
+        <div class="topic">
+          <span class="gem" style="background:var(--grey-soft);color:#9a948a"><i data-icon="gem"></i></span>
+          <div class="grow"><div class="t">Profit &amp; Loss</div><div class="m">Not started · 2 tasks planned</div></div>
+          <div class="nx"><b>Mon 19 Oct</b>first task</div>
+          <i data-icon="chevron-right" class="sm muted"></i>
+        </div>
+        <div class="group section-label" style="border-top:1px solid var(--line);padding-top:12px">Algebra</div>
+        <div class="topic">
+          <span class="gem" style="background:var(--blue-soft);color:var(--blue)"><i data-icon="gem"></i></span>
+          <div class="grow"><div class="t">Linear Equations</div><div class="m">In revision · step 3 of 6</div></div>
+          <div class="nx"><b>Sat 17 Oct</b>next revision</div>
+          <i data-icon="chevron-right" class="sm muted"></i>
+        </div>
+        <div class="group section-label" style="border-top:1px solid var(--line);padding-top:12px">Geometry</div>
+        <div class="topic">
+          <span class="gem" style="background:var(--blue-soft);color:var(--blue)"><i data-icon="gem"></i></span>
+          <div class="grow"><div class="t">Triangles</div><div class="m">In revision · step 1 of 6</div></div>
+          <div class="nx"><b>Fri 16 Oct</b>next revision</div>
+          <i data-icon="chevron-right" class="sm muted"></i>
+        </div>
+        <div class="row between small" style="padding:12px 16px;border-top:1px solid var(--line);color:var(--ink-3)">
+          <span class="row gap6"><i data-icon="archive" class="sm"></i>Archived topics (2)</span>
+          <span class="row gap6"><i data-icon="pencil" class="sm"></i>Rename · colour · island style · archive subject</span>
+        </div>
+      </div>
+
+      <div class="row gap12" style="margin-top:12px;align-items:stretch">
+        <div class="card pad grow" style="padding:14px 16px">
+          <div class="row between" style="margin-bottom:8px"><div class="section-label">Resources</div><a class="tiny bold row gap4"><i data-icon="plus" class="sm"></i>Add</a></div>
+          <div class="col gap6 small">
+            <div class="row gap8"><i data-icon="video" class="sm" style="color:var(--s-soft)"></i><span class="grow">Percentage videos playlist</span><i data-icon="external-link" class="sm muted"></i></div>
+            <div class="row gap8"><i data-icon="link" class="sm" style="color:var(--blue)"></i><span class="grow">Quant practice site</span><i data-icon="external-link" class="sm muted"></i></div>
+          </div>
+        </div>
+        <div class="card pad grow" style="padding:14px 16px">
+          <div class="row between" style="margin-bottom:8px"><div class="section-label">Recent tests</div><a class="tiny bold">All</a></div>
+          <div class="col gap6 small">
+            <div class="row gap8"><span class="grow">Online mock #12 · Maths</span><b>71%</b></div>
+            <div class="row gap8"><span class="grow">Practice book · Set 4</span><b>64%</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="icons.js"></script>
+  <script src="common.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "name": "Auren — Aurel’s male companion",
+  "species": "Aurel sky drake",
+  "sex": "male",
+  "partner": "Aurel",
+  "asset": "auren_male_companion_v1.glb",
+  "generator": "scripts/build-male-dragon.mjs",
+  "bytes": 1689048,
+  "sha256": "0815b6bc938d75c16917e737e9470105f27e9d2c8acdb479247f1668a082c74e",
+  "meshes": 1,
+  "materials": 1,
+  "bones": 16,
+  "triangles": 10188,
+  "textures": 0,
+  "populationCap": 1,
+  "palette": "Unchanged approved Aurel teal, warm coral/gold membranes and cream accents",
+  "morph": {
+    "bodyWidth": 1.14,
+    "bodyHeight": 1.18,
+    "bodyLength": 1.16,
+    "outerWingSpan": 1.42,
+    "tailExtension": 1.65
+  },
+  "bounds": {
+    "min": [
+      -6.610603332519531,
+      -0.668419361114502,
+      -7.081699848175049
+    ],
+    "max": [
+      6.610603332519531,
+      1.2642533779144287,
+      3.1702566146850586
+    ]
+  },
+  "clips": [
+    {
+      "name": "Wingbeat",
+      "duration": 3.776
+    },
+    {
+      "name": "Glide",
+      "duration": 7.08
+    },
+    {
+      "name": "TailSway",
+      "duration": 5.664
+    }
+  ],
+  "parts": [
+    "Body",
+    "Neck",
+    "Head",
+    "Face",
+    "Head_Fins",
+    "Tail",
+    "Tail_Rudder",
+    "Dorsal_Crest",
+    "Folded_Legs",
+    "Left_Wing_Membrane",
+    "Left_Wing_Frame",
+    "Right_Wing_Membrane",
+    "Right_Wing_Frame"
+  ],
+  "originalVertexCount": 29370
+}

@@ -1,0 +1,468 @@
+{
+  "models": 20,
+  "totalBytes": 1370700,
+  "totalTriangles": 18222,
+  "totalPrimitives": 129,
+  "assets": [
+    {
+      "file": "island_base_01.glb",
+      "kind": "island_base",
+      "bytes": 53708,
+      "triangles": 570,
+      "meshCount": 4,
+      "primitiveCount": 9,
+      "materialCount": 9,
+      "bounds": {
+        "min": [
+          -4.408745288848877,
+          -3.0799999237060547,
+          -4.682666301727295
+        ],
+        "max": [
+          4.660377025604248,
+          0.5294535160064697,
+          4.603875160217285
+        ]
+      },
+      "sha256": "25b0039b85314393f7c40f2127c2762d7da43f3dc877e02abcfbe85e9a269c92",
+      "extensions": []
+    },
+    {
+      "file": "island_base_02.glb",
+      "kind": "island_base",
+      "bytes": 53716,
+      "triangles": 570,
+      "meshCount": 4,
+      "primitiveCount": 9,
+      "materialCount": 9,
+      "bounds": {
+        "min": [
+          -4.408745288848877,
+          -3.8499999046325684,
+          -4.682666301727295
+        ],
+        "max": [
+          4.660377025604248,
+          0.5294535160064697,
+          4.603875160217285
+        ]
+      },
+      "sha256": "00bc226201ebc6b7bc5b15edb5aed318dd24cc159b6758e13fba82603e4472b9",
+      "extensions": []
+    },
+    {
+      "file": "island_base_03.glb",
+      "kind": "island_base",
+      "bytes": 53712,
+      "triangles": 570,
+      "meshCount": 4,
+      "primitiveCount": 9,
+      "materialCount": 9,
+      "bounds": {
+        "min": [
+          -4.408745288848877,
+          -4.550000190734863,
+          -4.682666301727295
+        ],
+        "max": [
+          4.660377025604248,
+          0.5294535160064697,
+          4.603875160217285
+        ]
+      },
+      "sha256": "e9a710a1c57e2c89775fb19b58de7668d46fac3984c7d8cb512761b979a9ae96",
+      "extensions": []
+    },
+    {
+      "file": "landmark_maths.glb",
+      "kind": "landmark",
+      "bytes": 162376,
+      "triangles": 2038,
+      "meshCount": 10,
+      "primitiveCount": 10,
+      "materialCount": 9,
+      "bounds": {
+        "min": [
+          -1.100000023841858,
+          3.725290298461914e-09,
+          -1.100000023841858
+        ],
+        "max": [
+          1.100000023841858,
+          2.569999933242798,
+          1.100000023841858
+        ]
+      },
+      "sha256": "159605a0eb89ad56d178a862bd3e7c1eb6f254660a7caa0c5fa2a2f70056152e",
+      "extensions": []
+    },
+    {
+      "file": "landmark_reasoning.glb",
+      "kind": "landmark",
+      "bytes": 56288,
+      "triangles": 708,
+      "meshCount": 9,
+      "primitiveCount": 9,
+      "materialCount": 9,
+      "bounds": {
+        "min": [
+          -1.3799999952316284,
+          3.725290298461914e-09,
+          -1.3799999952316284
+        ],
+        "max": [
+          1.3799999952316284,
+          1.9049999713897705,
+          1.3799999952316284
+        ]
+      },
+      "sha256": "59e727894bdc21e9084d74f3801dfb555f34cfb91fdf5ad47a59f58d3e9f0ed2",
+      "extensions": []
+    },
+    {
+      "file": "landmark_english.glb",
+      "kind": "landmark",
+      "bytes": 58124,
+      "triangles": 688,
+      "meshCount": 13,
+      "primitiveCount": 13,
+      "materialCount": 11,
+      "bounds": {
+        "min": [
+          -1.0999990701675415,
+          2.2351741790771484e-08,
+          -1.100000023841858
+        ],
+        "max": [
+          1.1000009775161743,
+          1.9010134935379028,
+          1.100000023841858
+        ]
+      },
+      "sha256": "89cb58a9b985bddd7f403d48a56462d1e87950d645b0ffa8ed92bb8f24c2b3dc",
+      "extensions": []
+    },
+    {
+      "file": "landmark_gk.glb",
+      "kind": "landmark",
+      "bytes": 328784,
+      "triangles": 4964,
+      "meshCount": 5,
+      "primitiveCount": 7,
+      "materialCount": 7,
+      "bounds": {
+        "min": [
+          -0.9999997615814209,
+          2.2351741790771484e-08,
+          -1.0
+        ],
+        "max": [
+          1.000000238418579,
+          2.3520002365112305,
+          1.0
+        ]
+      },
+      "sha256": "c46232e8cd8d6909178ac8d3e8f16c57c580f73205d8cde3be9d423420b22f90",
+      "extensions": []
+    },
+    {
+      "file": "landmark_dsa.glb",
+      "kind": "landmark",
+      "bytes": 73380,
+      "triangles": 908,
+      "meshCount": 8,
+      "primitiveCount": 8,
+      "materialCount": 8,
+      "bounds": {
+        "min": [
+          -1.1799989938735962,
+          2.2351741790771484e-08,
+          -1.1799999475479126
+        ],
+        "max": [
+          1.180000901222229,
+          2.2750000953674316,
+          1.1799999475479126
+        ]
+      },
+      "sha256": "69fc4fee67dbcb9bed09d2b46f708e274509f51a44e30a8628677ab8299ec970",
+      "extensions": []
+    },
+    {
+      "file": "landmark_software.glb",
+      "kind": "landmark",
+      "bytes": 83956,
+      "triangles": 1332,
+      "meshCount": 12,
+      "primitiveCount": 12,
+      "materialCount": 12,
+      "bounds": {
+        "min": [
+          -1.2000000476837158,
+          2.2351741790771484e-08,
+          -1.2000000476837158
+        ],
+        "max": [
+          1.2000000476837158,
+          2.067500114440918,
+          1.2000000476837158
+        ]
+      },
+      "sha256": "08c6bfd2c05601a9afa16850ec2d817f2a3ae6787f5e8f038e306e8dd4638423",
+      "extensions": []
+    },
+    {
+      "file": "topic_plot_not_started.glb",
+      "kind": "topic_plot",
+      "bytes": 18844,
+      "triangles": 234,
+      "meshCount": 5,
+      "primitiveCount": 5,
+      "materialCount": 4,
+      "bounds": {
+        "min": [
+          -0.7699980735778809,
+          -4.842877388000488e-08,
+          -0.7700009346008301
+        ],
+        "max": [
+          0.7700018882751465,
+          1.2300000190734863,
+          0.7699990272521973
+        ]
+      },
+      "sha256": "c633a7c809ceab29b086ee97feb7c348c1cdb1a3f621a9695731cedff9a69092",
+      "extensions": []
+    },
+    {
+      "file": "topic_plot_in_revision.glb",
+      "kind": "topic_plot",
+      "bytes": 20428,
+      "triangles": 240,
+      "meshCount": 6,
+      "primitiveCount": 6,
+      "materialCount": 5,
+      "bounds": {
+        "min": [
+          -0.7699990272521973,
+          -4.842877388000488e-08,
+          -0.7700009346008301
+        ],
+        "max": [
+          0.7700009346008301,
+          1.2300000190734863,
+          0.7699990272521973
+        ]
+      },
+      "sha256": "a37f4fa29edc8faef8e9304a796c79dd7d2d73d610a5c0aabed8deaab5674b3c",
+      "extensions": []
+    },
+    {
+      "file": "topic_plot_ready_for_test.glb",
+      "kind": "topic_plot",
+      "bytes": 20600,
+      "triangles": 242,
+      "meshCount": 6,
+      "primitiveCount": 6,
+      "materialCount": 5,
+      "bounds": {
+        "min": [
+          -0.7699999809265137,
+          -4.842877388000488e-08,
+          -0.7700009346008301
+        ],
+        "max": [
+          0.7699999809265137,
+          1.2300000190734863,
+          0.7699990272521973
+        ]
+      },
+      "sha256": "438766cb8748c51c499d836d20eb64917ddc93e621f34b9ed81c755784626169",
+      "extensions": []
+    },
+    {
+      "file": "topic_plot_strong.glb",
+      "kind": "topic_plot",
+      "bytes": 120920,
+      "triangles": 1210,
+      "meshCount": 8,
+      "primitiveCount": 8,
+      "materialCount": 7,
+      "bounds": {
+        "min": [
+          -0.7699999809265137,
+          -4.842877388000488e-08,
+          -0.7700004577636719
+        ],
+        "max": [
+          0.7699999809265137,
+          1.2300000190734863,
+          0.7699995040893555
+        ]
+      },
+      "sha256": "6a1cb5fd7a70be6a06af635677adf65bc5987cab384a411468ebe58392edd763",
+      "extensions": []
+    },
+    {
+      "file": "topic_plot_weak.glb",
+      "kind": "topic_plot",
+      "bytes": 19912,
+      "triangles": 236,
+      "meshCount": 6,
+      "primitiveCount": 6,
+      "materialCount": 5,
+      "bounds": {
+        "min": [
+          -0.7699999809265137,
+          -4.842877388000488e-08,
+          -0.7700009346008301
+        ],
+        "max": [
+          0.7699999809265137,
+          1.2300000190734863,
+          0.7699990272521973
+        ]
+      },
+      "sha256": "e0a00b997aa93205fbf47e2bded66923e900e96c055c14c20d7fcdf6318c0f8e",
+      "extensions": []
+    },
+    {
+      "file": "bridge.glb",
+      "kind": "bridge",
+      "bytes": 206212,
+      "triangles": 3384,
+      "meshCount": 3,
+      "primitiveCount": 3,
+      "materialCount": 3,
+      "bounds": {
+        "min": [
+          -2.0523080825805664,
+          -0.24047625064849854,
+          -0.6050004363059998
+        ],
+        "max": [
+          2.0523083209991455,
+          0.6600000262260437,
+          0.6049999594688416
+        ]
+      },
+      "sha256": "d404f638c53d1a2c88e751f17586416e77ed0deaaa269ad1b7c2ee47f39bdb35",
+      "extensions": []
+    },
+    {
+      "file": "scenery_tree_round.glb",
+      "kind": "scenery",
+      "bytes": 11408,
+      "triangles": 96,
+      "meshCount": 3,
+      "primitiveCount": 3,
+      "materialCount": 3,
+      "bounds": {
+        "min": [
+          -0.6241003274917603,
+          5.960464477539063e-08,
+          -0.40830743312835693
+        ],
+        "max": [
+          0.6041074991226196,
+          1.7900002002716064,
+          0.40830695629119873
+        ]
+      },
+      "sha256": "a4b7174e880d59d87034450a69b0436781b670421610f10cf1f15bd420f2171c",
+      "extensions": []
+    },
+    {
+      "file": "scenery_tree_pine.glb",
+      "kind": "scenery",
+      "bytes": 8168,
+      "triangles": 72,
+      "meshCount": 3,
+      "primitiveCount": 3,
+      "materialCount": 3,
+      "bounds": {
+        "min": [
+          -0.5069624781608582,
+          -5.960464477539063e-08,
+          -0.5199999809265137
+        ],
+        "max": [
+          0.5069624781608582,
+          1.6700001955032349,
+          0.46850377321243286
+        ]
+      },
+      "sha256": "7f488c6826ee815037fcdeda6540495edc4e5f11973be1046f19e68d254eff50",
+      "extensions": []
+    },
+    {
+      "file": "scenery_cloud.glb",
+      "kind": "scenery",
+      "bytes": 9444,
+      "triangles": 80,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "bounds": {
+        "min": [
+          -0.7698808312416077,
+          -0.27000001072883606,
+          -0.29772400856018066
+        ],
+        "max": [
+          0.7698817849159241,
+          0.48000001907348633,
+          0.29772400856018066
+        ]
+      },
+      "sha256": "a02d7d81845d888a724abce32c84ed7b64c6cf12912c2a733ab8bda3a7107534",
+      "extensions": []
+    },
+    {
+      "file": "scenery_rocks.glb",
+      "kind": "scenery",
+      "bytes": 7400,
+      "triangles": 60,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "bounds": {
+        "min": [
+          -0.5219928026199341,
+          -1.4901161193847656e-08,
+          -0.32668551802635193
+        ],
+        "max": [
+          0.4546617865562439,
+          0.6399999856948853,
+          0.3561021685600281
+        ]
+      },
+      "sha256": "c35f2969151a27f3ea710fa76780fea06cc462593b65280f1b3eb50c7bf43c7d",
+      "extensions": []
+    },
+    {
+      "file": "path_stone.glb",
+      "kind": "path_stone",
+      "bytes": 3320,
+      "triangles": 20,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "bounds": {
+        "min": [
+          -0.14310799539089203,
+          -0.03999999910593033,
+          -0.11058320105075836
+        ],
+        "max": [
+          0.14310799539089203,
+          0.03999999910593033,
+          0.11058320105075836
+        ]
+      },
+      "sha256": "3e2318ec78c213741cb13b1b1c27170011d4880fa498bba7bb5e5f9cb634b160",
+      "extensions": []
+    }
+  ]
+}

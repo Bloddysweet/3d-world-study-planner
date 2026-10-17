@@ -1,0 +1,13 @@
+node_modules/
+.DS_Store
+.cache/
+__pycache__/
+
+dist/
+*.tsbuildinfo
+
+# Private AI credentials: never bundle or commit.
+.env
+.env.*
+!.env.example
+server/.env.local

@@ -1,0 +1,21 @@
+# One free same-origin web service. Enter secrets only in Render's dashboard.
+services:
+  - type: web
+    name: study-world-planner
+    runtime: node
+    plan: free
+    autoDeployTrigger: checksPass
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: '22'
+      - key: NODE_ENV
+        value: production
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: AI_IMPORT_ACCESS_CODE
+        sync: false
+      - key: AI_IMPORT_DAILY_LIMIT
+        value: '40'

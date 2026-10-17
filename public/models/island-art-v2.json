@@ -1,0 +1,230 @@
+{
+  "schemaVersion": 1,
+  "generator": "scripts/build-all-islands.mjs",
+  "islands": [
+    {
+      "theme": "maths",
+      "label": "Mathematics",
+      "metadata": {
+        "schemaVersion": 1,
+        "asset": "island_maths_v2.glb",
+        "generator": "scripts/build-maths-island.mjs",
+        "seed": 84.73,
+        "theme": "maths",
+        "surfaceY": 0.24,
+        "topicPlots": "Runtime only; all six gardenPositions remain clear",
+        "bounds": {
+          "min": [
+            -4.567147254943848,
+            -4.900000095367432,
+            -4.7567853927612305
+          ],
+          "max": [
+            4.646660327911377,
+            4.119999885559082,
+            5.25944185256958
+          ]
+        },
+        "bytes": 1144080,
+        "triangles": 15092,
+        "meshes": 11,
+        "materials": 11,
+        "static": true,
+        "externalResources": 0,
+        "sha256": "7afdf158c4dc3f09660286778153402ba08b6cfc2e688e3aa55417cd52184b42"
+      }
+    },
+    {
+      "theme": "reasoning",
+      "label": "Reasoning",
+      "metadata": {
+        "schemaVersion": 1,
+        "asset": "island_reasoning_v2.glb",
+        "generator": "scripts/build-maths-island.mjs",
+        "seed": 117.42,
+        "theme": "reasoning",
+        "surfaceY": 0.24,
+        "topicPlots": "Runtime only; all six gardenPositions remain clear",
+        "bounds": {
+          "min": [
+            -4.59489631652832,
+            -4.908510208129883,
+            -4.6689534187316895
+          ],
+          "max": [
+            4.682882785797119,
+            3.3440001010894775,
+            5.34429931640625
+          ]
+        },
+        "bytes": 964444,
+        "triangles": 13114,
+        "meshes": 11,
+        "materials": 11,
+        "static": true,
+        "externalResources": 0,
+        "sha256": "b97c6048f93c1ecaa509eb34e197ac3080819719eb98d5b02ea69f5fee6c8a48"
+      }
+    },
+    {
+      "theme": "english",
+      "label": "English & Vocabulary",
+      "metadata": {
+        "schemaVersion": 1,
+        "asset": "island_english_v2.glb",
+        "generator": "scripts/build-maths-island.mjs",
+        "seed": 164.26,
+        "theme": "english",
+        "surfaceY": 0.24,
+        "topicPlots": "Runtime only; all six gardenPositions remain clear",
+        "bounds": {
+          "min": [
+            -4.687448024749756,
+            -4.909388542175293,
+            -4.614614009857178
+          ],
+          "max": [
+            4.730956077575684,
+            3.1432242393493652,
+            5.324304580688477
+          ]
+        },
+        "bytes": 995852,
+        "triangles": 13627,
+        "meshes": 10,
+        "materials": 10,
+        "static": true,
+        "externalResources": 0,
+        "sha256": "2ea209b928bf5caafac660ce2918162eef9affc73f656407c433a65c98b67b6e"
+      }
+    },
+    {
+      "theme": "gk",
+      "label": "General Knowledge",
+      "metadata": {
+        "schemaVersion": 1,
+        "asset": "island_gk_v2.glb",
+        "generator": "scripts/build-maths-island.mjs",
+        "seed": 217.88,
+        "theme": "gk",
+        "surfaceY": 0.24,
+        "topicPlots": "Runtime only; all six gardenPositions remain clear",
+        "bounds": {
+          "min": [
+            -4.740042686462402,
+            -4.900000095367432,
+            -4.56664514541626
+          ],
+          "max": [
+            4.729586601257324,
+            3.610811710357666,
+            5.2860846519470215
+          ]
+        },
+        "bytes": 1127916,
+        "triangles": 15657,
+        "meshes": 11,
+        "materials": 11,
+        "static": true,
+        "externalResources": 0,
+        "sha256": "42be7e030e90bbe79cd6799579c0572208f0726fce4a25a7e1d05bda92704499"
+      }
+    },
+    {
+      "theme": "dsa",
+      "label": "Data Structures & Algorithms",
+      "metadata": {
+        "schemaVersion": 1,
+        "asset": "island_dsa_v2.glb",
+        "generator": "scripts/build-maths-island.mjs",
+        "seed": 288.65,
+        "theme": "dsa",
+        "surfaceY": 0.24,
+        "topicPlots": "Runtime only; all six gardenPositions remain clear",
+        "bounds": {
+          "min": [
+            -4.678724765777588,
+            -4.928999900817871,
+            -4.631862163543701
+          ],
+          "max": [
+            4.648631572723389,
+            3.3399999141693115,
+            5.2938642501831055
+          ]
+        },
+        "bytes": 1009504,
+        "triangles": 14643,
+        "meshes": 11,
+        "materials": 11,
+        "static": true,
+        "externalResources": 0,
+        "sha256": "6b142f86c0f160a9a92df6bd1cf339bee1fd8834982c47a26bfa788e479adedb"
+      }
+    },
+    {
+      "theme": "software",
+      "label": "Software Development",
+      "metadata": {
+        "schemaVersion": 1,
+        "asset": "island_software_v2.glb",
+        "generator": "scripts/build-maths-island.mjs",
+        "seed": 349.71,
+        "theme": "software",
+        "surfaceY": 0.24,
+        "topicPlots": "Runtime only; all six gardenPositions remain clear",
+        "bounds": {
+          "min": [
+            -4.642964839935303,
+            -4.900000095367432,
+            -4.78296422958374
+          ],
+          "max": [
+            4.6006622314453125,
+            2.996000051498413,
+            5.364416122436523
+          ]
+        },
+        "bytes": 962908,
+        "triangles": 13144,
+        "meshes": 10,
+        "materials": 10,
+        "static": true,
+        "externalResources": 0,
+        "sha256": "1089657d2acf286c2197e5e777c090a4d7bdcb92d77459cc4a3809d3f6b08b0d"
+      }
+    },
+    {
+      "theme": "generic",
+      "label": "Custom subject · learning grove",
+      "metadata": {
+        "schemaVersion": 1,
+        "asset": "island_generic_v2.glb",
+        "generator": "scripts/build-maths-island.mjs",
+        "seed": 418.53,
+        "theme": "generic",
+        "surfaceY": 0.24,
+        "topicPlots": "Runtime only; all six gardenPositions remain clear",
+        "bounds": {
+          "min": [
+            -4.637214660644531,
+            -4.9099650382995605,
+            -4.825008392333984
+          ],
+          "max": [
+            4.595794200897217,
+            3.500711441040039,
+            5.209486484527588
+          ]
+        },
+        "bytes": 984008,
+        "triangles": 13588,
+        "meshes": 9,
+        "materials": 9,
+        "static": true,
+        "externalResources": 0,
+        "sha256": "2e31d2f0c40b058f13c1fef8b323661fcd58a1b4b1acd2ba8acdb50cff31bbae"
+      }
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>06 — Revisions</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .grid { display: grid; grid-template-columns: 1fr 468px; gap: 20px; }
+  .rrow { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-top: 1px solid var(--line); }
+  .rrow .ttl { font-weight: 600; }
+  .rrow.done .ttl { color: var(--ink-3); text-decoration: line-through; }
+  .open { background: #f7faff; border-top: 1px solid #d7e4ff; border-bottom: 1px solid #d7e4ff; padding: 14px 16px; }
+  .recall { display: flex; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #fff; border: 1px solid var(--line); margin: 10px 0 12px; font-size: 13px; }
+  .cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .cal .h { font-size: 11px; font-weight: 700; color: var(--ink-3); text-align: center; padding-bottom: 2px; }
+  .cal .d { height: 50px; border-radius: 10px; padding: 5px 6px; background: var(--soft); border: 1px solid transparent; display: flex; flex-direction: column; justify-content: space-between; }
+  .cal .d .n { font-size: 12px; font-weight: 600; color: var(--ink-2); }
+  .cal .d.out .n { color: #c4bdb1; }
+  .cal .d.today { border: 2px solid var(--primary); background: #fff; }
+  .cal .d .c { align-self: flex-end; font-size: 10.5px; font-weight: 700; padding: 1px 5px; border-radius: 6px; display: inline-flex; align-items: center; gap: 2px; }
+  .cal .d .c.g { background: var(--green-soft); color: var(--green); }
+  .cal .d .c.b { background: var(--blue-soft); color: var(--blue); }
+  .cal .d .c.a { background: var(--amber-soft); color: var(--amber); }
+  .cal .d .c svg.ic { width: 10px; height: 10px; stroke-width: 3; }
+  .ladder { position: relative; display: grid; grid-template-columns: repeat(6, 1fr); margin: 14px 0 4px; }
+  .ladder::before { content: ""; position: absolute; left: 8%; right: 8%; top: 15px; height: 3px; background: linear-gradient(90deg, #b9cbfb, #3b6fe0); border-radius: 2px; }
+  .ladder .st { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .ladder .st b { width: 32px; height: 32px; border-radius: 50%; background: #fff; border: 3px solid var(--blue); display: inline-flex; align-items: center; justify-content: center; font-family: "Fredoka"; font-size: 13px; color: var(--blue); z-index: 1; }
+  .ladder .st.cur b { background: var(--blue); color: #fff; box-shadow: 0 0 0 5px rgba(59, 111, 224, 0.18); }
+  .ladder .st span { font-size: 12px; font-weight: 700; }
+  .ladder .st em { font-style: normal; font-size: 10.5px; color: var(--ink-3); }
+  .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .rules div { padding: 8px 10px; border-radius: 10px; background: var(--soft); font-size: 12.5px; }
+  .rules b { display: block; font-size: 13px; }
+  .up { display: flex; gap: 12px; padding: 9px 16px; border-top: 1px solid var(--line); align-items: center; }
+  .up .day { width: 86px; font-weight: 700; font-size: 12.5px; color: var(--ink-2); }
+</style>
+</head>
+<body class="page">
+  <div data-topbar="revisions"></div>
+  <div class="main">
+    <div class="page-head" style="margin-bottom:14px">
+      <div class="grow">
+        <h1>Revisions</h1>
+        <div class="sub">Counted from the day you actually finish. Missed revisions move forward as one item and never pile up.</div>
+      </div>
+      <div class="seg"><span class="on">Due today <span class="pill red" style="height:18px">4</span></span><span>Upcoming</span><span>History</span></div>
+    </div>
+
+    <div class="grid">
+      <div class="col gap16">
+        <div class="card" style="overflow:hidden">
+          <div class="card-h"><h2>Due today</h2><span class="small muted">3 left · about 45 min</span></div>
+
+          <div class="rrow">
+            <span class="check"></span>
+            <div class="grow"><div class="ttl">Revise Coding-Decoding</div>
+              <div class="row gap6" style="margin-top:3px"><span class="subj" data-s="reason"></span><span class="pill red">Overdue 1 day</span><span class="pill blue">Step 4 of 6</span><span class="tiny muted">Covers: practice set 2 (finished Thu 1 Oct)</span></div></div>
+            <span class="small bold ink2">15m</span><button class="btn sm">Start</button>
+          </div>
+
+          <div class="rrow" style="background:#f7faff">
+            <span class="check"></span>
+            <div class="grow"><div class="ttl">Revise Percentage</div>
+              <div class="row gap6" style="margin-top:3px"><span class="subj" data-s="maths"></span><span class="pill blue">Step 2 of 6</span><span class="tiny muted">Covers: videos 1–3 + 20 questions (finished Tue 13 Oct)</span></div></div>
+            <span class="small bold ink2">15m</span><i data-icon="chevron-down" class="sm muted"></i>
+          </div>
+          <div class="open">
+            <div class="recall">
+              <i data-icon="brain" style="color:var(--violet)"></i>
+              <div><b>Recall first, then check.</b> Without notes, solve 5 mixed percentage questions and explain successive % changes in your own words. Then open your notes and compare.</div>
+            </div>
+            <div class="row between" style="margin-bottom:8px"><span class="small bold">How well did you remember?</span><span class="tiny muted">Each button shows when you'll see this again</span></div>
+            <div class="rate">
+              <div class="r forgot"><b>Forgot</b><span>again tomorrow · back to step 1</span></div>
+              <div class="r hard"><b>Hard</b><span>in 2 days · repeat step 2</span></div>
+              <div class="r good"><b>Good</b><span>in 4 days · step 3</span></div>
+              <div class="r easy"><b>Easy</b><span>in 7 days · skip to step 4</span></div>
+            </div>
+          </div>
+
+          <div class="rrow">
+            <span class="check"></span>
+            <div class="grow"><div class="ttl">Revise Fundamental Rights</div>
+              <div class="row gap6" style="margin-top:3px"><span class="subj" data-s="gk"></span><span class="pill blue">Step 3 of 6</span><span class="tiny muted">Covers: Articles 12–35 notes</span></div></div>
+            <span class="small bold ink2">15m</span><button class="btn sm">Start</button>
+          </div>
+          <div class="rrow done">
+            <span class="check done"><i data-icon="check"></i></span>
+            <div class="grow"><div class="ttl">Revise Vocab 51–100</div>
+              <div class="row gap6" style="margin-top:3px"><span class="subj" data-s="english"></span><span class="pill green">Rated Good</span><span class="tiny muted">Next: Sat 31 Oct (step 5)</span></div></div>
+            <span class="small bold muted">10m</span><button class="btn sm ghost">Undo</button>
+          </div>
+        </div>
+
+        <div class="card" style="overflow:hidden">
+          <div class="card-h"><h2>Coming up</h2><a class="small bold">See all</a></div>
+          <div class="up"><span class="day">Fri 16 Oct</span><div class="row gap8 wrap grow"><span class="subj" data-s="maths" data-label="Triangles · step 1"></span><span class="subj" data-s="maths" data-label="Ratio & Proportion · restarted"></span></div><span class="tiny muted">2 · 30m</span></div>
+          <div class="up"><span class="day">Sat 17 Oct</span><div class="row gap8 wrap grow"><span class="subj" data-s="maths" data-label="Linear Equations · step 3"></span><span class="subj" data-s="english" data-label="Idioms set 1 · step 2"></span></div><span class="tiny muted">2 · 25m</span></div>
+          <div class="up"><span class="day">Sun 18 Oct</span><div class="row gap8 wrap grow"><span class="subj" data-s="maths" data-label="Simple Interest · step 4"></span><span class="subj" data-s="english" data-label="Vocab 1–50 · step 5"></span><span class="subj" data-s="dsa" data-label="Two Pointers · step 2"></span></div><span class="tiny muted">3 · 40m</span></div>
+        </div>
+      </div>
+
+      <div class="col gap16">
+        <div class="card pad" style="padding:16px 18px">
+          <div class="row between" style="margin-bottom:10px">
+            <h2>October 2026</h2>
+            <div class="row gap4"><button class="btn icon sm ghost"><i data-icon="chevron-left"></i></button><button class="btn icon sm ghost"><i data-icon="chevron-right"></i></button></div>
+          </div>
+          <div class="cal" id="cal"></div>
+          <div class="row gap12 tiny muted" style="margin-top:10px">
+            <span class="row gap4"><span class="dot" style="background:var(--green)"></span>done</span>
+            <span class="row gap4"><span class="dot" style="background:var(--blue)"></span>due</span>
+            <span class="row gap4"><span class="dot" style="background:var(--amber)"></span>missed, moved forward</span>
+          </div>
+        </div>
+
+        <div class="card pad" style="padding:16px 18px">
+          <div class="row gap8"><i data-icon="info" class="sm" style="color:var(--primary)"></i><h3 class="grow">How your schedule works</h3><a class="tiny bold">Change in Settings</a></div>
+          <div class="ladder">
+            <div class="st"><b>1</b><span>Day 1</span><em>+1</em></div>
+            <div class="st cur"><b>2</b><span>Day 3</span><em>+2</em></div>
+            <div class="st"><b>3</b><span>Day 7</span><em>+4</em></div>
+            <div class="st"><b>4</b><span>Day 14</span><em>+7</em></div>
+            <div class="st"><b>5</b><span>Day 30</span><em>+16</em></div>
+            <div class="st"><b>6</b><span>Day 60</span><em>+30</em></div>
+          </div>
+          <div class="tiny muted" style="text-align:center">Days after you finish, if every revision is on time. Then every 60 days.</div>
+          <div class="rules">
+            <div><b style="color:var(--red)">Forgot</b>Back to step 1</div>
+            <div><b style="color:var(--amber)">Hard</b>Repeat the same step</div>
+            <div><b style="color:var(--green)">Good</b>Go to the next step</div>
+            <div><b style="color:var(--blue)">Easy</b>Skip one step</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    window.pageInit = () => {
+      const done = { 28: 2, 29: 3, 30: 2, 1: 3, 2: 4, 3: 2, 4: 1, 5: 3, 6: 2, 7: 4, 8: 3, 9: 2, 11: 5, 12: 3, 13: 2, 14: 3 };
+      const due = { 15: 4, 16: 2, 17: 2, 18: 3, 19: 4, 20: 2, 21: 3, 22: 2, 23: 3, 24: 1, 25: 2, 26: 3, 27: 2, 28: 3, 29: 2, 30: 3, 31: 4, 1: 2 };
+      let html = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => `<div class="h">${d}</div>`).join("");
+      const days = [[28, "sep"], [29, "sep"], [30, "sep"], ...Array.from({ length: 31 }, (_, i) => [i + 1, "oct"]), [1, "nov"]];
+      for (const [n, m] of days) {
+        let badge = "";
+        const past = m === "sep" || (m === "oct" && n < 15);
+        if (m === "oct" && n === 10) badge = `<span class="c a">1 moved</span>`;
+        else if (past && done[n]) badge = `<span class="c g"><i data-icon="check"></i>${done[n]}</span>`;
+        else if (!past && (m === "oct" || m === "nov") && due[n]) badge = `<span class="c b">${due[n]}</span>`;
+        html += `<div class="d ${m !== "oct" ? "out" : ""} ${m === "oct" && n === 15 ? "today" : ""}"><span class="n">${n}</span>${badge}</div>`;
+      }
+      document.getElementById("cal").innerHTML = html;
+    };
+  </script>
+  <script src="icons.js"></script>
+  <script src="common.js"></script>
+</body>
+</html>
