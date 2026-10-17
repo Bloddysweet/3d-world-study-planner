@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>07 — Tests</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; }
+  .ready { display: flex; align-items: center; gap: 10px; padding: 10px 0; }
+  .ready + .ready { border-top: 1px dashed var(--line); }
+  .fgrid { display: grid; grid-template-columns: 1.3fr 1.1fr 1fr 0.8fr; gap: 12px; }
+  .score { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 14px; background: var(--soft); border: 1px solid var(--line); }
+  .big { font-family: "Fredoka"; font-size: 34px; font-weight: 600; line-height: 1; }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--ink-3); padding: 8px 10px; border-bottom: 1px solid var(--line); }
+  td { padding: 8px 10px; border-bottom: 1px solid var(--line); font-size: 13px; vertical-align: middle; }
+  .thr { display: flex; height: 26px; border-radius: 8px; overflow: hidden; font-size: 11px; font-weight: 700; color: #fff; }
+  .thr span { display: flex; align-items: center; justify-content: center; }
+</style>
+</head>
+<body class="page">
+  <div data-topbar="tests"></div>
+  <div class="main">
+    <div class="page-head" style="margin-bottom:14px">
+      <div class="grow">
+        <h1>Tests</h1>
+        <div class="sub">Take tests anywhere (mock apps, books, PDFs) and record the score here. Topic scores adjust your revisions.</div>
+      </div>
+      <button class="btn primary"><i data-icon="plus"></i>Record a test result</button>
+    </div>
+
+    <div class="grid">
+      <div class="col gap16">
+        <div class="card pad">
+          <div class="row between" style="margin-bottom:4px"><h2>Ready for a test</h2><span class="pill gold">3</span></div>
+          <div class="tiny muted" style="margin-bottom:6px">Topics that finished their 3rd revision and haven't been tested since.</div>
+          <div class="ready"><span data-subject-icon="maths" data-size="32" data-radius="9"></span><div class="grow"><div class="bold">Simple Interest</div><div class="tiny muted">3 revisions done · last on Sun 11 Oct</div></div><button class="btn xs">Record</button></div>
+          <div class="ready"><span data-subject-icon="reason" data-size="32" data-radius="9"></span><div class="grow"><div class="bold">Coding-Decoding</div><div class="tiny muted">3 revisions done · revision overdue</div></div><button class="btn xs">Record</button></div>
+          <div class="ready"><span data-subject-icon="english" data-size="32" data-radius="9"></span><div class="grow"><div class="bold">Vocab 1–50</div><div class="tiny muted">4 revisions done · last on Fri 2 Oct</div></div><button class="btn xs">Record</button></div>
+        </div>
+
+        <div class="card pad">
+          <h3 style="margin-bottom:10px">How a topic score moves revisions</h3>
+          <div class="thr">
+            <span style="flex:50;background:var(--red)">Forgot</span>
+            <span style="flex:20;background:var(--amber)">Hard</span>
+            <span style="flex:20;background:var(--green)">Good</span>
+            <span style="flex:10;background:var(--blue)">Easy</span>
+          </div>
+          <div style="position:relative;height:16px;margin:3px 0 10px" class="tiny muted">
+            <span style="position:absolute;left:0">0%</span><span style="position:absolute;left:50%;transform:translateX(-50%)">50</span>
+            <span style="position:absolute;left:70%;transform:translateX(-50%)">70</span><span style="position:absolute;left:90%;transform:translateX(-50%)">90</span>
+            <span style="position:absolute;right:0">100</span>
+          </div>
+          <div class="col gap6 small ink2">
+            <div class="row gap8"><i data-icon="refresh-ccw" class="sm" style="color:var(--blue)"></i>A topic score counts as that topic's revision on the test date.</div>
+            <div class="row gap8"><i data-icon="info" class="sm" style="color:var(--ink-3)"></i>An overall score alone is saved, but doesn't move dates.</div>
+            <div class="row gap8"><i data-icon="sliders-horizontal" class="sm" style="color:var(--ink-3)"></i>You can change these limits in Settings.</div>
+          </div>
+        </div>
+
+        <div class="card pad">
+          <div class="row between" style="margin-bottom:10px"><h3>Mock test trend</h3><span class="pill green"><i data-icon="trending-up"></i>+15 points</span></div>
+          <div class="row gap10" style="align-items:flex-end;height:96px;border-bottom:1px solid var(--line);padding:0 4px">
+            <div class="col center grow gap4"><span class="tiny bold">58%</span><span style="width:26px;height:46px;border-radius:6px 6px 2px 2px;background:#cdd7f7"></span></div>
+            <div class="col center grow gap4"><span class="tiny bold">61%</span><span style="width:26px;height:52px;border-radius:6px 6px 2px 2px;background:#b3c3f5"></span></div>
+            <div class="col center grow gap4"><span class="tiny bold">64%</span><span style="width:26px;height:58px;border-radius:6px 6px 2px 2px;background:#93acf2"></span></div>
+            <div class="col center grow gap4"><span class="tiny bold">71%</span><span style="width:26px;height:68px;border-radius:6px 6px 2px 2px;background:#5f86ec"></span></div>
+            <div class="col center grow gap4"><span class="tiny bold" style="color:var(--primary)">73%</span><span style="width:26px;height:72px;border-radius:6px 6px 2px 2px;background:repeating-linear-gradient(135deg,var(--primary) 0 6px,#5b6fd6 6px 12px)"></span></div>
+          </div>
+          <div class="row tiny muted" style="padding:5px 4px 0"><span class="grow" style="text-align:center">#9</span><span class="grow" style="text-align:center">#10</span><span class="grow" style="text-align:center">#11</span><span class="grow" style="text-align:center">#12</span><span class="grow" style="text-align:center">#13 draft</span></div>
+        </div>
+      </div>
+
+      <div class="col gap16">
+        <div class="card pad" style="padding:18px 20px">
+          <div class="row gap10" style="margin-bottom:12px"><h2 class="grow">Record a test result</h2><span class="pill">Draft · not saved yet</span></div>
+          <div class="fgrid" style="margin-bottom:12px">
+            <div class="field"><label>Test name</label><div class="input sm">Online mock #13</div></div>
+            <div class="field"><label>Where you took it</label><div class="input sm">Online mock app</div></div>
+            <div class="field"><label>Date</label><div class="input sm"><i data-icon="calendar" class="sm muted"></i>Thu 15 Oct 2026</div></div>
+            <div class="field"><label>Time taken</label><div class="input sm">58 min</div></div>
+          </div>
+          <div class="score" style="margin-bottom:12px">
+            <div class="col"><span class="tiny muted bold">OVERALL SCORE</span><div class="row gap8"><span class="big">146</span><span class="ink2" style="font-size:18px">/ 200</span></div></div>
+            <div class="col" style="width:200px"><div class="row between small"><span class="ink2">Accuracy</span><b>73%</b></div><div class="bar" style="margin-top:6px"><span style="width:73%;background:var(--primary)"></span></div></div>
+            <div class="grow tiny muted" style="padding-left:8px">Saved for analytics. Add topic scores below to move revision dates.</div>
+          </div>
+          <table>
+            <tr><th style="width:30%">Topic</th><th>Correct</th><th>Score</th><th>Counts as</th><th>What happens to revisions</th></tr>
+            <tr><td><div class="row gap8"><span class="dot" style="background:var(--s-maths)"></span><b>Simple Interest</b></div></td><td class="mono">20 / 22</td><td class="bold">91%</td><td><span class="pill blue">Easy</span></td><td class="small ink2">Skips a step · next on <b>Sat 14 Nov</b></td></tr>
+            <tr><td><div class="row gap8"><span class="dot" style="background:var(--s-reason)"></span><b>Coding-Decoding</b></div></td><td class="mono">14 / 17</td><td class="bold">82%</td><td><span class="pill green">Good</span></td><td class="small ink2">Next step · <b>Sat 31 Oct</b>, clears today's overdue revision</td></tr>
+            <tr><td><div class="row gap8"><span class="dot" style="background:var(--s-reason)"></span><b>Syllogism</b></div></td><td class="mono">7 / 11</td><td class="bold">64%</td><td><span class="pill amber">Hard</span></td><td class="small ink2">Repeats step 3 · <b>Mon 19 Oct</b></td></tr>
+            <tr><td><div class="row gap8"><span class="dot" style="background:var(--s-maths)"></span><b>Ratio &amp; Proportion</b></div></td><td class="mono">7 / 12</td><td class="bold">58%</td><td><span class="pill amber">Hard</span></td><td class="small ink2">Repeats step 1 · <b>Fri 16 Oct</b></td></tr>
+            <tr><td colspan="5" style="border-bottom:0"><a class="small bold row gap6"><i data-icon="plus" class="sm"></i>Add a topic score</a></td></tr>
+          </table>
+          <div class="row gap12" style="margin-top:8px">
+            <div class="input sm grow"><i data-icon="notebook-pen" class="sm muted"></i><span class="muted">Notes on mistakes (optional): mixed up part-to-whole ratios in Q14–17</span></div>
+            <button class="btn">Cancel</button>
+            <button class="btn primary"><i data-icon="check"></i>Save result</button>
+          </div>
+        </div>
+
+        <div class="card" style="overflow:hidden">
+          <div class="card-h" style="padding-bottom:4px"><h2>Recent results</h2><a class="small bold">All tests</a></div>
+          <table>
+            <tr><th>Date</th><th>Test</th><th>Score</th><th>Topic scores used for revisions</th></tr>
+            <tr><td class="ink2">Wed 7 Oct</td><td class="bold">Online mock #12</td><td><b>71%</b> <span class="muted small">142/200</span></td><td><div class="row gap6 wrap"><span class="pill green">Percentage 82%</span><span class="pill red">Ratio 45%</span><span class="pill blue">Time &amp; Work 91%</span></div></td></tr>
+            <tr><td class="ink2">Sun 4 Oct</td><td class="bold">Practice book · Set 4</td><td><b>64%</b> <span class="muted small">32/50</span></td><td><div class="row gap6 wrap"><span class="pill green">Simple Interest 70%</span><span class="pill amber">Linear Equations 60%</span></div></td></tr>
+            <tr><td class="ink2" style="border-bottom:0">Sat 26 Sep</td><td class="bold" style="border-bottom:0">Online mock #11</td><td style="border-bottom:0"><b>64%</b> <span class="muted small">128/200</span></td><td style="border-bottom:0"><span class="pill outline">Overall only · revisions unchanged</span></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="icons.js"></script>
+  <script src="common.js"></script>
+</body>
+</html>

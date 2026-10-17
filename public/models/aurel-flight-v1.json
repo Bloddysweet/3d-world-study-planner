@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "name": "Aurel animated sky drake",
+  "stage": "Optional app flight layer",
+  "asset": "aurel_sky_drake_rigged_v1.glb",
+  "generator": "scripts/build-sky-animation.mjs",
+  "bytes": 1688464,
+  "triangles": 10188,
+  "meshes": 1,
+  "materials": 1,
+  "bones": 16,
+  "clips": [
+    {
+      "name": "Wingbeat",
+      "duration": 3.2
+    },
+    {
+      "name": "Glide",
+      "duration": 6
+    },
+    {
+      "name": "TailSway",
+      "duration": 4.8
+    }
+  ],
+  "textures": 0,
+  "sha256": "fbae5bbbc0ee6fa0f14b5de5388f7179ac69d35ca3e537a8c025cc9cced73933",
+  "populationCap": 1
+}

@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>03 — Today (study area)</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .grid { display: grid; grid-template-columns: 392px 1fr; gap: 20px; }
+  .budget { display: flex; align-items: center; gap: 14px; padding: 10px 14px; border-radius: 14px; background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow); }
+  .budget .bar { width: 300px; }
+  .banner {
+    display: flex; align-items: center; gap: 12px; padding: 9px 12px; border-radius: 14px;
+    background: var(--amber-soft); border: 1px solid #f5d39a; margin-bottom: 12px;
+  }
+  .banner .ico { width: 34px; height: 34px; border-radius: 10px; background: #fff; color: var(--amber); display: inline-flex; align-items: center; justify-content: center; flex: none; }
+  .list { overflow: hidden; }
+  .sec { display: flex; align-items: center; gap: 8px; padding: 6px 16px 5px; background: var(--soft); border-top: 1px solid var(--line); }
+  .sec:first-child { border-top: 0; }
+  .sec .section-label { flex: 1; }
+  .trow { display: flex; align-items: center; gap: 12px; padding: 4px 16px; border-top: 1px solid var(--line); min-height: 44px; }
+  .trow .pill, .trow .subj { height: 20px; }
+  .trow .grip { color: #c9c1b3; }
+  .trow .ttl { font-weight: 600; font-size: 14px; }
+  .trow .meta { margin-top: 2px; }
+  .trow .dur { font-size: 12.5px; font-weight: 600; color: var(--ink-2); width: 44px; text-align: right; }
+  .trow.done .ttl { color: var(--ink-3); text-decoration: line-through; text-decoration-color: #c5bfb4; }
+  .trow.sel { background: #f6f9ff; }
+  .trow.suggest { background: repeating-linear-gradient(135deg, #fffaf0 0 10px, #fff6e6 10px 20px); }
+  .star { color: #e0a21b; fill: #f2b84b; width: 15px !important; height: 15px !important; }
+  .ratebox .rate .r { padding: 5px 8px; flex-direction: row; justify-content: center; gap: 6px; }
+  .ratebox .rate .r b { font-size: 13px; }
+  .ratebox { margin: 0 16px 8px 70px; padding: 8px 10px; border-radius: 12px; border: 1px solid #cfe0ff; background: #f7faff; }
+  .tip { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-2); }
+  .tip code { font-family: inherit; font-weight: 600; background: var(--grey-soft); padding: 1px 6px; border-radius: 6px; color: var(--ink); }
+  .order { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 12px; font-weight: 600; }
+  .order span.o { padding: 3px 8px; border-radius: 7px; background: var(--grey-soft); }
+</style>
+</head>
+<body class="page">
+  <div data-topbar="today"></div>
+  <div class="main">
+    <div class="page-head" style="margin-bottom:14px">
+      <div class="grow">
+        <h1>Today</h1>
+        <div class="sub">Thursday, 15 October · 9 items · 2 done</div>
+      </div>
+      <div class="budget">
+        <div class="col gap6">
+          <div class="row between small"><span class="ink2"><span class="dot" style="background:var(--green);margin-right:4px"></span>25m done · <b class="mono" style="color:var(--ink)">4h 10m</b> planned of <b class="mono" style="color:var(--ink)">3h 30m</b> free</span><span class="pill red">40m over</span></div>
+          <div class="bar"><span style="width:10%;background:var(--green)"></span><span style="width:74%;background:var(--primary);border-radius:0"></span><span style="width:16%;background:var(--red);border-radius:0 6px 6px 0"></span></div>
+
+        </div>
+        <button class="btn sm"><i data-icon="clock"></i>Today's hours</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- left column -->
+      <div class="col gap16">
+        <div class="card pad">
+          <div class="row gap10" style="margin-bottom:10px">
+            <span style="width:34px;height:34px;border-radius:10px;background:var(--primary-soft);color:var(--primary);display:inline-flex;align-items:center;justify-content:center"><i data-icon="clipboard-paste"></i></span>
+            <div class="grow"><h2>Paste today's targets</h2><div class="tiny muted">All subjects in one go. You check everything before it's saved.</div></div>
+          </div>
+          <div class="textarea" style="height:186px">
+            SSC Maths: Complete percentage videos 1–5. Solve 30 questions from the practice site (priority).<br>
+            Revise vocabulary words 101–150.<br>
+            Learn DSA Day 1 of 5. OR complete one Java collection topic.<br>
+            Watch this video: https://example.com/video
+          </div>
+          <div class="col gap6" style="margin:12px 0 14px">
+            <div class="tip"><i data-icon="lightbulb" class="sm" style="color:#d79a14"></i>Ranges work: <code>words 101–150</code> <code>videos 1–5</code></div>
+            <div class="tip"><i data-icon="star" class="sm" style="color:#d79a14"></i>Add <code>priority</code> to put a task on top</div>
+            <div class="tip"><i data-icon="clock" class="sm" style="color:#d79a14"></i>Times like <code>45 min</code> set the estimate</div>
+          </div>
+          <button class="btn primary" style="width:100%"><i data-icon="scan-text"></i>Read my plan</button>
+          <div class="row gap6 tiny muted" style="margin-top:9px;justify-content:center"><i data-icon="shield" class="sm"></i>Read on this device. No AI, nothing is uploaded.</div>
+        </div>
+
+        <div class="card pad">
+          <div class="row gap8" style="margin-bottom:8px"><i data-icon="info" class="sm" style="color:var(--primary)"></i><h3>How today was planned</h3></div>
+          <div class="order" style="margin-bottom:10px">
+            <span class="o">Priority</span><i data-icon="chevron-right" class="sm muted"></i>
+            <span class="o">Revisions due</span><i data-icon="chevron-right" class="sm muted"></i>
+            <span class="o">Carried forward</span><i data-icon="chevron-right" class="sm muted"></i>
+            <span class="o">New</span>
+          </div>
+          <div class="col gap6 small ink2">
+            <div class="row gap8"><i data-icon="corner-down-right" class="sm"></i>Anything not ticked moves to tomorrow by itself.</div>
+            <div class="row gap8"><i data-icon="refresh-ccw" class="sm"></i>Revisions count from the day you finish.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- right column -->
+      <div>
+        <div class="banner">
+          <span class="ico"><i data-icon="triangle-alert"></i></span>
+          <div class="grow"><b>40 min over your free time.</b> <span class="ink2">Move <b>Read Java Collections</b> (new, 40 min) to tomorrow? Nothing becomes overdue.</span></div>
+          <button class="btn sm primary">Move to tomorrow</button>
+          <button class="btn sm">Keep everything</button>
+        </div>
+        <div class="card list" id="list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const T = (o) => o;
+    const sections = [
+      ["star", "Priority", "#c27c00", [
+        T({ title: "Solve 30 Percentage questions", star: 1, s: "maths", topic: "Percentage", pills: [["Carried 1 day", "amber"], ["Practice · 30 questions"]], dur: "45m" }),
+        T({ title: "DSA Day 1 of 5: Arrays", star: 1, s: "dsa", topic: "Arrays", pills: [["Day plan · 1 of 5"]], dur: "50m" }),
+      ]],
+      ["refresh-ccw", "Revisions due", "var(--blue)", [
+        T({ title: "Revise Coding-Decoding", s: "reason", pills: [["Overdue 1 day", "red"], ["Step 4 of 6", "blue"]], dur: "15m" }),
+        T({ title: "Revise Percentage", s: "maths", sel: 1, done: 1, rate: 1, pills: [["Step 2 of 6", "blue"], ["Covers videos 1–3 + 20 questions"]], dur: "15m" }),
+        T({ title: "Revise Vocab 51–100", s: "english", done: 1, pills: [["Rated Good", "green"], ["Next: Sat 31 Oct"]], dur: "10m" }),
+        T({ title: "Revise Fundamental Rights", s: "gk", pills: [["Step 3 of 6", "blue"]], dur: "15m" }),
+      ]],
+      ["corner-down-right", "Carried forward", "var(--amber)", [
+        T({ title: "Watch Percentage videos 4–5", s: "maths", topic: "Percentage", pills: [["Carried 1 day", "amber"], ["Video · 2 videos"]], dur: "30m" }),
+      ]],
+      ["sprout", "New", "var(--green)", [
+        T({ title: "Learn Vocab 101–150", s: "english", topic: "Vocab 101–150", pills: [["Memorise · 50 words"]], dur: "30m" }),
+        T({ title: "Read Java Collections: List vs Set", s: "soft", topic: "Java Collections", suggest: 1, pills: [["Reading"], ["Suggested: tomorrow", "amber"]], dur: "40m" }),
+      ]],
+    ];
+    const ratebox = `<div class="ratebox">
+      <div class="row between" style="margin-bottom:6px"><span class="small bold">How well did you remember Percentage?</span><span class="tiny muted">Try to recall first, then check your notes</span></div>
+      <div class="rate">
+        <div class="r forgot"><b>Forgot</b><span>again tomorrow</span></div>
+        <div class="r hard"><b>Hard</b><span>in 2 days</span></div>
+        <div class="r good"><b>Good</b><span>in 4 days</span></div>
+        <div class="r easy"><b>Easy</b><span>in 7 days</span></div>
+      </div></div>`;
+    window.pageInit = () => {
+      document.getElementById("list").innerHTML = sections.map(([icon, label, color, rows]) => `
+        <div class="sec"><i data-icon="${icon}" class="sm" style="color:${color}"></i><span class="section-label">${label}</span><span class="tiny muted bold">${rows.length}</span></div>
+        ${rows.map((t) => `
+          <div class="trow ${t.done ? "done" : ""} ${t.sel ? "sel" : ""} ${t.suggest ? "suggest" : ""}">
+            <i data-icon="grip-vertical" class="sm grip"></i>
+            <span class="check ${t.done ? "done" : ""}">${t.done ? '<i data-icon="check"></i>' : ""}</span>
+            <div class="grow">
+              <div class="row gap6"><span class="ttl">${t.title}</span>${t.star ? '<i data-icon="star" class="star"></i>' : ""}</div>
+              <div class="row gap6 meta"><span class="subj" data-s="${t.s}" ${t.topic ? `data-label="${SUBJECTS[t.s].short} · ${t.topic}"` : ""}></span>${t.pills.map((p) => `<span class="pill ${p[1] || ""}">${p[0]}</span>`).join("")}</div>
+            </div>
+            <span class="dur">${t.dur}</span>
+            <i data-icon="ellipsis" class="sm muted"></i>
+          </div>${t.rate ? ratebox : ""}`).join("")}`).join("");
+    };
+  </script>
+  <script src="icons.js"></script>
+  <script src="common.js"></script>
+</body>
+</html>

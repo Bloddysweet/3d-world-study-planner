@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>09 — Settings &amp; data</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 382px 340px; gap: 16px; }
+  .card.pad { padding: 16px 18px; display: flex; flex-direction: column; }
+  .ch { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .ch .ico { width: 32px; height: 32px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+  .ch h3 { flex: 1; }
+  .dayrow { display: flex; align-items: center; gap: 10px; padding: 2px 0; font-size: 13px; }
+  .dayrow .dn { width: 92px; font-weight: 600; color: var(--ink-2); }
+  .dayrow .bar { flex: 1; height: 8px; }
+  .dayrow .val { width: 64px; height: 28px; border: 1px solid var(--line-2); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12.5px; }
+  .gaps { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .gap { width: 44px; height: 40px; border-radius: 10px; border: 1px solid var(--line-2); display: inline-flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; background: #fff; }
+  .gap em { font-style: normal; font-size: 9.5px; color: var(--ink-3); font-weight: 600; }
+  .gap.m { border-style: dashed; width: 58px; }
+  .setrow { display: flex; align-items: center; gap: 10px; padding: 9px 0; font-size: 13px; }
+  .setrow + .setrow { border-top: 1px dashed var(--line); }
+  .setrow .t { flex: 1; }
+  .setrow .t div { font-size: 11.5px; color: var(--ink-3); }
+  .num { width: 58px; height: 30px; border: 1px solid var(--line-2); border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; }
+  .subrow { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 13px; }
+  .subrow + .subrow { border-top: 1px dashed var(--line); }
+  .subrow .t { flex: 1; font-weight: 600; }
+  .subrow .t span { font-weight: 500; color: var(--ink-3); font-size: 11.5px; margin-left: 6px; }
+  .note { padding: 10px 12px; border-radius: 12px; font-size: 12.5px; display: flex; gap: 8px; }
+  .dbtn { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); font-weight: 600; font-size: 13px; }
+  .dbtn .s { font-weight: 500; color: var(--ink-3); font-size: 11.5px; }
+</style>
+</head>
+<body class="page">
+  <div data-topbar="settings"></div>
+  <div class="main">
+    <div class="page-head" style="margin-bottom:14px">
+      <div class="grow">
+        <h1>Settings</h1>
+        <div class="sub">Your study time, revision rules, subjects and data. Everything is saved in this browser.</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- study time -->
+      <div class="card pad">
+        <div class="ch"><span class="ico" style="background:var(--primary-soft);color:var(--primary)"><i data-icon="clock"></i></span><h3>Daily study time</h3></div>
+        <div id="days"></div>
+        <div class="divider" style="margin:10px 0 6px"></div>
+        <div class="setrow"><div class="t">Default times<div>When the paste doesn't say</div></div><span class="tiny muted">task</span><span class="num">30m</span><span class="tiny muted">revision</span><span class="num">15m</span></div>
+      </div>
+
+      <!-- revision schedule -->
+      <div class="card pad">
+        <div class="ch"><span class="ico" style="background:var(--blue-soft);color:var(--blue)"><i data-icon="refresh-ccw"></i></span><h3>Revision schedule</h3><a class="tiny bold">Why these?</a></div>
+        <div class="small ink2" style="margin-bottom:8px">Gap (days) before each revision, counted from when you actually did the last one:</div>
+        <div class="gaps">
+          <span class="gap">1<em>step 1</em></span><span class="gap">2<em>step 2</em></span><span class="gap">4<em>step 3</em></span>
+          <span class="gap">7<em>step 4</em></span><span class="gap">16<em>step 5</em></span><span class="gap">30<em>step 6</em></span>
+          <span class="gap m">60<em>then every</em></span>
+        </div>
+        <div class="tiny muted" style="margin:6px 0 10px">On time, that's day 1, 3, 7, 14, 30 and 60 after you finish.</div>
+        <div class="setrow"><div class="t"><b style="color:var(--red)">Forgot</b> · back to step 1</div><div class="t"><b style="color:var(--amber)">Hard</b> · repeat step</div></div>
+        <div class="setrow"><div class="t"><b style="color:var(--green)">Good</b> · next step</div><div class="t"><b style="color:var(--blue)">Easy</b> · skip one step</div></div>
+        <div style="margin-top:auto" class="row gap8"><button class="btn sm"><i data-icon="undo-2"></i>Reset to defaults</button><span class="tiny muted">Defaults, not a guaranteed best</span></div>
+      </div>
+
+      <!-- tests -->
+      <div class="card pad">
+        <div class="ch"><span class="ico" style="background:var(--green-soft);color:var(--green)"><i data-icon="clipboard-check"></i></span><h3>Tests</h3></div>
+        <div class="setrow"><div class="t"><b style="color:var(--red)">Forgot</b> if a topic scores below</div><span class="num">50%</span></div>
+        <div class="setrow"><div class="t"><b style="color:var(--amber)">Hard</b> if below</div><span class="num">70%</span></div>
+        <div class="setrow"><div class="t"><b style="color:var(--green)">Good</b> if below <span class="muted">(otherwise <b style="color:var(--blue)">Easy</b>)</span></div><span class="num">90%</span></div>
+        <div class="setrow"><div class="t">"Ready for test" after<div>Revisions finished on a topic</div></div><span class="num">3</span></div>
+        <div class="note" style="background:var(--soft);margin-top:auto"><i data-icon="info" class="sm" style="color:var(--ink-3);margin-top:2px"></i><span class="ink2">Only topic scores move revision dates. An overall score is saved for analytics.</span></div>
+      </div>
+
+      <!-- subjects -->
+      <div class="card pad">
+        <div class="ch"><span class="ico" style="background:var(--gold-soft);color:#c27c00"><i data-icon="map"></i></span><h3>Subjects (islands)</h3><button class="btn xs primary"><i data-icon="plus"></i>Add</button></div>
+        <div id="subs"></div>
+        <div class="row between tiny muted" style="margin-top:auto;padding-top:6px"><span class="row gap4"><i data-icon="archive" class="sm"></i>Archived subjects (0)</span><span>A new subject gets an empty island</span></div>
+      </div>
+
+      <!-- appearance -->
+      <div class="card pad">
+        <div class="ch"><span class="ico" style="background:var(--violet-soft, #f0ebfe);color:var(--violet, #7c5ce6)"><i data-icon="palette"></i></span><h3>World &amp; motion</h3></div>
+        <div class="small bold ink2" style="margin-bottom:6px">3D world quality</div>
+        <div class="seg" style="margin-bottom:8px"><span class="on">Auto</span><span>Low</span><span>High</span><span>2D map only</span></div>
+        <div class="setrow"><div class="t">Reduce motion<div>Follows your device setting</div></div><span class="toggle on"></span></div>
+        <div class="setrow"><div class="t">Rewards &amp; celebrations<div>Glowing plots, path lights, badges</div></div><span class="toggle on"></span></div>
+        <div class="setrow"><div class="t">Open on the 2D map<div>Skip the 3D world at start</div></div><span class="toggle"></span></div>
+      </div>
+
+      <!-- data -->
+      <div class="card pad">
+        <div class="ch"><span class="ico" style="background:var(--grey-soft);color:var(--ink-2)"><i data-icon="hard-drive"></i></span><h3>Your data</h3></div>
+        <div class="note" style="background:var(--amber-soft);color:#8a5a06;margin-bottom:10px"><i data-icon="triangle-alert" class="sm" style="margin-top:2px"></i><span>Saved only in this browser on this device. Clearing browser data deletes it, so export a backup now and then. Last backup: never.</span></div>
+        <div class="col gap8">
+          <div class="dbtn"><i data-icon="download" class="sm" style="color:var(--primary)"></i><span class="grow">Export backup <span class="s">· .json file</span></span><i data-icon="chevron-right" class="sm muted"></i></div>
+          <div class="dbtn"><i data-icon="upload" class="sm" style="color:var(--primary)"></i><span class="grow">Import backup <span class="s">· checks the file first</span></span><i data-icon="chevron-right" class="sm muted"></i></div>
+          <div class="dbtn" style="border-color:#f3c4c5;color:var(--red)"><i data-icon="trash-2" class="sm"></i><span class="grow">Clear all data <span class="s">· asks you to confirm</span></span><i data-icon="chevron-right" class="sm"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    window.pageInit = () => {
+      const days = [["Monday", 3.5], ["Tuesday", 3.5], ["Wednesday", 3.5], ["Thursday", 3.5], ["Friday", 3.5], ["Saturday", 5], ["Sunday", 2, "light day"]];
+      document.getElementById("days").innerHTML = days.map(([d, h, tag]) => `
+        <div class="dayrow"><span class="dn">${d}</span><div class="bar"><span style="width:${(h / 6) * 100}%;background:${tag ? "#a9c2f6" : "var(--primary)"}"></span></div>
+        ${tag ? `<span class="pill blue" style="height:20px">${tag}</span>` : ""}<span class="val">${Math.floor(h)}h${h % 1 ? " 30m" : ""}</span></div>`).join("");
+      const subs = [["maths", 7], ["reason", 9], ["english", 12], ["gk", 10], ["dsa", 8], ["soft", 6]];
+      document.getElementById("subs").innerHTML = subs.map(([k, n]) => `
+        <div class="subrow"><span data-subject-icon="${k}" data-size="28" data-radius="8"></span><span class="t">${SUBJECTS[k].name}<span>${n} topics</span></span>
+        <button class="btn icon xs ghost" style="width:26px"><i data-icon="pencil"></i></button><button class="btn icon xs ghost" style="width:26px"><i data-icon="archive"></i></button></div>`).join("");
+    };
+  </script>
+  <script src="icons.js"></script>
+  <script src="common.js"></script>
+</body>
+</html>

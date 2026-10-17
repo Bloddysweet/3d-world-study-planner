@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>08 — Analytics</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px; }
+  .stat { padding: 14px 16px; }
+  .stat .v { font-family: "Fredoka"; font-size: 30px; font-weight: 600; line-height: 1.05; }
+  .stat .l { font-size: 12px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat .k { display: inline-flex; align-items: center; gap: 4px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1.25fr 0.95fr; gap: 16px; margin-bottom: 16px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1.25fr 0.95fr; gap: 16px; }
+  .heat { display: grid; grid-template-columns: 26px repeat(12, 1fr); gap: 4px; }
+  .heat .lbl { font-size: 10px; color: var(--ink-3); display: flex; align-items: center; }
+  .heat .cell { aspect-ratio: 1; border-radius: 4px; }
+  .chart { height: 150px; display: flex; align-items: flex-end; gap: 14px; padding: 0 4px; border-bottom: 1px solid var(--line); position: relative; }
+  .chart .grp { flex: 1; display: flex; align-items: flex-end; justify-content: center; gap: 4px; height: 100%; }
+  .chart .b { width: 16px; border-radius: 5px 5px 2px 2px; }
+  .xl { display: flex; gap: 14px; padding: 6px 4px 0; }
+  .xl span { flex: 1; text-align: center; font-size: 11px; color: var(--ink-3); font-weight: 600; }
+  .donut { width: 120px; height: 120px; border-radius: 50%; position: relative; flex: none;
+    background: conic-gradient(var(--red) 0 8%, var(--amber) 8% 29%, var(--green) 29% 84%, var(--blue) 84% 100%); }
+  .donut::after { content: ""; position: absolute; inset: 22px; background: #fff; border-radius: 50%; }
+  .donut .mid { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; }
+  .hb { display: flex; align-items: center; gap: 10px; font-size: 12.5px; }
+  .hb .nm { width: 96px; color: var(--ink-2); font-weight: 600; }
+  .hb .bar { flex: 1; height: 10px; }
+  .hb b { width: 36px; text-align: right; }
+  .weak { display: flex; align-items: center; gap: 10px; padding: 9px 0; }
+  .weak + .weak { border-top: 1px dashed var(--line); }
+  .four { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .four div { padding: 9px 10px; border-radius: 11px; background: var(--soft); font-size: 12px; color: var(--ink-2); }
+  .four b { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink); margin-bottom: 2px; }
+</style>
+</head>
+<body class="page">
+  <div data-topbar="analytics"></div>
+  <div class="main">
+    <div class="page-head" style="margin-bottom:14px">
+      <div class="grow">
+        <h1>Analytics</h1>
+        <div class="sub">Built only from what you recorded. Activity, recall and test scores are kept separate on purpose.</div>
+      </div>
+      <div class="seg"><span>7 days</span><span class="on">30 days</span><span>All time</span></div>
+    </div>
+
+    <div class="stats">
+      <div class="card stat"><div class="l">Study days</div><div class="v">22<span class="ink2" style="font-size:18px"> / 30</span></div><div class="small ink2">Consistency · 12-day streak now</div></div>
+      <div class="card stat"><div class="l">Tasks completed</div><div class="v">64</div><div class="small" style="color:var(--green)"><span class="k"><i data-icon="trending-up" class="sm"></i>12 more than the 30 days before</span></div></div>
+      <div class="card stat"><div class="l">Revisions on time</div><div class="v">86%</div><div class="small ink2">112 of 130 · 18 moved forward</div></div>
+      <div class="card stat"><div class="l">Topic test average</div><div class="v">68%</div><div class="small ink2">From 14 topic scores in 5 tests</div></div>
+    </div>
+
+    <div class="row2">
+      <div class="card pad">
+        <div class="row between" style="margin-bottom:10px"><h3>Study consistency</h3><span class="tiny muted">last 12 weeks</span></div>
+        <div class="heat" id="heat"></div>
+        <div class="row gap6 tiny muted" style="margin-top:10px;justify-content:flex-end">less
+          <span class="dot" style="border-radius:3px;width:11px;height:11px;background:#efe9df"></span>
+          <span class="dot" style="border-radius:3px;width:11px;height:11px;background:#d6e2fb"></span>
+          <span class="dot" style="border-radius:3px;width:11px;height:11px;background:#a9c2f6"></span>
+          <span class="dot" style="border-radius:3px;width:11px;height:11px;background:#6f97ee"></span>
+          <span class="dot" style="border-radius:3px;width:11px;height:11px;background:#3b6fe0"></span>more</div>
+      </div>
+      <div class="card pad">
+        <div class="row between" style="margin-bottom:12px"><h3>Planned vs done</h3>
+          <div class="row gap10 tiny muted"><span class="row gap4"><span class="dot" style="background:#cdd7f7"></span>planned</span><span class="row gap4"><span class="dot" style="background:var(--primary)"></span>done</span><span class="row gap4"><span class="dot" style="background:var(--red)"></span>free time</span></div></div>
+        <div class="chart" id="chart"></div>
+        <div class="xl"><span>Fri</span><span>Sat</span><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Today</span></div>
+        <div class="tiny muted" style="margin-top:10px">Dashed line = the free time you set for that day. Today is still in progress.</div>
+      </div>
+      <div class="card pad">
+        <h3 style="margin-bottom:12px">How well you remembered</h3>
+        <div class="row gap16">
+          <div class="donut"><div class="mid"><span class="display" style="font-size:22px">130</span><span class="tiny muted">revisions</span></div></div>
+          <div class="col gap8 small">
+            <div class="row gap8"><span class="dot" style="background:var(--red)"></span>Forgot<b style="margin-left:auto;padding-left:14px">8%</b></div>
+            <div class="row gap8"><span class="dot" style="background:var(--amber)"></span>Hard<b style="margin-left:auto">21%</b></div>
+            <div class="row gap8"><span class="dot" style="background:var(--green)"></span>Good<b style="margin-left:auto">55%</b></div>
+            <div class="row gap8"><span class="dot" style="background:var(--blue)"></span>Easy<b style="margin-left:auto">16%</b></div>
+          </div>
+        </div>
+        <div class="tiny muted" style="margin-top:14px">Mostly Good means the gaps suit you. If Forgot rises above about 1 in 5, shorter gaps may help.</div>
+      </div>
+    </div>
+
+    <div class="row3">
+      <div class="card pad">
+        <div class="row between" style="margin-bottom:12px"><h3>Test scores by subject</h3><span class="tiny muted">topic scores</span></div>
+        <div class="col gap10">
+          <div class="hb"><span class="nm">Maths</span><div class="bar"><span style="width:71%;background:var(--s-maths)"></span></div><b>71%</b></div>
+          <div class="hb"><span class="nm">Reasoning</span><div class="bar"><span style="width:66%;background:var(--s-reason)"></span></div><b>66%</b></div>
+          <div class="hb"><span class="nm">English</span><div class="bar"><span style="width:62%;background:var(--s-english)"></span></div><b>62%</b></div>
+          <div class="hb"><span class="nm">GK</span><div class="bar"><span style="width:58%;background:var(--s-gk)"></span></div><b>58%</b></div>
+          <div class="hb"><span class="nm">DSA</span><div class="bar"><span style="width:74%;background:var(--s-dsa)"></span></div><b>74%</b></div>
+          <div class="hb"><span class="nm">Software Dev</span><span class="tiny muted grow">No tests recorded yet</span></div>
+        </div>
+      </div>
+      <div class="card pad">
+        <div class="row between" style="margin-bottom:4px"><h3>Topics that need attention</h3><span class="pill red">4 weak</span></div>
+        <div class="weak"><span class="subj" data-s="maths"></span><div class="grow"><div class="bold">Ratio &amp; Proportion</div><div class="tiny muted">Test 45% · rated Forgot last revision</div></div><button class="btn xs">Revise today</button></div>
+        <div class="weak"><span class="subj" data-s="english"></span><div class="grow"><div class="bold">Error Spotting</div><div class="tiny muted">Test 52% · same mistakes twice (articles)</div></div><button class="btn xs">Revise today</button></div>
+        <div class="weak"><span class="subj" data-s="gk"></span><div class="grow"><div class="bold">Mughal Empire</div><div class="tiny muted">Test 58% · 2 revisions rated Hard</div></div><button class="btn xs">Revise today</button></div>
+        <div class="weak"><span class="subj" data-s="reason"></span><div class="grow"><div class="bold">Syllogism</div><div class="tiny muted">Test 64% · borderline</div></div><button class="btn xs">Revise today</button></div>
+      </div>
+      <div class="card pad">
+        <h3 style="margin-bottom:10px">Four different things</h3>
+        <div class="four">
+          <div><b><i data-icon="list-checks" class="sm" style="color:var(--primary)"></i>Activity</b>Tasks done and time spent. Effort, not learning.</div>
+          <div><b><i data-icon="brain" class="sm" style="color:var(--violet)"></i>Recall</b>Your Forgot / Hard / Good / Easy ratings.</div>
+          <div><b><i data-icon="clipboard-check" class="sm" style="color:var(--green)"></i>Test scores</b>Results you recorded, by topic.</div>
+          <div><b><i data-icon="gem" class="sm" style="color:#c08200"></i>Topic strength</b>Weak to Strong, from recall + tests. <a class="bold">How?</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    window.pageInit = () => {
+      // heatmap: 12 weeks x 7 days, deterministic sample data
+      let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+      const colors = ["#efe9df", "#d6e2fb", "#a9c2f6", "#6f97ee", "#3b6fe0"];
+      const days = ["Mon", "", "Wed", "", "Fri", "", "Sun"];
+      let html = "";
+      for (let d = 0; d < 7; d++) {
+        html += `<span class="lbl">${days[d]}</span>`;
+        for (let w = 0; w < 12; w++) {
+          const isFuture = w === 11 && d > 3;
+          let level = rnd() < 0.2 ? 0 : 1 + Math.floor(rnd() * 4);
+          if (w >= 10) level = Math.max(level, 2);
+          html += `<span class="cell" style="background:${isFuture ? "transparent" : colors[level]};${isFuture ? "border:1px dashed #e4ddd1" : ""}"></span>`;
+        }
+      }
+      document.getElementById("heat").innerHTML = html;
+      // planned vs done (hours), free time line per day
+      const data = [[3.5, 3.0, 3.5], [5, 4.5, 5], [2, 1.5, 2], [3.5, 3.5, 3.5], [3.5, 2.5, 3.5], [3.5, 3.0, 3.5], [4.2, 0.4, 3.5]];
+      const max = 5.5, H = 150;
+      document.getElementById("chart").innerHTML = data.map(([p, d, f]) => `
+        <div class="grp" style="position:relative">
+          <span class="b" style="height:${(p / max) * H}px;background:#cdd7f7"></span>
+          <span class="b" style="height:${(d / max) * H}px;background:var(--primary)"></span>
+          <span style="position:absolute;left:8%;right:8%;bottom:${(f / max) * H}px;border-top:2px dashed var(--red);opacity:.8"></span>
+        </div>`).join("");
+    };
+  </script>
+  <script src="icons.js"></script>
+  <script src="common.js"></script>
+</body>
+</html>

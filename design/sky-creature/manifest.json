@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "name": "Aurel sky drake",
+  "stage": "Static model approval; no rig, clips or app flight yet",
+  "asset": "models/aurel_sky_drake_v1.glb",
+  "generator": "scripts/build-sky-creature.mjs",
+  "bytes": 875036,
+  "triangles": 10188,
+  "meshes": 13,
+  "materials": 1,
+  "bounds": {
+    "min": [
+      -4.6553544998168945,
+      -0.5664570927619934,
+      -4.579999923706055
+    ],
+    "max": [
+      4.6553544998168945,
+      1.0714011192321777,
+      2.7329797744750977
+    ]
+  },
+  "sha256": "3c350b4c36ebbe6578b0d9639c868a7c1cf607b53146aac2a2d815ff82b4fead",
+  "textures": 0,
+  "animations": 0
+}

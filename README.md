@@ -9,6 +9,123 @@
 
 ---
 
+# Running basic app
+
+The first local-first React app is implemented, with the approved 3D model kit, editable subjects, Today plans, paste review, revisions, external test results, analytics and JSON backups.
+
+```sh
+# Node.js 22.12+; run inside this repository
+npm ci
+npm run dev
+```
+
+Use the **Study World planner** live preview in Arena, or Vite's printed local URL. Your personal workspace starts without fake tasks; explore the separate demo from World or Settings. Nothing has been deployed to a cloud service.
+
+- [App guide: workflows, storage, limits and development](APP_GUIDE.md)
+- [Verification results](APP_VERIFICATION.md)
+
+---
+
+# 0. Confirmed Product Decisions
+
+Confirmed with the project owner on 2026-10-15. **Where this section conflicts with any later section, this section takes precedence.**
+
+## 0.1 The problem we are solving
+
+A self-studying learner (for example, someone preparing for SSC exams while also learning programming) needs to know **what to study today**, **remember what they have already studied**, and **see which topics are actually weak**. The planner, revision, and test logic is the core product. The 3D world is the engaging layer on top of it, never a replacement for it.
+
+## 0.2 Core workflow
+
+1. **Paste.** In the Today area (the user's "study area"), the user pastes the day's targets for any number of subjects in one go.
+2. **Review.** The local parser splits the text into proposed tasks and assigns each one to a subject and topic. The user fixes or removes proposals, then confirms. Nothing is saved without confirmation.
+3. **Plan.** Confirmed tasks go on today's plan. Tasks marked **Priority** come first.
+4. **Complete.** The user explicitly marks work as completed.
+5. **Revise.** Completing work schedules revisions counted from the **actual completion date**, not the date the task was created or first planned.
+6. **Carry forward.** Work that is not marked completed moves to the next day automatically. It is never dropped.
+7. **Test.** Revised topics become ready for a test. The user records the results of tests taken elsewhere, and those results adjust future revisions.
+
+## 0.3 Subjects are dynamic
+
+- The app starts with six editable starter subjects: SSC Mathematics, SSC Reasoning, English and Vocabulary, GK and General Studies, Data Structures and Algorithms, and Software Development.
+- The user can add, rename, archive, and restore subjects. Archiving hides a subject but keeps its history. Permanent deletion is a separate action with a confirmation step.
+- Each active subject appears as one island. The 3D layout and the 2D fallback must handle any number of subjects, not a fixed six.
+- **Terminology:** the app calls an island a **Subject** (earlier versions of this spec said "Study Area"). The hierarchy is **Subject → Topic → Tasks and Resources**. A topic may carry an optional group label (for example, "Arithmetic") instead of a separate hierarchy level.
+
+## 0.4 Reading pasted plans: local parser first
+
+- Version 1 uses only the built-in deterministic local parser (Section 8.2). No AI key, paid service, or network access is required.
+- Real AI parsing (for example, OpenRouter through a secure server-side component, Section 8.3) is deferred to a later phase.
+- Scheduling never needs AI. It is deterministic rules: priority, carry-forward, revision dates, and available time.
+
+## 0.5 Time-aware daily planning
+
+- The user sets the available study time for each day.
+- Every task has an estimated duration. The parser fills it in when the pasted text states one; otherwise a default applies. The user can edit it.
+- Today's plan combines Priority tasks, due and overdue revisions, carried-forward tasks, and new tasks, in that default order.
+- Unfinished tasks carry forward to the next day automatically and show how many days they have been carried.
+- When the day's total exceeds the available time, the app shows the overload, explains what it recommends doing first, and suggests what to move (lowest-priority new learning first). **The user decides.** Nothing is moved or deleted silently.
+
+## 0.6 Revision schedule: adaptive ladder
+
+Default schedule (configurable). Each gap is counted from the day the previous step was **actually** completed:
+
+| Revision | Gap after previous step | Day after completion, if every step is on time |
+| --- | --- | --- |
+| 1st | 1 day | Day 1 |
+| 2nd | 2 days | Day 3 |
+| 3rd | 4 days | Day 7 |
+| 4th | 7 days | Day 14 |
+| 5th | 16 days | Day 30 |
+| 6th | 30 days | Day 60 |
+| Maintenance | Every 60 days | Day 120, 180, ... until the topic is archived or revision is switched off |
+
+After each revision, the user taps one rating:
+
+| Rating | Next revision |
+| --- | --- |
+| Forgot | Restart at the 1st step (in 1 day) |
+| Hard | Repeat the same step (same gap again) |
+| Good | Move to the next step |
+| Easy | Skip one step |
+
+Rules:
+
+- **One revision per topic per day of work.** Tasks for the same topic completed on the same day create one revision item (for example, "Revise Percentage") that lists what it covers.
+- **Default, to confirm in Phase 6:** if a topic already has an active revision schedule when more work on it is completed, the schedule restarts at the 1st step from the new completion date and covers both. A topic never has two parallel schedules.
+- **Exception:** range-based memorization (for example, vocabulary words 101–150) keeps one schedule per range, because each range is different material.
+- **Revision toggle:** revision is on by default and can be switched off for individual tasks (for example, "take a mock test" or "build a feature").
+- **Missed revisions** are overdue, not forgotten. They carry forward as a single item (never duplicated) and show how many days they are overdue. The next gap is counted from the day the revision is actually done.
+- **Revision means active recall:** the revision screen prompts the user to recall or solve first and check notes afterwards, rather than simply re-reading.
+
+Research basis: spaced practice and practice testing are the highest-rated study techniques, while re-reading is rated low (Dunlosky et al., 2013). The best gap depends on how far away the test is (Cepeda et al., 2008). Ever-expanding gaps have not been shown to beat other spacing for long-term retention (Karpicke & Roediger, 2007), and adaptive schedulers such as SM-2 and FSRS adjust gaps from the learner's own recall. No fixed sequence is scientifically proven optimal, so these values are transparent, configurable defaults, not validated optima. References are listed in Section 0.9.
+
+## 0.7 Tests: scheduled revision exams and external results
+
+- Version 1 records the results of tests taken outside the app (mock-test apps, books, PDFs): name or source, date, score and total (shown as a percentage), optional time taken, optional notes on mistakes, and per-topic results where available.
+- **Scheduled revision exams (user-approved addition):** default every 7 days, adjustable from 1–90 days in Settings. Weekly is a practical starting cadence, not a scientifically fixed optimum. The first deadline starts from an actual recall revision, not learning completion. Build a syllabus from untested recall dates for active topics, retaining separate vocabulary ranges. Show a due reminder in Today and a bounded syllabus in Tests; take the exam outside the app.
+- A missed exam stays as one due checkpoint, not a pile of duplicates. Explicitly recording a revision-exam result requires confirming that the whole displayed syllabus was covered. Store that syllabus with the test record; ordinary unrelated result records remain separate. Overall-only exam scores do not move revisions. New recalls build the next checkpoint from the actual exam date; after an inactive interval with no material, restart from the first new recall rather than inventing an overdue empty exam. Future recalls and exam-generated score evidence do not create a syllabus.
+- A topic shows as **ready for test** after its 3rd revision (about one week after completion when revisions are on time). A test can still be recorded for any topic at any time.
+- A recorded **topic-level** result counts as a revision of that topic on the test date. It maps to a rating using configurable thresholds: below 50% is Forgot, 50–69% is Hard, 70–89% is Good, and 90% or higher is Easy.
+- An overall score without topic-level results is stored and shown in analytics, but it does not change revision timing.
+- In-app question banks, quizzes, flashcards, and AI-generated questions are deferred to a later phase.
+
+## 0.8 Deferred to later phases
+
+- Real AI parsing (requires a secure server-side component).
+- In-app quizzes, flashcards, and AI-generated questions.
+- Everything already deferred by Sections 2 and 20 (Supabase, authentication, Cloudflare, deployment).
+
+## 0.9 References for the revision design
+
+- Dunlosky, J., Rawson, K. A., Marsh, E. J., Nathan, M. J., & Willingham, D. T. (2013). Improving students' learning with effective learning techniques. *Psychological Science in the Public Interest, 14*(1), 4–58. https://doi.org/10.1177/1529100612453266
+- Cepeda, N. J., Vul, E., Rohrer, D., Wixted, J. T., & Pashler, H. (2008). Spacing effects in learning: A temporal ridgeline of optimal retention. *Psychological Science, 19*(11), 1095–1102. https://doi.org/10.1111/j.1467-9280.2008.02209.x
+- Karpicke, J. D., & Roediger, H. L. (2007). Expanding retrieval practice promotes short-term retention, but equally spaced retrieval enhances long-term retention. *Journal of Experimental Psychology: Learning, Memory, and Cognition, 33*(4), 704–719. https://doi.org/10.1037/0278-7393.33.4.704
+- Murre, J. M. J., & Dros, J. (2015). Replication and analysis of Ebbinghaus' forgetting curve. *PLoS ONE, 10*(7), e0120644. https://doi.org/10.1371/journal.pone.0120644
+- SuperMemo algorithm SM-2 (Woźniak, 1987): https://supermemo.guru/wiki/History_of_spaced_repetition_(print)
+- FSRS (Free Spaced Repetition Scheduler): https://github.com/open-spaced-repetition/fsrs4anki
+
+---
+
 # 1. Product Vision
 
 Build an attractive, interactive, gamified study planner that transforms unstructured learning goals into organized study tasks, automatically schedules revisions, tracks performance, and helps users identify weak areas.
@@ -71,7 +188,7 @@ Use browser `localStorage` through a dedicated persistence adapter for the first
 
 Requirements:
 
-- Persist study areas, subjects, topics, resources, tasks, revision sessions, assessment results, preferences, and progress.
+- Persist subjects, topics, resources, tasks, revision sessions, assessment results, preferences, and progress.
 - Load saved state on application startup.
 - Handle invalid or corrupted stored data safely.
 - Version the stored data format.
@@ -147,7 +264,7 @@ Use:
 - Soft directional lighting.
 - Atmospheric depth and restrained fog where appropriate.
 - Smooth shadows without excessive rendering cost.
-- A cohesive palette, with different accents for different study areas.
+- A cohesive palette, with different accents for different subjects.
 - Thoughtful composition, camera framing, spacing, and scale.
 - Smooth camera transitions.
 - Subtle ambient animation.
@@ -205,7 +322,7 @@ The website must still be usable on ordinary laptops.
 
 # 5. The Learning World
 
-Create six initial study islands:
+Start with six editable starter subjects, each shown as an island:
 
 1. SSC Mathematics.
 2. SSC Reasoning.
@@ -214,7 +331,9 @@ Create six initial study islands:
 5. Data Structures and Algorithms.
 6. Software Development.
 
-Each island represents a study area, not an individual task.
+Subjects are dynamic: the user can add, rename, archive, restore, or permanently delete subjects (Section 0.3). The world shows one island per active subject and must lay out any number of islands, not a fixed six.
+
+Each island represents a subject, not an individual task.
 
 Each island should have:
 
@@ -244,7 +363,7 @@ Path states may include:
 
 Use progress-based unlocking only when it improves the product.
 
-Do not make core study features inaccessible behind arbitrary game requirements. Users must still be able to create study areas and tasks through the standard interface.
+Do not make core study features inaccessible behind arbitrary game requirements. Users must still be able to create subjects and tasks through the standard interface.
 
 ## 5.2 Visual rewards
 
@@ -273,9 +392,9 @@ Create the following pages or equivalent navigable views.
 
 Display the 3D island world, overall study progress, today's workload summary, due revisions, and quick actions.
 
-## 6.2 Island / Study Area
+## 6.2 Island / Subject
 
-Show subjects and topics associated with the selected island.
+Show the topics (optionally grouped) of the selected subject's island.
 
 Allow the user to:
 
@@ -301,6 +420,8 @@ Show the current day's planned workload, including:
 
 Allow completion, postponement, rescheduling, and opening task details.
 
+Today is the user's main "study area": it offers the paste box for the day's targets (Section 6.4), lists Priority tasks first, carries unfinished work forward automatically, and shows overload against the day's available time (Sections 0.2 and 0.5).
+
 ## 6.4 Import Study Plan
 
 Allow users to paste unstructured study material and convert it into structured tasks.
@@ -317,7 +438,7 @@ Display due, completed, postponed, and overdue revision sessions.
 
 ## 6.7 Practice and Assessments
 
-Support quizzes, recall exercises, assessment results, and review of incorrect answers.
+Version 1 (Section 0.7): record the results of tests taken elsewhere, overall and per topic, with optional notes on mistakes, and show which topics are ready for a test. In-app quizzes, recall exercises, flashcards, and incorrect-answer review are deferred to a later phase.
 
 ## 6.8 Analytics
 
@@ -331,19 +452,20 @@ The application must not become unusable on narrow screens. On mobile, use a sim
 
 ---
 
-# 7. Study Areas, Subjects, Topics, and Resources
+# 7. Subjects, Topics, and Resources
 
 Use a consistent hierarchy:
 
-Study Area → Subject → Topic → Tasks and Resources.
+Subject (one island) → Topic → Tasks and Resources.
+
+A topic may carry an optional group label (for example, "Arithmetic") instead of a separate hierarchy level.
 
 The hierarchy must remain flexible enough to support different study styles.
 
 For example:
 
-Study Area: SSC Mathematics  
-Subject: Arithmetic  
-Topic: Percentage  
+Subject: SSC Mathematics\
+Topic: Percentage (group: Arithmetic)\
 Tasks:
 - Learn percentage basics.
 - Solve 30 questions.
@@ -524,14 +646,18 @@ Completion should be based on the user's explicit confirmation or recorded asses
 
 Implement revision scheduling as deterministic, testable TypeScript logic.
 
-Use a configurable default schedule based on the actual completion date:
+Use a configurable default schedule based on the actual completion date (Section 0.6):
 
-- Day 0: initial learning.
+- Day 0: initial learning (the day the work is marked completed).
 - Day 1: first revision.
 - Day 3: second revision.
 - Day 7: third revision.
 - Day 14: fourth revision.
 - Day 30: fifth revision.
+- Day 60: sixth revision.
+- Then every 60 days (maintenance) until the topic is archived or revision is switched off.
+
+These day numbers assume every revision is done on time. Each next revision is scheduled from the date the previous step was actually completed (gaps of 1, 2, 4, 7, 16, 30, then 60 days).
 
 These are initial defaults, not scientifically guaranteed optimal intervals.
 
@@ -548,6 +674,8 @@ Allow users to configure the default intervals later through settings.
 - Allow users to complete, postpone, or reschedule a session.
 - Record the user's recall result when available.
 - Explain why the next session is scheduled.
+- Track revisions per topic: work on the same topic completed on the same day creates one revision item (Section 0.6).
+- Allow revision to be switched off for individual tasks.
 
 ## 10.2 Performance adjustment
 
@@ -560,7 +688,7 @@ Support simple recall outcomes such as:
 
 Implement a documented and configurable interval-adjustment policy.
 
-For example, poor recall can shorten the next interval, while strong recall can lengthen it.
+Default policy (UI labels: Forgot, Hard, Good, Easy): Again restarts at the first step (next revision in 1 day), Difficult repeats the current step's gap, Good moves to the next step, and Easy skips one step. Test results map to these outcomes (Section 0.7).
 
 The algorithm must be transparent and unit-tested.
 
@@ -576,6 +704,8 @@ Do not create unlimited duplicate revisions when a user misses several days.
 
 Use a clear policy for handling overdue sessions and display that policy in the UI.
 
+Default policy: a missed revision stays as a single overdue item that carries forward day to day (never duplicated) and shows how many days it is overdue. The next revision is counted from the day it is actually completed.
+
 ## 10.4 Assessment consolidation
 
 Topic-level performance may influence revision scheduling.
@@ -583,6 +713,8 @@ Topic-level performance may influence revision scheduling.
 A test covering several topics may record one overall score and individual results for each topic.
 
 Do not lose topic-level information when consolidating assessments.
+
+A recorded topic-level test result counts as a revision of that topic on the test date (Section 0.7).
 
 ---
 
@@ -615,7 +747,7 @@ Prioritize tasks using transparent factors such as:
 - Available time.
 - Assessment deadlines where configured.
 
-Do not blindly move every overdue task to tomorrow.
+Unfinished tasks automatically carry forward to the next day and are never dropped (Section 0.5). If carried-forward work, due revisions, and new tasks together exceed the day's available time, apply the overload handling below instead of silently cramming everything into one day.
 
 When the planned workload exceeds availability:
 
@@ -641,6 +773,8 @@ Do not infer mastery from the amount of time spent studying.
 # 12. Quizzes, Recall, and Assessments
 
 Build a usable assessment system.
+
+**Version 1 scope (Section 0.7):** the Tests area records the results of tests taken elsewhere, overall and per topic, and lists topics that are ready for a test. The in-app question features below (multiple-choice, recall prompts, flashcards, generated questions) are deferred to a later phase; keep the data model ready for them.
 
 Include:
 
@@ -682,7 +816,7 @@ Include:
 - Topic-level accuracy.
 - Repeated mistakes.
 - Topics needing review.
-- Progress by study area.
+- Progress by subject.
 - Study consistency over time.
 
 Distinguish clearly between:
@@ -737,9 +871,8 @@ The initial implementation may use a versioned local data structure, but its log
 Include equivalents of the following entities:
 
 - UserPreferences.
-- StudyArea.
-- Subject.
-- Topic.
+- Subject (one island; replaces the former StudyArea entity).
+- Topic (with an optional group label, replacing the former middle Subject level).
 - Resource.
 - Task.
 - TaskResource.
@@ -773,8 +906,8 @@ Create a data-access interface that separates application logic from the underly
 
 For example, define interfaces for:
 
-- Study area operations.
-- Subject and topic operations.
+- Subject operations.
+- Topic operations.
 - Task operations.
 - Revision session operations.
 - Assessment operations.
@@ -826,7 +959,6 @@ Use a structure similar to the following, adjusting it when the existing reposit
         interactions/
         fallback/
       features/
-        study-areas/
         subjects/
         topics/
         tasks/
@@ -955,7 +1087,7 @@ Implement the application incrementally.
 
 - Build the first stylized floating island.
 - Add lighting, camera, terrain, and a few recognizable objects.
-- Create the six study-area islands.
+- Create one island per subject, starting with the six starter subjects; the layout must support any number of islands.
 - Add selection and navigation.
 - Add loading and WebGL fallback states.
 - Verify that the scene renders and interactions work.
@@ -974,7 +1106,7 @@ Do not spend the entire project budget on 3D polish before core functionality ex
 
 ## Phase 4 — Study Management
 
-- Add study areas, subjects, topics, resources, and tasks.
+- Add subjects (add, rename, archive, restore, delete), topics, resources, and tasks.
 - Implement creation, editing, completion, archiving, and deletion where appropriate.
 - Connect the world map to actual saved data.
 - Add practical 2D panels.
@@ -1008,7 +1140,7 @@ Do not spend the entire project budget on 3D polish before core functionality ex
 
 ## Phase 8 — Assessments and Analytics
 
-- Add quizzes, recall, flashcards, and manual assessments.
+- Add the Tests area: record the results of external tests (overall and per topic) and show topics ready for a test. In-app quizzes, recall prompts, and flashcards come in a later phase.
 - Implement scoring.
 - Record topic-level results.
 - Add weak-topic identification.
@@ -1041,9 +1173,10 @@ The sandbox version is complete only when the following are verified to the exte
 
 - The application builds successfully.
 - The world renders in the available browser preview.
-- All six islands can be selected.
+- Every subject's island can be selected, and adding or archiving a subject updates the world.
 - The 2D navigation remains usable.
-- Study areas, topics, and tasks can be managed.
+- Subjects, topics, and tasks can be managed.
+- Unfinished tasks carry forward to the next day.
 - Changes persist across refreshes when browser storage is available.
 - Data can be exported and imported safely.
 - Study-plan parsing has a review-before-save workflow.
@@ -1096,5 +1229,5 @@ Do not implement all phases as one enormous, unreviewable change.
 
 Do not add Supabase, authentication, Cloudflare, or a mandatory external AI API during this phase.
 
-**Immediate objective: create a working sandbox version with the foundation, the stylized 3D world, and a real connection between the world and study-area data. Continue implementing the remaining phases in order, preserving all requirements in this document.**
+**Immediate objective: create a working sandbox version with the foundation, the stylized 3D world, and a real connection between the world and subject data. Continue implementing the remaining phases in order, preserving all requirements in this document.**
 

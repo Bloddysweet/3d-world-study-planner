@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "asset": "island_dsa_v2.glb",
+  "generator": "scripts/build-maths-island.mjs",
+  "seed": 288.65,
+  "theme": "dsa",
+  "surfaceY": 0.24,
+  "topicPlots": "Runtime only; all six gardenPositions remain clear",
+  "bounds": {
+    "min": [
+      -4.678724765777588,
+      -4.928999900817871,
+      -4.631862163543701
+    ],
+    "max": [
+      4.648631572723389,
+      3.3399999141693115,
+      5.2938642501831055
+    ]
+  },
+  "bytes": 1009504,
+  "triangles": 14643,
+  "meshes": 11,
+  "materials": 11,
+  "static": true,
+  "externalResources": 0,
+  "sha256": "6b142f86c0f160a9a92df6bd1cf339bee1fd8834982c47a26bfa788e479adedb"
+}

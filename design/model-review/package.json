@@ -1,0 +1,27 @@
+{
+  "name": "study-world-model-review",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "check": "AWS_EXECUTION_ENV=AWS_Lambda_nodejs22.x node check-browser.mjs",
+    "validate": "python3 validate_models.py",
+    "test": "python3 test_optimization.py",
+    "optimize:stage": "node optimize-models.mjs",
+    "optimize:geometry": "python3 validate_models.py --models ../../.cache/model-optimization/staged --output ../../.cache/model-optimization/staged-validation.json && python3 compare_geometry.py",
+    "optimize:browser": "AWS_EXECUTION_ENV=AWS_Lambda_nodejs22.x node compare-browser.mjs",
+    "optimize:publish": "python3 publish_optimized.py && python3 validate_models.py",
+    "optimize": "npm run test && npm run optimize:stage && npm run optimize:geometry && npm run optimize:browser && npm run optimize:publish && npm run check"
+  },
+  "dependencies": {
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "@gltf-transform/core": "4.5.1",
+    "@gltf-transform/extensions": "4.5.1",
+    "@gltf-transform/functions": "4.5.1",
+    "@sparticuz/chromium": "153.0.0",
+    "pngjs": "7.0.0",
+    "puppeteer-core": "25.14.0"
+  }
+}

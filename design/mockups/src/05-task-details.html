@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>05 — Task details (drawer)</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  body { background: url(../03-today.png) 0 0 / 1440px 900px no-repeat; }
+  .drawer {
+    position: absolute; z-index: 40; right: 0; top: 0; width: 580px; height: 900px; background: #fff;
+    box-shadow: -10px 0 40px rgba(30, 36, 64, 0.22); display: flex; flex-direction: column;
+  }
+  .dh { padding: 20px 24px 16px; border-bottom: 1px solid var(--line); }
+  .db { flex: 1; padding: 16px 24px; display: flex; flex-direction: column; gap: 16px; overflow: hidden; }
+  .blk h3 { font-size: 15px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .nums { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .nums .n { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+  .nums .n .v { font-family: "Fredoka"; font-size: 24px; font-weight: 600; line-height: 1.1; }
+  .nums .n .l { font-size: 11.5px; color: var(--ink-3); font-weight: 600; }
+  .res { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 12px; }
+  .res + .res { margin-top: 8px; }
+  .revcard { border: 1px solid #cfe0ff; background: #f7faff; border-radius: 14px; padding: 12px 14px; }
+  .tl { position: relative; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; }
+  .tl::before { content: ""; position: absolute; left: 4px; top: 6px; bottom: 6px; width: 2px; background: var(--line-2); }
+  .tl div { position: relative; font-size: 12.5px; color: var(--ink-2); }
+  .tl div::before { content: ""; position: absolute; left: -18px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: #fff; border: 2px solid var(--line-2); }
+  .tl div.now::before { border-color: var(--primary); background: var(--primary); }
+  .tl b { color: var(--ink); font-weight: 600; }
+  .df { display: flex; align-items: center; gap: 10px; padding: 14px 24px; border-top: 1px solid var(--line); }
+</style>
+</head>
+<body>
+  <div class="scrim"></div>
+  <aside class="drawer">
+    <div class="dh">
+      <div class="row between" style="margin-bottom:8px">
+        <div class="crumbs" style="margin:0"><i data-icon="sun" class="sm"></i>Today <i data-icon="chevron-right" class="sm"></i>Task</div>
+        <div class="row gap4"><button class="btn icon sm ghost"><i data-icon="ellipsis"></i></button><button class="btn icon sm ghost"><i data-icon="x"></i></button></div>
+      </div>
+      <h1 style="font-size:25px;margin-bottom:10px">Solve 30 Percentage questions</h1>
+      <div class="row gap6 wrap">
+        <span class="subj" data-s="maths" data-label="Maths · Percentage"></span>
+        <span class="pill"><i data-icon="target"></i>Practice</span>
+        <span class="pill gold"><i data-icon="star"></i>Priority</span>
+        <span class="pill"><i data-icon="clock"></i>45 min estimate</span>
+        <span class="pill blue">In progress</span>
+      </div>
+    </div>
+
+    <div class="db">
+      <div class="blk">
+        <h3><i data-icon="list-checks" class="sm" style="color:var(--primary)"></i>Progress</h3>
+        <div class="nums">
+          <div class="n"><div class="v">24<span class="small muted"> / 30</span></div><div class="l">Attempted</div></div>
+          <div class="n"><div class="v" style="color:var(--green)">19</div><div class="l">Correct</div></div>
+          <div class="n"><div class="v">79%</div><div class="l">Accuracy so far</div></div>
+        </div>
+        <div class="tiny muted" style="margin-top:6px">You can finish without a perfect score. Accuracy is saved to the topic, not used as "mastery".</div>
+      </div>
+
+      <div class="blk">
+        <h3><i data-icon="link" class="sm" style="color:var(--primary)"></i>Resources</h3>
+        <div class="res"><i data-icon="target" class="sm" style="color:var(--blue)"></i><div class="grow"><div class="small bold">Quant practice site</div><div class="tiny muted">https://example.com/quant/percentage</div></div><i data-icon="external-link" class="sm muted"></i></div>
+        <div class="res"><i data-icon="video" class="sm" style="color:var(--s-soft)"></i><div class="grow"><div class="small bold">Percentage videos playlist</div><div class="tiny muted">5 videos · from your paste on 13 Oct</div></div><i data-icon="external-link" class="sm muted"></i></div>
+      </div>
+
+      <div class="blk">
+        <h3><i data-icon="refresh-ccw" class="sm" style="color:var(--blue)"></i>Revision</h3>
+        <div class="revcard">
+          <div class="row gap10" style="margin-bottom:6px">
+            <div class="grow small"><b>Counts toward the Percentage revisions</b></div>
+            <span class="small ink2">Needs revision</span><span class="toggle on"></span>
+          </div>
+          <div class="small ink2">Percentage is on <b>step 2 of 6</b> (next revision today). Finishing this adds new material, so its schedule restarts from step 1, counted from the day you finish.</div>
+        </div>
+      </div>
+
+      <div class="blk">
+        <h3><i data-icon="hourglass" class="sm" style="color:var(--ink-3)"></i>History</h3>
+        <div class="tl">
+          <div><b>Tue 13 Oct</b> · Added from your paste</div>
+          <div><b>Wed 14 Oct</b> · Not finished, carried forward to today</div>
+          <div><b>Thu 15 Oct, 08:10</b> · Marked as priority</div>
+          <div class="now"><b>Thu 15 Oct, 10:40</b> · Started · 24 questions attempted</div>
+        </div>
+      </div>
+
+      <div class="blk">
+        <h3><i data-icon="notebook-pen" class="sm" style="color:var(--ink-3)"></i>Notes</h3>
+        <div class="textarea small" style="height:66px">Mistakes: successive % changes. Remember x + y + xy/100. Re-check questions 12 and 19.</div>
+      </div>
+    </div>
+
+    <div class="df">
+      <button class="btn primary"><i data-icon="check"></i>Mark completed</button>
+      <button class="btn"><i data-icon="corner-down-right"></i>Move to tomorrow</button>
+      <button class="btn"><i data-icon="pencil"></i>Edit</button>
+      <span class="grow"></span>
+      <button class="btn danger icon"><i data-icon="trash-2"></i></button>
+    </div>
+  </aside>
+  <script src="icons.js"></script>
+  <script src="common.js"></script>
+</body>
+</html>

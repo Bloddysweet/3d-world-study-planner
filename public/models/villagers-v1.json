@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "generator": "scripts/build-villagers.mjs",
+  "assets": [
+    {
+      "variant": "scout",
+      "file": "villager_scout_v1.glb",
+      "bytes": 391028,
+      "triangles": 2568,
+      "meshes": 1,
+      "materials": 1,
+      "bones": 14,
+      "clips": [
+        {
+          "name": "Walk",
+          "duration": 1.4
+        },
+        {
+          "name": "Idle",
+          "duration": 4
+        },
+        {
+          "name": "LookAround",
+          "duration": 4
+        },
+        {
+          "name": "Study",
+          "duration": 5
+        }
+      ],
+      "sha256": "84b1b9579413c244cd95e9bda2fae0aef54344b881f80e986e5f8b8515252bbc"
+    },
+    {
+      "variant": "reader",
+      "file": "villager_reader_v1.glb",
+      "bytes": 390124,
+      "triangles": 2556,
+      "meshes": 1,
+      "materials": 1,
+      "bones": 14,
+      "clips": [
+        {
+          "name": "Walk",
+          "duration": 1.4
+        },
+        {
+          "name": "Idle",
+          "duration": 4
+        },
+        {
+          "name": "LookAround",
+          "duration": 4
+        },
+        {
+          "name": "Study",
+          "duration": 5
+        }
+      ],
+      "sha256": "3b073bce73906c61626fc035a38e26a2d7613ed8033d1eb7f27c0e4a7e4e371b"
+    },
+    {
+      "variant": "gardener",
+      "file": "villager_gardener_v1.glb",
+      "bytes": 392252,
+      "triangles": 2616,
+      "meshes": 1,
+      "materials": 1,
+      "bones": 14,
+      "clips": [
+        {
+          "name": "Walk",
+          "duration": 1.4
+        },
+        {
+          "name": "Idle",
+          "duration": 4
+        },
+        {
+          "name": "LookAround",
+          "duration": 4
+        },
+        {
+          "name": "Study",
+          "duration": 5
+        }
+      ],
+      "sha256": "697786c82c9bc326e533265950922ca2434b6efb61091e798c0ce91135e219b8"
+    }
+  ]
+}

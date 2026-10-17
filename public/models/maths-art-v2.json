@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "asset": "island_maths_v2.glb",
+  "generator": "scripts/build-maths-island.mjs",
+  "seed": 84.73,
+  "theme": "maths",
+  "surfaceY": 0.24,
+  "topicPlots": "Runtime only; all six gardenPositions remain clear",
+  "bounds": {
+    "min": [
+      -4.567147254943848,
+      -4.900000095367432,
+      -4.7567853927612305
+    ],
+    "max": [
+      4.646660327911377,
+      4.119999885559082,
+      5.25944185256958
+    ]
+  },
+  "bytes": 1144080,
+  "triangles": 15092,
+  "meshes": 11,
+  "materials": 11,
+  "static": true,
+  "externalResources": 0,
+  "sha256": "7afdf158c4dc3f09660286778153402ba08b6cfc2e688e3aa55417cd52184b42"
+}
