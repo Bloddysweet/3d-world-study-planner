@@ -1,1 +1,104 @@
+.account-root {
+  min-width: 0;
+}
+.account-loading {
+  max-width: 620px;
+  padding: 64px 24px;
+  margin: auto;
+}
+.auth-page {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.auth-card {
+  max-width: 540px;
+  padding: 28px;
+  margin: 24px auto;
+}
+.auth-fields {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+.auth-card form {
+  margin: 20px 0;
+}
+.auth-card .callout {
+  margin-top: 16px;
+  overflow-wrap: anywhere;
+}
+.account-panel {
+  padding: 24px;
+  margin-bottom: 24px;
+  scroll-margin-top: 100px;
+}
+.account-panel h2 {
+  font-size: 19px;
+  margin-bottom: 12px;
+}
+.account-panel p {
+  margin: 10px 0;
+}
+.account-email {
+  overflow-wrap: anywhere;
+}
+.account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0;
+}
+.account-actions .btn,
+.account-recovery .btn {
+  min-height: 44px;
+  white-space: normal;
+}
+.account-local-link {
+  display: inline-block;
+  margin: 18px 0;
+  text-decoration: underline;
+}
+.account-recovery {
+  margin: 20px 0;
+}
+.account-recovery summary {
+  cursor: pointer;
+  min-height: 44px;
+  padding: 12px 0;
+}
+.account-recovery-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid #e4e0d8;
+}
+.site-account-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid #dcdbe5;
+  border-radius: 10px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+@media (max-width: 760px) {
+  .site-account-link {
+    display: none;
+  }
+  .auth-card,
+  .account-panel {
+    padding: 18px;
+  }
+}
+.auth-fields .btn,
+.auth-fields input {
+  min-height: 44px;
+}
 
