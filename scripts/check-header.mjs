@@ -106,6 +106,7 @@ async function geometry(page) {
 }
 try {
   const page = await browser.newPage();
+  page.setDefaultNavigationTimeout(60000);
   page.on("pageerror", (e) => errors.push(e.message));
   await page.emulateMediaFeatures([
     { name: "prefers-reduced-motion", value: "reduce" },
