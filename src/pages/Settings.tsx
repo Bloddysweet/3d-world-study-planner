@@ -14,6 +14,8 @@ import {
   Trash2,
   Upload,
 } from "../components/icons";
+import { AccountPanel } from "../auth/AccountPanel";
+import { useAuth } from "../auth/AuthProvider";
 import { useApp } from "../data/AppProvider";
 import { deleteSubject } from "../domain/engine";
 import { preferencesSchema } from "../domain/model";
@@ -129,6 +131,7 @@ function ImportBackupForm({ backup }: { backup: AppData }) {
   );
 }
 function ResetForm() {
+  const { user } = useAuth();
   const { demo, reset, notify } = useApp(),
     { close } = useDialog(),
     [typed, setTyped] = useState("");
@@ -140,7 +143,9 @@ function ResetForm() {
         <p>
           {demo
             ? "Only the separate demo workspace will be reseeded. Your personal data stays untouched."
-            : "This permanently clears this browser’s personal tasks, topics, revision history, test results and custom subjects. The six editable starter subjects return."}
+            : user
+              ? "This clears your account’s cloud workspace after a successful sync, including study history. Other devices will see the reset when they refresh. Export a backup first."
+              : "This permanently clears this browser’s personal tasks, topics, revision history, test results and custom subjects. The six editable starter subjects return."}
         </p>
         <p>Export a backup first if you need to keep your work.</p>
         <Field label="Type RESET to confirm">
@@ -171,6 +176,7 @@ function ResetForm() {
   );
 }
 export function SettingsPage() {
+  const { user } = useAuth();
   const {
       data,
       update,
@@ -188,16 +194,32 @@ export function SettingsPage() {
     [gaps, setGaps] = useState(data.preferences.gaps.join(", ")),
     [error, setError] = useState(""),
     [backupError, setBackupError] = useState("");
+  const previousPreferences = useRef(data.preferences);
   useEffect(() => {
-    setPrefs(data.preferences);
-    setGaps(data.preferences.gaps.join(", "));
+    const previous = previousPreferences.current;
+    previousPreferences.current = data.preferences;
+    // A background cloud refresh must not erase an unsaved settings draft.
+    setPrefs((current) =>
+      JSON.stringify(current) === JSON.stringify(previous)
+        ? data.preferences
+        : current,
+    );
+    setGaps((current) =>
+      current === previous.gaps.join(", ")
+        ? data.preferences.gaps.join(", ")
+        : current,
+    );
   }, [data.preferences]);
   const draftGaps = gaps.split(",");
   return (
     <Page className="settings-page">
       <Heading
         title="Settings"
-        description="Your study time, revision rules, subjects and data. Everything is saved in this browser."
+        description={
+          user && !demo
+            ? "Your study settings and private cloud workspace. Check sync status below."
+            : "Your study time, revision rules, subjects and local browser data."
+        }
         action={
           <button
             type="submit"
@@ -209,6 +231,7 @@ export function SettingsPage() {
           </button>
         }
       />
+      <AccountPanel />
       <div className="settings-dashboard">
         <form
           className="settings-preferences"
@@ -563,8 +586,12 @@ export function SettingsPage() {
             <p>{storageMessage}</p>
           </div>
           <p className="muted small">
-            Local browser storage only. Clearing site data or using another
-            device will not carry your work over. Export backups regularly.
+            {user && !demo
+              ? "Account data syncs to Supabase when connected. Keep independent backups. Local recovery copies are stored on this device. "
+              : "Local browser storage only. "}
+            {user && !demo
+              ? "Only successfully synced changes carry over to other devices. Unsynced edits need a recovery copy or backup."
+              : "Clearing site data or using another device will not carry your work over. Export backups regularly."}
           </p>
           <div className="backup-actions">
             <button
@@ -638,7 +665,7 @@ export function SettingsPage() {
       </div>
       <footer className="settings-about">
         <ShieldCheck size={15} />
-        Study World · local-first · schema v1 · no remote AI, account or backend
+        Study World · local-first · schema v1 · optional private cloud accounts
       </footer>
     </Page>
   );
