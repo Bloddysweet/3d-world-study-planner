@@ -13,6 +13,13 @@ services:
         value: '22'
       - key: NODE_ENV
         value: production
+      # Public browser configuration for optional Supabase cloud login.
+      # Set these in the Render dashboard (build-time); never put secret or
+      # service-role keys here. See supabase/README.md.
+      - key: VITE_SUPABASE_URL
+        sync: false
+      - key: VITE_SUPABASE_PUBLISHABLE_KEY
+        sync: false
       - key: OPENROUTER_API_KEY
         sync: false
       - key: AI_IMPORT_ACCESS_CODE
