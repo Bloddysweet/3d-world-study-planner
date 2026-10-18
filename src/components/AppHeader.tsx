@@ -13,6 +13,7 @@ import {
   IslandMark,
   X,
 } from "./icons";
+import { useAuth } from "../auth/AuthProvider";
 import { useApp } from "../data/AppProvider";
 import { dailyPlan } from "../domain/engine";
 import { displayDate } from "../domain/model";
@@ -31,6 +32,7 @@ const navigation = [
 /** One navigation system for the World and all working pages. */
 export function AppHeader() {
   const { data, date, demo } = useApp();
+  const { user } = useAuth();
   const { open } = useDialog();
   const location = useLocation();
   const [expanded, setExpanded] = useState(false);
@@ -134,6 +136,12 @@ export function AppHeader() {
         })}
       </nav>
       <div className="site-header-actions">
+        <Link
+          className="site-account-link"
+          to={user ? "/settings#account" : "/login"}
+        >
+          {user ? "Account" : "Sign in"}
+        </Link>
         {demo && <span className="site-demo-label">Demo</span>}
         <time className="site-header-date" dateTime={date}>
           <CalendarDays size={15} aria-hidden="true" />
