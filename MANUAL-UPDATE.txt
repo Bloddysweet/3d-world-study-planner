@@ -1,0 +1,91 @@
+# Add login and cloud saving to your live Study World
+
+Your Supabase database/login settings are already prepared, and you said you added the two public connection settings to Render. The remaining step is uploading the new website code.
+
+**Use `study-world-login-cloud-update.zip` instead of the earlier ZIP. It includes the smaller visible labels and mobile performance improvements too.** You do not need a new Arena session.
+
+## Before uploading
+
+On the browser where you currently study, open **Settings → Your data → Export backup**. Keep that JSON file safe. Do not clear site storage. This update does not automatically upload or replace your local progress.
+
+If you or another tool made additional changes to the same code files since the previous update, compare them first rather than overwriting those edits.
+
+## 1. Download and extract
+
+Download **study-world-login-cloud-update.zip**. Right-click it and choose **Extract All**.
+
+Open the extracted folder. You should see `src`, `scripts`, `supabase`, the package files, configuration and guide files.
+
+**Do not upload the ZIP itself or the outer extracted folder. GitHub will not unpack it into your app automatically.**
+
+## 2. Upload through GitHub
+
+1. Open your **3d-world-study-planner** repository on GitHub.
+2. In the Code tab, choose the **main** branch.
+3. Click **Add file → Upload files**.
+4. From inside the extracted folder, drag in these items:
+   - `src` folder
+   - `scripts` folder
+   - `supabase` folder
+   - `package.json`
+   - `package-lock.json` — essential for the new login library
+   - `vite.config.ts`
+   - `APP_GUIDE.md`
+   - `APP_VERIFICATION.md`
+5. Confirm paths include **`src/auth/AuthPage.tsx`**, **`src/data/cloud-workspace.ts`** and **`src/preview-frame.ts`** directly. There must NOT be an extra `study-world-login-cloud-update/` prefix.
+6. Commit with a message such as **Add private accounts and cloud study saving**. Use a pull request if required or preferred; merge only after its checks pass.
+
+These folders contain only changed/new files. Other existing source files must be kept. You can skip `MANUAL-UPDATE.txt`; it is simply this instruction sheet.
+
+**Do not run the SQL file again.** The included `supabase/setup-study-workspaces.sql` records the setup already applied to your database.
+
+If you prefer GitHub Desktop, update/back up your existing checkout, copy the files into its root preserving folder paths, review Changes, commit and push through your usual deployment/PR workflow.
+
+## 3. Let Render deploy
+
+- Keep the environment variables you already added:
+  - `VITE_SUPABASE_URL`
+  - `VITE_SUPABASE_PUBLISHABLE_KEY`
+- Keep your OpenRouter/private environment variables unchanged. No secret/service-role key belongs in a `VITE_` variable.
+- Keep build command **`npm ci --include=dev && npm run build`** and start command **`npm start`**.
+- Once the update reaches Render's configured deployment branch, auto-deploy should run if enabled. Otherwise use **Manual Deploy → Deploy latest commit**.
+- Wait for Render to report **Live**, then reload the website. The source update, not just an environment rebuild, is what adds the new login features.
+
+The ZIP contains no keys, `.env`, dependencies, generated build or models. Render installs the pinned library from `package-lock.json` and creates the real build using its existing environment variables.
+
+## 4. Create your first study account
+
+1. Open `https://studyworld-i2ap.onrender.com/settings`.
+2. At the top, find **Account & cloud saving**.
+3. Click **Sign in / Create account**, then **Create an account**.
+4. Enter your email and choose a password. Do not send the password or keys in chat.
+5. Check your inbox/spam and open the confirmation link in the **same browser** where you requested it. Then sign in if needed.
+
+**If no email arrives, stop here and report the error without sharing credentials.** Public email delivery may need configuring in Supabase; no custom email provider was configured by this update. Built-in sending may be restricted/rate limited. Do not disable confirmation as a workaround. Google login is not enabled.
+
+## 5. Bring over your existing progress
+
+Your account starts as a separate workspace. Your original browser data is untouched.
+
+On the **original browser/device** where your progress exists:
+
+1. Sign in.
+2. Go to **Settings → Account & cloud saving**.
+3. Click **Import this browser’s progress**.
+4. Read and confirm the replacement warning. A backup download of the current account copy starts first. This is not an automatic merge.
+5. Wait until the status says **Saved to your private cloud workspace**.
+6. Sign into the same account on your phone/laptop and check that the progress appears. Use **Check cloud / Retry** if needed.
+
+Demo records never upload through this feature. If you see another version/conflict, do not reset anything. Download your copy, then choose the cloud version or explicitly keep this copy. Interrupted/closed-tab drafts can be found in **Unsynced recovery copies on this browser**.
+
+## First real-world checks
+
+- Create a small test task; wait for the saved status, then reload and check another device.
+- Sign out: the original local workspace should return.
+- Check a second account with a different address: it must not see the first account's records.
+- Test password-reset delivery and the reset link in the requesting browser.
+- Briefly test offline editing/reconnect and rotation/island taps on a real phone.
+
+## Verification already done here
+
+206 automated tests, strict TypeScript and production builds passed. Also passed: 14 account-browser groups in development and production against a **mock** Supabase service; 23 app-wide regression groups; 7 mobile-world, 9 dragon-pair and 5 header-layout groups. No real signup email or real cross-device login was performed here. Those final live checks above still matter.
