@@ -23,6 +23,9 @@ import "./components/app-header.css";
 import ResponsivePreview, {
   PREVIEW_FRAME_NAME,
 } from "./components/ResponsivePreview";
+import { AccountBoundary, AuthProvider } from "./auth/AuthProvider";
+import { AuthPage } from "./auth/AuthPage";
+import "./auth/account.css";
 class ErrorBoundary extends Component<
   { children: ReactNode },
   { error: boolean }
@@ -128,6 +131,9 @@ function Shell() {
           <Route path="/tests" element={<TestsPage />} />
           <Route path="/analytics" element={<AnalyticsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/login" element={<AuthPage />} />
+          <Route path="/auth/callback" element={<AuthPage />} />
+          <Route path="/reset-password" element={<AuthPage />} />
           <Route
             path="*"
             element={
@@ -169,13 +175,19 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <ResponsivePreview />
     ) : (
       <ErrorBoundary>
-        <AppProvider>
+        <AuthProvider>
           <BrowserRouter>
-            <DialogProvider>
-              <Shell />
-            </DialogProvider>
+            {/* Remounts the whole study UI when the signed-in account changes,
+                discarding prior-account forms and dialogs. */}
+            <AccountBoundary>
+              <AppProvider>
+                <DialogProvider>
+                  <Shell />
+                </DialogProvider>
+              </AppProvider>
+            </AccountBoundary>
           </BrowserRouter>
-        </AppProvider>
+        </AuthProvider>
       </ErrorBoundary>
     )}
   </React.StrictMode>,

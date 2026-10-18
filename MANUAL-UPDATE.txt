@@ -88,4 +88,4 @@ Demo records never upload through this feature. If you see another version/confl
 
 ## Verification already done here
 
-206 automated tests, strict TypeScript and production builds passed. Also passed: 14 account-browser groups in development and production against a **mock** Supabase service; 23 app-wide regression groups; 7 mobile-world, 9 dragon-pair and 5 header-layout groups. No real signup email or real cross-device login was performed here. Those final live checks above still matter.
+207 automated tests, strict TypeScript and production builds passed. Also passed: 14 account-browser groups in development and production against a **mock** Supabase service; 23 app-wide regression groups; 7 mobile-world, 9 dragon-pair and 5 header-layout groups. No real signup email or real cross-device login was performed here. Those final live checks above still matter.

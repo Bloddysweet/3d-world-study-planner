@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { cloudConfiguration } from "./config";
+import { cloudConfigurationError, supabase } from "./client";
+import { PREVIEW_FRAME_NAME } from "../preview-frame";
 describe("public-only Supabase configuration", () => {
   it("allows local-only use without configuration", () =>
     expect(cloudConfiguration().error).toContain("not configured"));
@@ -29,5 +31,11 @@ describe("public-only Supabase configuration", () => {
         "sb_publishable_example_public_key",
       ).error,
     ).toContain("invalid");
+  });
+  it("resolves the shared preview-frame module and stays inert in tests", () => {
+    // Also guards the module graph: a missing src/preview-frame breaks login.
+    expect(PREVIEW_FRAME_NAME).toBeTruthy();
+    expect(supabase).toBeNull();
+    expect(cloudConfigurationError).toContain("not configured");
   });
 });
