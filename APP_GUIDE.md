@@ -299,3 +299,23 @@ Private setup, network requirement, free-model/provider limitations and deployme
 ## Production hosting and CI
 
 After `npm ci --include=dev` and `npm run build`, use **`npm start`** for one same-origin website + private API service. It honours the host's `PORT` and exposes `/healthz`. Do not use Vite's development/preview server as production hosting. `render.yaml` and `.github/workflows/ci.yml` prepare free Render hosting and deployment after CI checks pass; neither has been pushed/executed on those platforms yet. Enter real secrets only in Render's private Environment settings. Full instructions: [server/README.md](server/README.md); review findings/current verification: [CODE_REVIEW.md](CODE_REVIEW.md).
+
+## Phone World interaction (local follow-up fix)
+
+On narrow screens and coarse-pointer landscape phones, the World uses a 1× pixel-density budget. During an actual camera gesture and its short settling period, captions stay visible at compact sizes, follow the camera with stable offsets and become temporarily non-interactive, the two dragons briefly rest out of view, and villagers stop animating. This gives the camera priority instead of moving everything at once. Caption taps and flight resume automatically after settling. Short taps still select islands/topics, central pinch/drag still works, and touch edges retain native page scrolling. Desktop and normal tablet views retain the standard profile and independent decorative motion.
+
+This is a local follow-up patch, not yet on the hosted site. This session closed after its original PR merged; you can publish manually from your own computer/GitHub account, or use a new coding session. No Render secrets, study data, scheduling rules or dragon assets are changed. Physical-phone performance must still be checked after redeployment.
+
+### Smaller, persistent World names
+
+World captions now use smaller pills, lighter shadows and no backdrop blur, including on desktop/tablet. Full subject/topic names remain in accessible labels and hover titles. During rotation the labels stay visible and keep their settled offsets instead of repeatedly swapping places to avoid each other; overlap resolution runs again at rest. Camera-only transform updates reuse cached dimensions. This supersedes the earlier fade-out approach.
+
+## Accounts and private cloud saving — local update, pending publication
+
+Optional Supabase accounts are now implemented in the local app source. Open **Settings → Account & cloud saving** (or desktop **Sign in**) to create/sign into an account. Email confirmation stays required; callback and reset-password routes are included. Render must build the new source with `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`. Secret/service-role keys are rejected before a production bundle is generated. Real confirmation/reset-email delivery still needs testing/provider setup; no custom SMTP was configured here.
+
+Local study records stay separate and are never uploaded automatically. After login, explicitly choose **Import this browser’s progress** on the original browser to replace the account workspace after a warning/backup download. Demo data is never uploaded. Cloud saves use owner/revision filtering; conflicts keep local edits and require an explicit choice, not last-write-wins. **Check cloud / Retry**, online/window-focus checks and per-tab account recovery copies support interrupted saves. The whole study UI remounts on account changes so prior-account forms/dialogs cannot carry over.
+
+Existing browser backups, local mode, all study rules and World artwork remain. This is not realtime collaborative merging. Unsynced copies can be downloaded/restored from Account settings; account caches remain on the device and are not encrypted. On shared devices, export needed work, sign out, then clear site data.
+
+The live site has not received this source update. Use **deliverables/study-world-login-cloud-update.zip** and **deliverables/HOW-TO-APPLY-LOGIN-UPDATE.md** for manual publication without a new Arena session. This new ZIP also includes the prior smaller-visible-label/mobile changes; do not mix it with the older patch. Supabase setup details and verification limitations: [supabase/README.md](supabase/README.md). Do not rerun its already-applied SQL.
