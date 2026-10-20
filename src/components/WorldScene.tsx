@@ -848,10 +848,10 @@ function WorldScene({
           </>
         )}
       </Suspense>
-      {skyAnchor(positions, selectedIndex) && (
+      {(skyAnchor(positions, selectedIndex) || immersive) && (
         <SkyCreature
           paired={immersive && wildAvailable}
-          anchor={skyAnchor(positions, selectedIndex)!}
+          anchor={skyAnchor(positions, selectedIndex) ?? [0, 0, 0]}
           focused={garden || selectedIndex >= 0}
           islands={
             garden && selectedIndex >= 0
@@ -863,11 +863,11 @@ function WorldScene({
           onUnavailable={onSkyUnavailable}
         />
       )}
-      {immersive && wildAvailable && skyAnchor(positions, selectedIndex) && (
+      {immersive && wildAvailable && (
         <SkyCreature
           kind="wild"
           paired
-          anchor={skyAnchor(positions, selectedIndex)!}
+          anchor={skyAnchor(positions, selectedIndex) ?? [0, 0, 0]}
           focused={garden || selectedIndex >= 0}
           islands={
             garden && selectedIndex >= 0
