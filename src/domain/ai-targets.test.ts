@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { emptyData } from "./model";
+import { seededData as emptyData } from "../data/demo";
 import {
   catalogueFor,
   validateAiPlan,

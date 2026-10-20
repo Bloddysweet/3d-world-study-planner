@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { addDays, dataSchema, daysBetween, emptyData, validDay } from "./model";
+import { addDays, dataSchema, daysBetween, validDay } from "./model";
+import { seededData as emptyData } from "../data/demo";
 import {
   addTasks,
   completeTask,

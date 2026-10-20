@@ -13,6 +13,7 @@ import { themes, today, uid } from "../domain/model";
 import type { Subject, Task, Theme } from "../domain/model";
 import { parseTargets } from "../domain/parser";
 import type { Proposal } from "../domain/parser";
+import { applyProposals } from "../domain/local-organise";
 import { ErrorText, Field, Modal, useDialog } from "./ui";
 export function SubjectForm({ initial }: { initial?: Subject }) {
   const { update, data, notify } = useApp(),
@@ -411,7 +412,16 @@ function ManualImportForm({
   const subjects = data.subjects.filter((a) => !a.archived);
   const set = (i: number, patch: Partial<Proposal>) =>
     setProposals((items) =>
-      items!.map((a, n) => (n === i ? { ...a, ...patch } : a)),
+      items!.map((a, n) =>
+        n === i
+          ? {
+              ...a,
+              ...patch,
+              subjectName:
+                patch.subjectId !== undefined ? undefined : a.subjectName,
+            }
+          : a,
+      ),
     );
   const valid =
     proposals?.length &&
@@ -521,6 +531,12 @@ function ManualImportForm({
                             }
                           >
                             <option value="">Choose subject</option>
+                            {p.subjectName &&
+                              !subjects.some((s) => s.id === p.subjectId) && (
+                                <option value={p.subjectId}>
+                                  {p.subjectName} (new)
+                                </option>
+                              )}
                             {subjects.map((s) => (
                               <option key={s.id} value={s.id}>
                                 {s.name}
@@ -606,7 +622,7 @@ function ManualImportForm({
             disabled={!valid}
             onClick={() => {
               try {
-                update((s) => addTasks(s, proposals, today()));
+                update((s) => applyProposals(s, proposals, today()));
                 notify(`${proposals.length} tasks added. Your plan is ready.`);
                 close();
               } catch {

@@ -359,6 +359,12 @@ export function createTargetsMiddleware(
       return send(200, {
         configured: !!config.apiKey && config.accessCode.length >= 16,
         requiresAccessCode: true,
+        missing: [
+          ...(config.apiKey ? [] : ["OPENROUTER_API_KEY"]),
+          ...(config.accessCode.length >= 16
+            ? []
+            : ["AI_IMPORT_ACCESS_CODE (16+ characters)"]),
+        ],
       });
     if (path !== "/api/targets/analyse")
       return send(404, { error: "Unknown AI endpoint." });

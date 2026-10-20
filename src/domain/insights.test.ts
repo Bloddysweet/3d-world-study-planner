@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { addDays, emptyData } from "./model";
+import { addDays } from "./model";
+import { seededData as emptyData } from "../data/demo";
 import { addTasks, completeTask, recordTest } from "./engine";
 import { insights } from "./insights";
 const date = "2026-10-15";

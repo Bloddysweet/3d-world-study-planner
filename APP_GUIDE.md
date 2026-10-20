@@ -68,6 +68,23 @@ Each task row also has a visible **Edit** button for its standalone details (inc
 
 Undo removes just that task from revision coverage and returns it to unfinished work. An otherwise-unused schedule is removed; prior schedule progress is restored where a snapshot exists. Genuine recall/test records and other vocabulary ranges are retained. For completions saved before this update (without a snapshot), the schedule is reconciled from remaining completed work and retained reviews rather than pretending to know lost historical preferences. No data reset is needed.
 
+### Sleep schedule tracking (Today)
+
+Today carries a **Sleep schedule** card. Enter last night's **Bedtime** and
+**Wake up** (24-hour times) — the live **≈** preview shows the duration and
+handles midnight crossings. **Save sleep** keeps one entry per morning; saving
+the same date updates it. Impossible spans (under 15 minutes or over 16 hours)
+are rejected with a clear message instead of guessing. The card shows **Last
+night: …**, a 7-night chip history (hover a chip for exact times), and the
+**7-night average**. Like everything else, sleep starts empty and stays on your
+account or device.
+
+### Study streak (Today)
+
+Mark **I studied today** and press **Save streak**. Consecutive days extend the
+streak; a missed day restarts it at 1. Saving the same day twice changes
+nothing. The counter caps at 20,000 days.
+
 ## Scheduling behavior
 
 - Order: priority tasks → due/overdue revisions → carried tasks → new learning.

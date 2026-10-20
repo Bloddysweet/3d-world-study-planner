@@ -1,0 +1,197 @@
+/* Shared World atmosphere: every non-immersive section (Today, Revisions,
+   Tests, Analytics, Settings, subject pages) sits on the same sky that the
+   World page paints, so moving between sections feels like one place. */
+.app-shell.reference-shell:not(.immersive-shell) {
+  background:
+    radial-gradient(ellipse at 76% 34%, #fff2cfcc 0, transparent 48%),
+    radial-gradient(ellipse at 12% 68%, #ddd9ed 0, transparent 60%),
+    linear-gradient(165deg, #c8d5e6 0%, #edced0 40%, #f5ddc9 65%, #d9c9df 100%);
+  background-attachment: fixed;
+}
+
+/* Settings: a section nav bar instead of one long scrolling page. */
+.settings-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 5px;
+  margin: 0 0 18px;
+  border: 1px solid #ffffffb8;
+  border-radius: 14px;
+  background: #fffdf5d9;
+  box-shadow: 0 6px 18px #51475d10;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.settings-tabs::-webkit-scrollbar {
+  display: none;
+}
+.settings-tabs button {
+  flex: 1 0 auto;
+  border: 0;
+  background: transparent;
+  color: #55604f;
+  border-radius: 10px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.settings-tabs button:hover {
+  background: #f1f0e4;
+  color: #34483c;
+}
+.settings-tabs button.active {
+  background: #526e50;
+  color: #ffffff;
+  box-shadow: 0 3px 10px #526e5033;
+}
+@media (max-width: 640px) {
+  .settings-tabs button {
+    flex: 1 0 auto;
+    padding: 9px 12px;
+  }
+}
+
+/* One visible section at a time fills the page instead of a third-column strip. */
+.settings-dashboard {
+  grid-template-columns: minmax(0, 1fr) !important;
+  justify-items: center;
+}
+.settings-dashboard > .settings-section,
+.settings-dashboard .subjects-settings,
+.settings-dashboard .world-settings-card,
+.settings-dashboard .test-settings-card {
+  grid-column: auto !important;
+  grid-row: auto !important;
+  width: 100%;
+  max-width: 920px;
+}
+
+/* Shared section tab bar (Analytics, Tests) mirrors Settings. */
+.section-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 5px;
+  margin: 0 0 18px;
+  border: 1px solid #ffffffb8;
+  border-radius: 14px;
+  background: #fffdf5d9;
+  box-shadow: 0 6px 18px #51475d10;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.section-tabs::-webkit-scrollbar {
+  display: none;
+}
+.section-tabs button {
+  flex: 1 0 auto;
+  border: 0;
+  background: transparent;
+  color: #55604f;
+  border-radius: 10px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.section-tabs button:hover {
+  background: #f1f0e4;
+  color: #34483c;
+}
+.section-tabs button.active {
+  background: #526e50;
+  color: #ffffff;
+  box-shadow: 0 3px 10px #526e5033;
+}
+
+/* Legal pages */
+.legal-page {
+  max-width: 900px;
+}
+.legal-card {
+  padding: 28px 32px;
+  display: block;
+}
+.legal-card h2 {
+  font-size: 17px;
+  margin: 22px 0 8px;
+  color: #34483c;
+}
+.legal-card h2:first-of-type {
+  margin-top: 8px;
+}
+.legal-card p,
+.legal-card li {
+  color: #55604f;
+  line-height: 1.65;
+  font-size: 14px;
+}
+.legal-card ul {
+  padding-left: 20px;
+  margin: 6px 0;
+}
+.legal-effective {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #98a094;
+  margin: 0 0 6px;
+}
+.legal-footnote {
+  margin-top: 26px;
+  padding-top: 16px;
+  border-top: 1px solid #eceadf;
+  font-size: 12.5px;
+}
+
+/* Gentle global polish */
+.page-heading h1 {
+  letter-spacing: -0.02em;
+}
+.panel {
+  border-radius: 18px;
+}
+
+/* Density pass: fit each section in one screen wherever practical. */
+.reference-shell:not(.immersive-shell) .page {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+.page-heading {
+  margin-bottom: 18px;
+}
+.page-heading h1 {
+  font-size: clamp(26px, 3vw, 34px);
+}
+.insight-stats {
+  margin-bottom: 14px;
+}
+.insight-stat {
+  padding: 14px 16px;
+}
+.insight-grid {
+  gap: 14px;
+}
+.settings-tabs,
+.section-tabs {
+  position: sticky;
+  top: 8px;
+  z-index: 5;
+  backdrop-filter: blur(10px);
+}
+@media (max-height: 820px) {
+  .reference-shell:not(.immersive-shell) .page {
+    padding-top: 16px;
+  }
+  .page-heading p {
+    display: none;
+  }
+}

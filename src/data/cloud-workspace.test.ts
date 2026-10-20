@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { emptyData } from "../domain/model";
+import { seededData as emptyData } from "./demo";
 import type { AppData } from "../domain/model";
 import { CloudError, parseCloudRecord } from "./cloud-api";
 import type { CloudApi, CloudRecord } from "./cloud-api";

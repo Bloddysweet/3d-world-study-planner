@@ -7,7 +7,8 @@ import {
   deleteSubject,
 } from "./engine";
 import { revisionExamPlan, recordRevisionExam } from "./exams";
-import { dataSchema, emptyData, testSchema, uid } from "./model";
+import { dataSchema, testSchema, uid } from "./model";
+import { seededData as emptyData } from "../data/demo";
 import type { TestResult, AppData } from "./model";
 import {
   readBackup,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { emptyData } from "../domain/model";
+import { seededData as emptyData } from "./demo";
 import { LocalStudyRepository, readBackup, storageKey } from "./repository";
 import { demoData } from "./demo";
 function memory() {

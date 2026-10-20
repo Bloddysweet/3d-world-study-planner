@@ -28,6 +28,7 @@ export function AiImportForm({
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   const [configured, setConfigured] = useState<boolean | null>(null),
+    [missing, setMissing] = useState<string[]>([]),
     [plan, setPlan] = useState<AiPlan | null>(null),
     [rows, setRows] = useState<ReviewTask[]>([]),
     [model, setModel] = useState("");
@@ -39,7 +40,10 @@ export function AiImportForm({
     const c = new AbortController();
     fetch("/api/targets/status", { signal: c.signal, cache: "no-store" })
       .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((v) => setConfigured(v.configured === true))
+      .then((v) => {
+        setConfigured(v.configured === true);
+        setMissing(Array.isArray(v.missing) ? v.missing : []);
+      })
       .catch(() => {
         if (!c.signal.aborted) setConfigured(false);
       });
@@ -193,11 +197,21 @@ export function AiImportForm({
               <div className="callout ai-setup" role="status">
                 <strong>Private AI setup needed</strong>
                 <p>
-                  Set OPENROUTER_API_KEY and AI_IMPORT_ACCESS_CODE in your
-                  hosting server’s private environment (or{" "}
+                  Set{" "}
+                  {(missing.length
+                    ? missing
+                    : ["OPENROUTER_API_KEY", "AI_IMPORT_ACCESS_CODE (16+ characters)"]
+                  ).map((name, i) => (
+                    <span key={name}>
+                      {i > 0 ? " and " : ""}
+                      <code>{name}</code>
+                    </span>
+                  ))}{" "}
+                  in your hosting server’s private environment (or{" "}
                   <code>server/.env.local</code> locally), then restart the
-                  server. Never put your API key in this dialog. You can still
-                  use the manual reader below.
+                  server. Never put your API key in this dialog — the dialog
+                  wants only the access code. You can still use the manual
+                  reader below.
                 </p>
               </div>
             )}

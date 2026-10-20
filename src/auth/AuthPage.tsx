@@ -1,8 +1,32 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Field, Heading, Page } from "../components/ui";
+import { ArrowLeft, IslandMark } from "../components/icons";
 import { useAuth } from "./AuthProvider";
-import { cloudConfigurationError, supabase } from "./client";
+import { supabase } from "./client";
+
+function GoogleMark() {
+  return (
+    <svg viewBox="0 0 18 18" width="17" height="17" aria-hidden="true">
+      <path
+        fill="#4285F4"
+        d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62Z"
+      />
+      <path
+        fill="#34A853"
+        d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18Z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M3.97 10.72a5.4 5.4 0 0 1 0-3.44V4.95H.96a9 9 0 0 0 0 8.1l3.01-2.33Z"
+      />
+      <path
+        fill="#EA4335"
+        d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58Z"
+      />
+    </svg>
+  );
+}
 export function AuthPage() {
   const auth = useAuth(),
     location = useLocation(),
@@ -13,6 +37,7 @@ export function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmation, setConfirmation] = useState("");
+  const [agreed, setAgreed] = useState(false);
   const [busy, setBusy] = useState(false),
     [message, setMessage] = useState(""),
     [error, setError] = useState("");
@@ -25,32 +50,66 @@ export function AuthPage() {
     setMode(next);
     setPassword("");
     setConfirmation("");
+    setAgreed(false);
     setMessage("");
     setError("");
   }
+  async function signInWithGoogle() {
+    if (!supabase) return;
+    setError("");
+    setBusy(true);
+    const result = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
+    });
+    if (result.error) {
+      setError(result.error.message);
+      setBusy(false);
+    }
+  }
   return (
     <Page className="auth-page">
-      <Heading
-        title={
-          recovering
-            ? "Choose a new password"
-            : mode === "signup"
-              ? "Create your account"
-              : mode === "forgot"
-                ? "Reset your password"
-                : "Welcome to Study World"
-        }
-        description="Your private study progress, on your devices. Local mode is still available."
-      />
       <section className="panel auth-card">
+        <div className="auth-card-top">
+          <Link className="auth-brand" to="/">
+            <span className="auth-brand-mark">
+              <IslandMark size={34} />
+            </span>
+            <span className="auth-brand-text">
+              <strong>Study World</strong>
+              <em>A LITTLE EVERY DAY</em>
+            </span>
+          </Link>
+          <Link className="auth-back" to="/">
+            <ArrowLeft size={15} />
+            Back to home
+          </Link>
+        </div>
+        <Heading
+          title={
+            recovering
+              ? "Choose a new password"
+              : mode === "signup"
+                ? "Create your account"
+                : mode === "forgot"
+                  ? "Reset your password"
+                  : "Welcome back"
+          }
+          description={
+            recovering
+              ? "Set a new password for your account."
+              : mode === "signup"
+                ? "Create your private study world."
+                : mode === "forgot"
+                  ? "We’ll email you a secure reset link."
+                  : "Sign in to continue your study world."
+          }
+        />
         {!supabase ? (
-          <>
-            <p role="alert">{cloudConfigurationError}</p>
-            <p>
-              Add VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY to the
-              hosting environment, then rebuild.
-            </p>
-          </>
+          <div className="callout soft" role="status">
+            <strong>Sign-in is unavailable right now</strong>
+            <p>Please try again shortly, or contact support if it persists.</p>
+          </div>
         ) : (
           <>
             {auth.error && (
@@ -63,6 +122,22 @@ export function AuthPage() {
                 If your email link expired or was opened on a different browser,
                 request a new link or sign in below.
               </p>
+            )}
+            {!recovering && mode !== "forgot" && (
+              <>
+                <button
+                  type="button"
+                  className="btn auth-google"
+                  disabled={busy}
+                  onClick={signInWithGoogle}
+                >
+                  <GoogleMark />
+                  Continue with Google
+                </button>
+                <div className="auth-divider">
+                  <span>or continue with email</span>
+                </div>
+              </>
             )}
             {recovering && !auth.user ? (
               <>
@@ -78,13 +153,17 @@ export function AuthPage() {
               <form
                 onSubmit={async (event) => {
                   event.preventDefault();
-                  if (!supabase) return;
                   setError("");
                   setMessage("");
                   if (recovering && password !== confirmation) {
-                    setError("The two passwords do not match.");
+                    setError("Both passwords should match.");
                     return;
                   }
+                  if (mode === "signup" && !agreed) {
+                    setError("Please tick “I agree” to continue.");
+                    return;
+                  }
+                  if (!supabase) return;
                   setBusy(true);
                   try {
                     if (recovering) {
@@ -116,7 +195,7 @@ export function AuthPage() {
                       if (result.error) throw result.error;
                       setPassword("");
                       setMessage(
-                        "Check your email to confirm your account, then sign in. Open the confirmation link in this browser. If no email arrives, the project owner may need to configure email delivery.",
+                        `Check your email — we've sent a confirmation to ${email.trim()}. Open its link, or enter the one-time code (OTP) it contains, to confirm your account, then sign in. Check spam if nothing arrives.`,
                       );
                     } else {
                       const result = await supabase.auth.signInWithPassword({
@@ -186,6 +265,17 @@ export function AuthPage() {
                       />
                     </Field>
                   )}
+                  {mode === "signup" && !recovering && (
+                    <label className="auth-consent">
+                      <input
+                        type="checkbox"
+                        checked={agreed}
+                        onChange={(e) => setAgreed(e.target.checked)}
+                      />
+                      I agree to the privacy terms — my study data stays in my
+                      account and is never shared.
+                    </label>
+                  )}
                   <button type="submit" className="btn primary">
                     {busy
                       ? "Please wait…"
@@ -236,12 +326,13 @@ export function AuthPage() {
             )}
           </>
         )}
-        <Link to="/" className="account-local-link">
-          Back to my world — {auth.user ? "stay signed in" : "continue locally"}
-        </Link>
         <p className="small muted">
-          Signing in never automatically uploads your existing browser progress
-          or demo data.
+          Your existing browser progress stays untouched until you import it.
+        </p>
+        <p className="auth-legal">
+          By continuing, you agree to our{" "}
+          <Link to="/terms">Terms of Service</Link> and{" "}
+          <Link to="/privacy">Privacy Policy</Link>.
         </p>
       </section>
     </Page>
