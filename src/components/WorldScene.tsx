@@ -1056,10 +1056,10 @@ export default function WorldSceneView({
             }}
             shadows
             camera={{ position: [35, 32, 42], fov: 42, near: 0.1, far: 400 }}
-            dpr={compact ? 1 : [1, 1.5]}
+            dpr={[1, 2]}
             frameloop="demand"
             gl={{
-              antialias: !compact,
+              antialias: true,
               alpha: true,
               powerPreference: "low-power",
             }}

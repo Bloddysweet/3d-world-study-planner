@@ -17,6 +17,7 @@ import { TestsPage } from "./pages/Tests";
 import { AnalyticsPage } from "./pages/Analytics";
 import { SettingsPage } from "./pages/Settings";
 import { PrivacyPage, TermsPage } from "./pages/Legal";
+import { WellnessPage } from "./pages/Wellness";
 import "./styles.css";
 import "./reference.css";
 import { AppHeader } from "./components/AppHeader";
@@ -134,6 +135,7 @@ function Shell() {
           <Route path="/today" element={<TodayPage />} />
           <Route path="/revisions" element={<RevisionsPage />} />
           <Route path="/tests" element={<TestsPage />} />
+          <Route path="/wellness" element={<WellnessPage />} />
           <Route path="/analytics" element={<AnalyticsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/login" element={<AuthPage />} />

@@ -24,8 +24,7 @@ import {
 const ratingColors = ["#ce4855", "#cc861c", "#2e8a62", "#4475d4"];
 export function AnalyticsPage() {
   const { data, date } = useApp(),
-    [period, setPeriod] = useState<InsightPeriod>("30"),
-    [tab, setTab] = useState<"activity" | "scores">("activity");
+    [period, setPeriod] = useState<InsightPeriod>("30");
   const report = insights(data, date, period),
     activeTopics = data.topics.filter((t) => !subjectFor(data, t.id)?.archived),
     weak = activeTopics.filter((t) => topicStatus(data, t.id) === "weak");
@@ -60,25 +59,6 @@ export function AnalyticsPage() {
           </div>
         }
       />
-      <nav className="section-tabs" aria-label="Analytics sections">
-        {(
-          [
-            ["activity", "Activity"],
-            ["scores", "Scores"],
-          ] as const
-        ).map(([key, label]) => (
-          <button
-            key={key}
-            type="button"
-            className={tab === key ? "active" : ""}
-            aria-current={tab === key ? "page" : undefined}
-            onClick={() => setTab(key)}
-          >
-            {label}
-          </button>
-        ))}
-      </nav>
-      <div className="insight-grid" hidden={tab !== "activity"}>
       <div className="insight-stats">
         {[
           [
@@ -111,6 +91,7 @@ export function AnalyticsPage() {
           </section>
         ))}
       </div>
+      <div className="insight-grid">
         <section className="panel heatmap-card">
           <SectionTitle
             title="Study consistency"
@@ -190,8 +171,6 @@ export function AnalyticsPage() {
             current daily budget.
           </p>
         </section>
-      </div>
-      <div className="insight-grid" hidden={tab !== "scores"}>
         <section className="panel recall-donut-card">
           <SectionTitle title="How well you remembered" />
           <div className="recall-breakdown">

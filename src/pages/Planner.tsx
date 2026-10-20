@@ -627,50 +627,65 @@ export function TodayPage() {
           </section>
         </aside>
         <div className="today-main">
-          <div className="today-checkins">
-            <section className="panel streak-card">
-              <div className="card-title-icon">
-                <CheckCircle2 size={16} />
-                <h2>Study streak</h2>
+          <section className="panel checkin-card" aria-label="Daily check-in">
+            <div className="checkin-part">
+              <div className="checkin-head">
+                <span className="checkin-icon">
+                  <CheckCircle2 size={16} />
+                </span>
+                <div className="checkin-titles">
+                  <h2>Study streak</h2>
+                  <p>
+                    {streak.count > 0
+                      ? `${streak.count}-day streak`
+                      : "Start your streak"}
+                  </p>
+                </div>
               </div>
-              <p className="streak-count">
-                {streak.count > 0
-                  ? `${streak.count}-day streak`
-                  : "Start your streak"}
-              </p>
-              <label className="streak-confirm">
-                <input
-                  type="checkbox"
-                  checked={studied}
-                  onChange={(e) => setStudied(e.target.checked)}
-                />
-                I studied today
-              </label>
-              <button
-                className="btn primary"
-                disabled={!studied}
-                onClick={() => {
-                  update((s) => saveStreak(s, date));
-                  notify("Streak saved.");
-                }}
-              >
-                <Check size={14} />
-                Save streak
-              </button>
-            </section>
-            <section className="panel sleep-card">
-              <div className="card-title-icon">
-                <Clock3 size={16} />
-                <h2>Sleep schedule</h2>
+              <div className="checkin-row">
+                <label className="checkin-toggle">
+                  <input
+                    type="checkbox"
+                    checked={studied}
+                    onChange={(e) => setStudied(e.target.checked)}
+                  />
+                  <span>I studied today</span>
+                </label>
+                <button
+                  className="btn primary checkin-save"
+                  disabled={!studied}
+                  onClick={() => {
+                    update((s) => saveStreak(s, date));
+                    notify("Streak saved.");
+                  }}
+                >
+                  <Check size={14} />
+                  Save streak
+                </button>
               </div>
-              <p className="sleep-text">
-                {lastNight
-                  ? `Last night: ${duration(lastNight.minutes)}`
-                  : "Log last night’s sleep"}
-              </p>
-              <div className="sleep-field">
+            </div>
+            <div className="checkin-part">
+              <div className="checkin-head">
+                <span className="checkin-icon">
+                  <Clock3 size={16} />
+                </span>
+                <div className="checkin-titles">
+                  <h2>Sleep schedule</h2>
+                  <p>
+                    {lastNight
+                      ? `Last night: ${duration(lastNight.minutes)}`
+                      : "Log last night’s sleep"}
+                  </p>
+                </div>
+                {sleepPreview && (
+                  <span className="checkin-duration">
+                    ≈ {duration(sleepPreview)}
+                  </span>
+                )}
+              </div>
+              <div className="checkin-row checkin-times">
                 <label>
-                  Bedtime
+                  <span>Bedtime</span>
                   <input
                     type="time"
                     value={bedtime}
@@ -681,7 +696,7 @@ export function TodayPage() {
                   />
                 </label>
                 <label>
-                  Wake up
+                  <span>Wake up</span>
                   <input
                     type="time"
                     value={wake}
@@ -691,11 +706,8 @@ export function TodayPage() {
                     }}
                   />
                 </label>
-                <span className="sleep-span">
-                  {sleepPreview ? `≈ ${duration(sleepPreview)}` : ""}
-                </span>
                 <button
-                  className="btn primary"
+                  className="btn primary checkin-save"
                   onClick={() => {
                     const result = saveSleep(data, { date, bedtime, wake });
                     if (!result.ok) return setSleepErr(result.error);
@@ -712,27 +724,31 @@ export function TodayPage() {
                   {sleepErr}
                 </small>
               )}
-              <div className="sleep-history">
-                {trend.window
-                  .slice(-7)
-                  .reverse()
-                  .map((s) => (
-                    <span
-                      className="sleep-chip"
-                      key={s.date}
-                      title={`${displayDate(s.date)} · ${s.bedtime}–${s.wake} · ${duration(s.minutes)}`}
-                    >
-                      {displayDate(s.date)}: {duration(s.minutes)}
-                    </span>
-                  ))}
+              <div className="checkin-meta">
+                {trend.window.length > 0 && (
+                  <div className="sleep-history">
+                    {trend.window
+                      .slice(-7)
+                      .reverse()
+                      .map((s) => (
+                        <span
+                          className="sleep-chip"
+                          key={s.date}
+                          title={`${displayDate(s.date)} · ${s.bedtime}–${s.wake} · ${duration(s.minutes)}`}
+                        >
+                          {displayDate(s.date)}: {duration(s.minutes)}
+                        </span>
+                      ))}
+                  </div>
+                )}
+                <p className="sleep-text">
+                  {trend.nights
+                    ? `7-night average: ${duration(trend.average!)} · ${trend.nights} night${trend.nights === 1 ? "" : "s"} logged.`
+                    : "7-night average appears once you log a night."}
+                </p>
               </div>
-              <p className="sleep-text muted small">
-                {trend.nights
-                  ? `7-night average: ${duration(trend.average!)} · ${trend.nights} night${trend.nights === 1 ? "" : "s"} logged.`
-                  : "7-night average appears once you log a night."}
-              </p>
-            </section>
-          </div>
+            </div>
+          </section>
           <div className="today-budget panel">
             <div>
               <strong>{duration(plan.total)}</strong> planned of{" "}

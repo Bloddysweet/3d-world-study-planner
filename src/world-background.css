@@ -195,3 +195,271 @@
     display: none;
   }
 }
+
+/* Mobile header: keep Sign in beside Paste targets. */
+@media (max-width: 760px) {
+  .site-header .site-account-link {
+    display: inline-flex;
+    min-height: 42px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #34483c;
+    background: #ffffff;
+    border: 1px solid #dcdbe5;
+    border-radius: 10px;
+  }
+}
+
+/* Today: one compact, aligned daily check-in panel. */
+.checkin-card {
+  padding: 0;
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+.checkin-part {
+  padding: 13px 17px;
+  display: grid;
+  gap: 9px;
+}
+.checkin-part + .checkin-part {
+  border-top: 1px solid #eceade;
+}
+.checkin-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.checkin-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: #f0f2e6;
+  color: #526e50;
+  flex: none;
+}
+.checkin-titles {
+  min-width: 0;
+}
+.checkin-titles h2 {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #34483c;
+}
+.checkin-titles p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #7a857a;
+}
+.checkin-duration {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 700;
+  color: #526e50;
+}
+.checkin-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.checkin-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #34483c;
+  min-height: 36px;
+}
+.checkin-save {
+  margin-left: auto;
+  min-height: 36px;
+  padding: 6px 14px;
+  font-size: 12px;
+}
+.checkin-times label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: #98a094;
+}
+.checkin-times input {
+  min-height: 36px;
+  padding: 4px 8px;
+  font-size: 13px;
+  width: 108px;
+}
+.checkin-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+}
+.checkin-meta .sleep-text {
+  margin: 0;
+  font-size: 11.5px;
+  color: #7a857a;
+}
+.checkin-meta .sleep-chip {
+  font-size: 10.5px;
+  padding: 2px 9px;
+}
+.checkin-part .error {
+  color: #a14b3c;
+  font-size: 11.5px;
+}
+@media (max-width: 520px) {
+  .checkin-save {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+/* Diet & gym week planner */
+.wellness-page {
+  max-width: 1080px;
+}
+.wellness-week-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  border: 1px solid #ffffffb8;
+  border-radius: 12px;
+  background: #fffdf5d9;
+}
+.wellness-week-nav span {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #34483c;
+  padding: 0 6px;
+  white-space: nowrap;
+}
+.wellness-lockbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  background: #fffdf5e6;
+  border: 1px solid #ffffffb8;
+}
+.wellness-lockbar > div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+.wellness-lockbar strong {
+  font-size: 13px;
+  color: #34483c;
+}
+.wellness-lock-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  background: #f0f2e6;
+  color: #526e50;
+}
+.wellness-card {
+  padding: 6px 0;
+  overflow: hidden;
+}
+.wellness-row {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  padding: 9px 18px;
+}
+.wellness-row + .wellness-row {
+  border-top: 1px solid #f1efe6;
+}
+.wellness-row.is-today {
+  background: #fbfbf3;
+}
+.wellness-head {
+  padding-top: 12px;
+  padding-bottom: 6px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #98a094;
+  border-bottom: 1px solid #eceade;
+}
+.wellness-day {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.wellness-day strong {
+  font-size: 13px;
+  color: #34483c;
+}
+.wellness-day > span {
+  font-size: 11px;
+  color: #98a094;
+}
+.wellness-field input {
+  width: 100%;
+  min-height: 38px;
+  padding: 7px 11px;
+  font-size: 13px;
+  border-radius: 10px;
+  border: 1px solid #e2e3d6;
+  background: #ffffff;
+  color: #34483c;
+}
+.wellness-field input:disabled {
+  background: #f6f5ec;
+  color: #7a857a;
+  cursor: not-allowed;
+}
+.wellness-footnote {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 12px 0 0;
+  font-size: 11.5px;
+  color: #7a857a;
+}
+@media (max-width: 700px) {
+  .wellness-row {
+    grid-template-columns: 74px minmax(0, 1fr);
+    grid-template-areas:
+      "day diet"
+      "day gym";
+    gap: 7px 10px;
+    padding: 11px 14px;
+  }
+  .wellness-head {
+    display: none;
+  }
+  .wellness-day {
+    grid-area: day;
+    align-self: start;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  .wellness-row > .wellness-field:nth-of-type(1) {
+    grid-area: diet;
+  }
+  .wellness-row > .wellness-field:nth-of-type(2) {
+    grid-area: gym;
+  }
+}

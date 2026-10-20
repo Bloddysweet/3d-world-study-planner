@@ -162,6 +162,19 @@ export const streakSchema = z.object({
   count: z.number().int().min(0).max(20000),
   lastOn: day.nullable(),
 });
+export const wellnessDaySchema = z.object({
+  day,
+  diet: z.string().max(300),
+  gym: z.string().max(300),
+});
+export const wellnessWeekSchema = z.object({
+  weekStart: day,
+  locked: z.boolean(),
+  days: z.array(wellnessDaySchema).max(7),
+});
+export const wellnessSchema = z.object({
+  weeks: z.array(wellnessWeekSchema).max(520),
+});
 export const preferencesSchema = z.object({
   dailyMinutes: z.number().int().min(15).max(1440),
   revisionMinutes: z.number().int().min(1).max(240),
@@ -188,12 +201,26 @@ export const dataSchema = z
     preferences: preferencesSchema,
     streak: streakSchema.default({ count: 0, lastOn: null }),
     sleep: z.array(sleepEntrySchema).max(20000).default([]),
+    wellness: wellnessSchema.default({ weeks: [] }),
   })
   .superRefine((s, ctx) => {
     const error = (message: string) =>
       ctx.addIssue({ code: "custom", message });
     if (new Set(s.sleep.map((a) => a.date)).size !== s.sleep.length)
       error("Only one sleep entry per date is allowed");
+    if (
+      new Set(s.wellness.weeks.map((w) => w.weekStart)).size !==
+      s.wellness.weeks.length
+    )
+      error("Only one wellness entry per week is allowed");
+    if (
+      s.wellness.weeks.some(
+        (w) =>
+          new Set(w.days.map((d) => d.day)).size !== w.days.length ||
+          w.days.some((d) => d.day < w.weekStart || d.day > addDays(w.weekStart, 6)),
+      )
+    )
+      error("Wellness days must be unique and inside their week");
     for (const key of [
       "subjects",
       "topics",
@@ -262,6 +289,7 @@ export type TestResult = z.infer<typeof testSchema>;
 export type Preferences = z.infer<typeof preferencesSchema>;
 export type SleepEntry = z.infer<typeof sleepEntrySchema>;
 export type Streak = z.infer<typeof streakSchema>;
+export type WellnessWeek = z.infer<typeof wellnessWeekSchema>;
 export type AppData = z.infer<typeof dataSchema>;
 export type Rating = (typeof ratings)[number];
 export type Theme = (typeof themes)[number];
@@ -308,6 +336,7 @@ export function emptyData(): AppData {
     tests: [],
     streak: { count: 0, lastOn: null },
     sleep: [],
+    wellness: { weeks: [] },
     preferences: {
       dailyMinutes: 210,
       revisionMinutes: 20,
