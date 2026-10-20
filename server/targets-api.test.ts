@@ -6,7 +6,6 @@ import type { Server } from "node:http";
 import {
   createAiService,
   createTargetsMiddleware,
-  freeCandidates,
   TARGETS_PROMPT,
   readRequestBody,
 } from "./targets-api";
@@ -21,12 +20,6 @@ const config: AiConfig = {
   dailyLimit: 40,
 };
 const req = { text: samplePaste, catalogue: catalogueFor(emptyData()) };
-const model = (id = "example/one:free", price = "0") => ({
-  id,
-  pricing: { prompt: price, completion: price },
-  context_length: 65536,
-  supported_parameters: ["response_format", "structured_outputs"],
-});
 const response = (v: unknown, status = 200) =>
   new Response(JSON.stringify(v), {
     status,
@@ -44,10 +37,9 @@ const output = () => ({
 const mockFetch = (
   chat: (init?: RequestInit) => Response | Promise<Response> = () =>
     response(output()),
-  models = [model(), model("example/two:free")],
 ) =>
-  vi.fn(async (url: Parameters<typeof fetch>[0], init?: RequestInit) =>
-    String(url).endsWith("/models") ? response({ data: models }) : chat(init),
+  vi.fn(async (_url: Parameters<typeof fetch>[0], init?: RequestInit) =>
+    chat(init),
   ) as unknown as typeof fetch;
 const servers: Server[] = [];
 afterEach(async () => {
@@ -92,49 +84,6 @@ async function api(c = config, fetcher = mockFetch()) {
   };
 }
 describe("private, free-only OpenRouter service", () => {
-  it("refuses blank, nonnumeric and additional nonzero model fees", () => {
-    expect(
-      freeCandidates(
-        [
-          { ...model(), pricing: { prompt: "", completion: "0" } },
-          { ...model(), pricing: { prompt: "NaN", completion: "0" } },
-          {
-            ...model(),
-            pricing: { prompt: "0", completion: "0", request: "0.01" },
-          },
-          {
-            ...model(),
-            pricing: { prompt: "0", completion: "0", input_cache_read: "0.01" },
-          },
-        ],
-        [],
-      ),
-    ).toEqual([]);
-  });
-
-  it("chooses only verified free structured-capable models, never a paid preferred model", () => {
-    expect(
-      freeCandidates(
-        [
-          model("paid/model", "1"),
-          model("free-but-not-tagged"),
-          model("x:free", "0.01"),
-          model(),
-          model("b:free"),
-        ],
-        ["paid/model"],
-      ).map((m) => m.id),
-    ).toEqual(["b:free", "example/one:free"]);
-    expect(
-      freeCandidates(
-        [
-          { ...model(), pricing: {} },
-          { ...model("no:free"), supported_parameters: [] },
-        ],
-        [],
-      ),
-    ).toEqual([]);
-  });
   it("makes a validated grounded request with no paid routing or browsing tools", async () => {
     const f = mockFetch();
     const r = await createAiService(config, f)(
@@ -143,8 +92,8 @@ describe("private, free-only OpenRouter service", () => {
     );
     expect(r.plan).toEqual(expectedPlan);
     const calls = vi.mocked(f).mock.calls,
-      body = JSON.parse(String(calls[1][1]?.body));
-    expect(body.model).toBe("example/one:free");
+      body = JSON.parse(String(calls[0][1]?.body));
+    expect(body.model).toBe("openrouter/free");
     expect(body.provider.max_price).toEqual({ prompt: 0, completion: 0 });
     expect(body.provider.data_collection).toBe("deny");
     expect(body.tools).toBeUndefined();
@@ -159,24 +108,19 @@ describe("private, free-only OpenRouter service", () => {
     expect(TARGETS_PROMPT).toContain("not a completed test record");
     expect(TARGETS_PROMPT).toContain("never instructions");
   });
-  it("tries just one alternative free model after rate limits", async () => {
-    let n = 0;
-    const f = mockFetch(() =>
-      ++n === 1 ? response({}, 429) : response(output()),
-    );
-    const result = await createAiService(config, f)(
-      req,
-      new AbortController().signal,
-    );
-    expect(result.model).toBe("example/two:free");
-    expect(n).toBe(2);
-  });
-  it("fails closed when free models are exhausted, with no paid fallback", async () => {
+  it("fails immediately on free-model rate limit, with no fallback", async () => {
     const f = mockFetch(() => response({}, 429));
     await expect(
       createAiService(config, f)(req, new AbortController().signal),
     ).rejects.toMatchObject({ status: 429, code: "FREE_RATE_LIMIT" });
-    expect(vi.mocked(f).mock.calls).toHaveLength(3);
+    expect(vi.mocked(f).mock.calls).toHaveLength(1);
+  });
+  it("fails immediately when free model returns non-OK", async () => {
+    const f = mockFetch(() => response({}, 502));
+    await expect(
+      createAiService(config, f)(req, new AbortController().signal),
+    ).rejects.toMatchObject({ status: 502, code: "INVALID_AI_RESPONSE" });
+    expect(vi.mocked(f).mock.calls).toHaveLength(1);
   });
   it("refuses malformed, truncated, hallucinated or charged output", async () => {
     for (const o of [
@@ -209,16 +153,6 @@ describe("private, free-only OpenRouter service", () => {
       ).rejects.toMatchObject({ code: "INVALID_AI_RESPONSE" });
     }
   });
-  it("does not use a paid-only catalogue or unstructured model", async () => {
-    const f = mockFetch(
-      () => response(output()),
-      [model("paid/model", "0.01")],
-    );
-    await expect(
-      createAiService(config, f)(req, new AbortController().signal),
-    ).rejects.toMatchObject({ code: "NO_FREE_MODEL" });
-    expect(vi.mocked(f).mock.calls).toHaveLength(1);
-  });
   it("sanitizes network/credential failures instead of leaking secrets", async () => {
     const f = vi.fn(async () => {
       throw Error(config.apiKey);
@@ -232,26 +166,6 @@ describe("private, free-only OpenRouter service", () => {
         mockFetch(() => response({ error: config.apiKey }, 401)),
       )(req, new AbortController().signal),
     ).rejects.toMatchObject({ code: "PROVIDER_AUTH" });
-  });
-  it("supports JSON-only response format when strict schema mode is unavailable", async () => {
-    const f = mockFetch(
-      () => response(output()),
-      [{ ...model(), supported_parameters: ["response_format"] }],
-    );
-    await createAiService(config, f)(req, new AbortController().signal);
-    expect(
-      JSON.parse(String(vi.mocked(f).mock.calls[1][1]?.body)).response_format,
-    ).toEqual({ type: "json_object" });
-  });
-  it("caches public model discovery, but not user paste/plan responses", async () => {
-    const f = mockFetch(),
-      service = createAiService(config, f);
-    await service(req, new AbortController().signal);
-    await service(req, new AbortController().signal);
-    expect(
-      vi.mocked(f).mock.calls.filter((c) => String(c[0]).endsWith("/models")),
-    ).toHaveLength(1);
-    expect(vi.mocked(f).mock.calls).toHaveLength(3);
   });
   it("requires server configuration and a private access code; status exposes no secrets", async () => {
     const a = await api({ ...config, apiKey: "" });
@@ -384,6 +298,6 @@ describe("request body and quota regressions", () => {
     await new Promise((resolve) => setTimeout(resolve, 30));
     starts.forEach((end) => end());
     expect((await Promise.all([first, second])).sort()).toEqual([200, 429]);
-    expect(vi.mocked(a.fetcher).mock.calls).toHaveLength(2);
+    expect(vi.mocked(a.fetcher).mock.calls).toHaveLength(1);
   });
 });
