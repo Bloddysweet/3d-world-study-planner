@@ -62,49 +62,7 @@ export class ImportError extends Error {
     super(message);
   }
 }
-type FreeModel = {
-  id: string;
-  context_length?: number;
-  pricing?: {
-    prompt?: string;
-    completion?: string;
-    [fee: string]: string | undefined;
-  };
-  supported_parameters?: string[];
-};
-export function freeCandidates(
-  models: FreeModel[],
-  preferred: string[],
-): FreeModel[] {
-  const free = models.filter(
-    (m) =>
-      (m.id.endsWith(":free") || m.id === "openrouter/free") &&
-      m.pricing?.prompt !== undefined &&
-      m.pricing?.completion !== undefined &&
-      // Reject absent/blank/ambiguous fees, including per-request/cache charges.
-      Object.values(m.pricing).every(
-        (fee) =>
-          typeof fee === "string" && fee.trim() !== "" && Number(fee) === 0,
-      ) &&
-      (m.context_length ?? 0) >= 32768 &&
-      m.supported_parameters?.includes("response_format"),
-  );
-  return free
-    .sort((a, b) => {
-      const rank = (m: FreeModel) => {
-        const i = preferred.indexOf(m.id);
-        return i < 0 ? preferred.length : i;
-      };
-      return (
-        rank(a) - rank(b) ||
-        Number(!!b.supported_parameters?.includes("structured_outputs")) -
-          Number(!!a.supported_parameters?.includes("structured_outputs")) ||
-        (b.context_length ?? 0) - (a.context_length ?? 0) ||
-        a.id.localeCompare(b.id)
-      );
-    })
-    .slice(0, 2);
-}
+
 const schema = z.toJSONSchema(aiPlanSchema);
 // Keep the provider schema portable; all bounds are still enforced by Zod locally.
 function portable(value: unknown): unknown {
@@ -133,7 +91,6 @@ export function createAiService(
   config: AiConfig,
   fetcher: typeof fetch = fetch,
 ) {
-  let cached: { time: number; models: FreeModel[] } | undefined;
   return async function analyse(
     request: AiRequest,
     signal: AbortSignal,
@@ -142,137 +99,107 @@ export function createAiService(
       Authorization: `Bearer ${config.apiKey}`,
       "Content-Type": "application/json",
     };
-    if (!cached || Date.now() - cached.time > 300000) {
-      let r: Response;
-      try {
-        r = await fetcher("https://openrouter.ai/api/v1/models", {
-          headers,
-          signal: AbortSignal.any([signal, AbortSignal.timeout(10000)]),
-        });
-      } catch {
-        throw new ImportError(
-          503,
-          "UPSTREAM_UNAVAILABLE",
-          "OpenRouter could not be reached. Your paste is unchanged. Check server network access or try the manual reader.",
-        );
-      }
-      if (!r.ok)
-        throw new ImportError(
-          503,
-          "MODELS_UNAVAILABLE",
-          "The free-model list is unavailable. Try again later.",
-        );
-      const result = (await r.json()) as { data?: FreeModel[] };
-      if (!Array.isArray(result.data))
-        throw new ImportError(
-          503,
-          "MODELS_UNAVAILABLE",
-          "OpenRouter returned an invalid model list.",
-        );
-      cached = {
-        time: Date.now(),
-        models: freeCandidates(
-          result.data.filter((m) => m && typeof m.id === "string"),
-          config.preferredModels,
-        ),
-      };
-    }
-    if (!cached.models.length)
+    const model = config.preferredModels[0] ?? "openrouter/free";
+    let r: Response;
+    try {
+      r = await fetcher(
+        "https://openrouter.ai/api/v1/chat/completions",
+      {
+        method: "POST",
+        headers,
+        signal: AbortSignal.any([signal, AbortSignal.timeout(25000)]),
+        body: JSON.stringify({
+          model: model,
+          stream: false,
+          max_tokens: 10000,
+          temperature: 0,
+          provider: {
+            require_parameters: true,
+            data_collection: "deny",
+            max_price: { prompt: 0, completion: 0 },
+          },
+          response_format: {
+            type: "json_schema",
+            json_schema: {
+              name: "study_targets",
+              strict: true,
+              schema: outputSchema,
+            },
+          },
+          messages: [
+            {
+              role: "system",
+              content: TARGETS_PROMPT + "\n" + JSON.stringify(outputSchema),
+            },
+            {
+              role: "user",
+              content: JSON.stringify({
+                paste: request.text,
+                catalogue: request.catalogue,
+              }),
+            },
+          ],
+        }),
+      },
+    );
+    } catch {
       throw new ImportError(
         503,
-        "NO_FREE_MODEL",
-        "No compatible free model is currently available. No paid model was used.",
+        "UPSTREAM_UNAVAILABLE",
+        "OpenRouter could not be reached. Your paste is unchanged. Check server network access or try the manual reader.",
       );
-    let limited = false;
-    for (const model of cached.models) {
-      if (signal.aborted)
-        throw new ImportError(499, "CANCELLED", "Analysis cancelled.");
-      try {
-        const strict =
-          model.supported_parameters?.includes("structured_outputs");
-        const r = await fetcher(
-          "https://openrouter.ai/api/v1/chat/completions",
-          {
-            method: "POST",
-            headers,
-            signal: AbortSignal.any([signal, AbortSignal.timeout(25000)]),
-            body: JSON.stringify({
-              model: model.id,
-              stream: false,
-              max_tokens: 10000,
-              temperature: 0,
-              provider: {
-                require_parameters: true,
-                data_collection: "deny",
-                max_price: { prompt: 0, completion: 0 },
-              },
-              response_format: strict
-                ? {
-                    type: "json_schema",
-                    json_schema: {
-                      name: "study_targets",
-                      strict: true,
-                      schema: outputSchema,
-                    },
-                  }
-                : { type: "json_object" },
-              messages: [
-                {
-                  role: "system",
-                  content: TARGETS_PROMPT + "\n" + JSON.stringify(outputSchema),
-                },
-                {
-                  role: "user",
-                  content: JSON.stringify({
-                    paste: request.text,
-                    catalogue: request.catalogue,
-                  }),
-                },
-              ],
-            }),
-          },
-        );
-        if (r.status === 401 || r.status === 403)
-          throw new ImportError(
-            503,
-            "PROVIDER_AUTH",
-            "OpenRouter rejected the server credentials or privacy/provider settings. Check them privately.",
-          );
-        if (r.status === 429) {
-          limited = true;
-          continue;
-        }
-        if (!r.ok) continue;
-        const result = (await r.json()) as {
-          choices?: {
-            finish_reason?: string;
-            message?: { content?: unknown };
-          }[];
-          usage?: { cost?: number };
-        };
-        const c = result.choices?.[0];
-        if (
-          c?.finish_reason !== "stop" ||
-          typeof c.message?.content !== "string" ||
-          c.message.content.length > 200000 ||
-          Number(result.usage?.cost ?? 0) !== 0
-        )
-          continue;
-        const plan = validateAiPlan(JSON.parse(c.message.content), request);
-        return { plan, model: model.id };
-      } catch (e) {
-        if (e instanceof ImportError) throw e;
-        if (signal.aborted)
-          throw new ImportError(499, "CANCELLED", "Analysis cancelled.");
-      }
     }
-    throw new ImportError(
-      limited ? 429 : 502,
-      limited ? "FREE_RATE_LIMIT" : "INVALID_AI_RESPONSE",
-      limited
-        ? "Free models are rate-limited. Try later; no paid model was used."
-        : "The free models could not return a complete, valid grounded plan. Nothing was saved. Retry or edit with the manual reader.",
-    );
+    if (r.status === 401 || r.status === 403)
+      throw new ImportError(
+        503,
+        "PROVIDER_AUTH",
+        "OpenRouter rejected the server credentials or privacy/provider settings. Check them privately.",
+      );
+    if (r.status === 429) {
+      throw new ImportError(
+        429,
+        "FREE_RATE_LIMIT",
+        "Free models are rate-limited. Try later; no paid model was used.",
+      );
+    }
+    if (!r.ok) {
+      const errorText = await r.text().catch(() => "");
+      throw new ImportError(
+        502,
+        "INVALID_AI_RESPONSE",
+        `OpenRouter returned ${r.status}. ${errorText.slice(0, 200)}`,
+      );
+    }
+    const result = (await r.json()) as {
+      choices?: {
+        finish_reason?: string;
+        message?: { content?: unknown };
+      }[];
+      usage?: { cost?: number };
+    };
+    const c = result.choices?.[0];
+    if (
+      c?.finish_reason !== "stop" ||
+      typeof c.message?.content !== "string" ||
+      c.message.content.length > 200000 ||
+      Number(result.usage?.cost ?? 0) !== 0
+    )
+      throw new ImportError(
+        502,
+        "INVALID_AI_RESPONSE",
+        "The free models could not return a complete, valid grounded plan. Nothing was saved. Retry or edit with the manual reader.",
+      );
+    let plan: AiPlan;
+    try {
+      plan = validateAiPlan(JSON.parse(c.message.content), request);
+    } catch {
+      throw new ImportError(
+        502,
+        "INVALID_AI_RESPONSE",
+        "The free models could not return a complete, valid grounded plan. Nothing was saved. Retry or edit with the manual reader.",
+      );
+    }
+    return { plan, model };
   };
 }
 // Keep raw bytes until the complete bounded body arrives. Decoding individual
