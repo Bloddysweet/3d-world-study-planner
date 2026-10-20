@@ -184,6 +184,12 @@ export function createAiService(
         "No compatible free model is currently available. No paid model was used.",
       );
     let limited = false;
+    // Short, non-sensitive reason per attempt (never paste text or keys).
+    const attempts: string[] = [];
+    const note = (id: string, reason: string) => {
+      attempts.push(`${id}: ${reason}`);
+      console.warn(`[ai-import] ${id} failed: ${reason}`);
+    };
     for (const model of cached.models) {
       if (signal.aborted)
         throw new ImportError(499, "CANCELLED", "Analysis cancelled.");
@@ -240,9 +246,13 @@ export function createAiService(
           );
         if (r.status === 429) {
           limited = true;
+          note(model.id, "rate limited (429)");
           continue;
         }
-        if (!r.ok) continue;
+        if (!r.ok) {
+          note(model.id, `provider HTTP ${r.status}`);
+          continue;
+        }
         const result = (await r.json()) as {
           choices?: {
             finish_reason?: string;
@@ -251,19 +261,45 @@ export function createAiService(
           usage?: { cost?: number };
         };
         const c = result.choices?.[0];
-        if (
-          c?.finish_reason !== "stop" ||
-          typeof c.message?.content !== "string" ||
-          c.message.content.length > 200000 ||
-          Number(result.usage?.cost ?? 0) !== 0
-        )
+        if (c?.finish_reason !== "stop") {
+          note(model.id, `finish_reason=${c?.finish_reason ?? "none"} (output cut off or empty)`);
           continue;
-        const plan = validateAiPlan(JSON.parse(c.message.content), request);
+        }
+        if (typeof c.message?.content !== "string") {
+          note(model.id, "empty or non-text message content");
+          continue;
+        }
+        if (c.message.content.length > 200000) {
+          note(model.id, "response too large");
+          continue;
+        }
+        if (Number(result.usage?.cost ?? 0) !== 0) {
+          note(model.id, "reported a non-zero cost, rejected");
+          continue;
+        }
+        let parsed: unknown;
+        try {
+          parsed = JSON.parse(c.message.content);
+        } catch {
+          note(model.id, "output was not valid JSON");
+          continue;
+        }
+        const plan = validateAiPlan(parsed, request);
         return { plan, model: model.id };
       } catch (e) {
         if (e instanceof ImportError) throw e;
         if (signal.aborted)
           throw new ImportError(499, "CANCELLED", "Analysis cancelled.");
+        const name = (e as Error)?.name;
+        // Zod errors carry field paths, not paste text; own Errors are fixed strings.
+        note(
+          model.id,
+          name === "TimeoutError" || name === "AbortError"
+            ? "timed out"
+            : name === "ZodError"
+              ? "JSON did not match the plan schema"
+              : `validation: ${e instanceof Error ? e.message.slice(0, 120) : "unknown"}`,
+        );
       }
     }
     throw new ImportError(
@@ -271,7 +307,7 @@ export function createAiService(
       limited ? "FREE_RATE_LIMIT" : "INVALID_AI_RESPONSE",
       limited
         ? "Free models are rate-limited. Try later; no paid model was used."
-        : "The free models could not return a complete, valid grounded plan. Nothing was saved. Retry or edit with the manual reader.",
+        : `The free models could not return a complete, valid grounded plan. Nothing was saved. Retry or edit with the manual reader. Details: ${attempts.join("; ") || "none"}`,
     );
   };
 }
