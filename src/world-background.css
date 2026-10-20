@@ -1,0 +1,465 @@
+/* Shared World atmosphere: every non-immersive section (Today, Revisions,
+   Tests, Analytics, Settings, subject pages) sits on the same sky that the
+   World page paints, so moving between sections feels like one place. */
+.app-shell.reference-shell:not(.immersive-shell) {
+  background:
+    radial-gradient(ellipse at 76% 34%, #fff2cfcc 0, transparent 48%),
+    radial-gradient(ellipse at 12% 68%, #ddd9ed 0, transparent 60%),
+    linear-gradient(165deg, #c8d5e6 0%, #edced0 40%, #f5ddc9 65%, #d9c9df 100%);
+  background-attachment: fixed;
+}
+
+/* Settings: a section nav bar instead of one long scrolling page. */
+.settings-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 5px;
+  margin: 0 0 18px;
+  border: 1px solid #ffffffb8;
+  border-radius: 14px;
+  background: #fffdf5d9;
+  box-shadow: 0 6px 18px #51475d10;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.settings-tabs::-webkit-scrollbar {
+  display: none;
+}
+.settings-tabs button {
+  flex: 1 0 auto;
+  border: 0;
+  background: transparent;
+  color: #55604f;
+  border-radius: 10px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.settings-tabs button:hover {
+  background: #f1f0e4;
+  color: #34483c;
+}
+.settings-tabs button.active {
+  background: #526e50;
+  color: #ffffff;
+  box-shadow: 0 3px 10px #526e5033;
+}
+@media (max-width: 640px) {
+  .settings-tabs button {
+    flex: 1 0 auto;
+    padding: 9px 12px;
+  }
+}
+
+/* One visible section at a time fills the page instead of a third-column strip. */
+.settings-dashboard {
+  grid-template-columns: minmax(0, 1fr) !important;
+  justify-items: center;
+}
+.settings-dashboard > .settings-section,
+.settings-dashboard .subjects-settings,
+.settings-dashboard .world-settings-card,
+.settings-dashboard .test-settings-card {
+  grid-column: auto !important;
+  grid-row: auto !important;
+  width: 100%;
+  max-width: 920px;
+}
+
+/* Shared section tab bar (Analytics, Tests) mirrors Settings. */
+.section-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 5px;
+  margin: 0 0 18px;
+  border: 1px solid #ffffffb8;
+  border-radius: 14px;
+  background: #fffdf5d9;
+  box-shadow: 0 6px 18px #51475d10;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.section-tabs::-webkit-scrollbar {
+  display: none;
+}
+.section-tabs button {
+  flex: 1 0 auto;
+  border: 0;
+  background: transparent;
+  color: #55604f;
+  border-radius: 10px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.section-tabs button:hover {
+  background: #f1f0e4;
+  color: #34483c;
+}
+.section-tabs button.active {
+  background: #526e50;
+  color: #ffffff;
+  box-shadow: 0 3px 10px #526e5033;
+}
+
+/* Legal pages */
+.legal-page {
+  max-width: 900px;
+}
+.legal-card {
+  padding: 28px 32px;
+  display: block;
+}
+.legal-card h2 {
+  font-size: 17px;
+  margin: 22px 0 8px;
+  color: #34483c;
+}
+.legal-card h2:first-of-type {
+  margin-top: 8px;
+}
+.legal-card p,
+.legal-card li {
+  color: #55604f;
+  line-height: 1.65;
+  font-size: 14px;
+}
+.legal-card ul {
+  padding-left: 20px;
+  margin: 6px 0;
+}
+.legal-effective {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #98a094;
+  margin: 0 0 6px;
+}
+.legal-footnote {
+  margin-top: 26px;
+  padding-top: 16px;
+  border-top: 1px solid #eceadf;
+  font-size: 12.5px;
+}
+
+/* Gentle global polish */
+.page-heading h1 {
+  letter-spacing: -0.02em;
+}
+.panel {
+  border-radius: 18px;
+}
+
+/* Density pass: fit each section in one screen wherever practical. */
+.reference-shell:not(.immersive-shell) .page {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+.page-heading {
+  margin-bottom: 18px;
+}
+.page-heading h1 {
+  font-size: clamp(26px, 3vw, 34px);
+}
+.insight-stats {
+  margin-bottom: 14px;
+}
+.insight-stat {
+  padding: 14px 16px;
+}
+.insight-grid {
+  gap: 14px;
+}
+.settings-tabs,
+.section-tabs {
+  position: sticky;
+  top: 8px;
+  z-index: 5;
+  backdrop-filter: blur(10px);
+}
+@media (max-height: 820px) {
+  .reference-shell:not(.immersive-shell) .page {
+    padding-top: 16px;
+  }
+  .page-heading p {
+    display: none;
+  }
+}
+
+/* Mobile header: keep Sign in beside Paste targets. */
+@media (max-width: 760px) {
+  .site-header .site-account-link {
+    display: inline-flex;
+    min-height: 42px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #34483c;
+    background: #ffffff;
+    border: 1px solid #dcdbe5;
+    border-radius: 10px;
+  }
+}
+
+/* Today: one compact, aligned daily check-in panel. */
+.checkin-card {
+  padding: 0;
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+.checkin-part {
+  padding: 13px 17px;
+  display: grid;
+  gap: 9px;
+}
+.checkin-part + .checkin-part {
+  border-top: 1px solid #eceade;
+}
+.checkin-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.checkin-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: #f0f2e6;
+  color: #526e50;
+  flex: none;
+}
+.checkin-titles {
+  min-width: 0;
+}
+.checkin-titles h2 {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #34483c;
+}
+.checkin-titles p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #7a857a;
+}
+.checkin-duration {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 700;
+  color: #526e50;
+}
+.checkin-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.checkin-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #34483c;
+  min-height: 36px;
+}
+.checkin-save {
+  margin-left: auto;
+  min-height: 36px;
+  padding: 6px 14px;
+  font-size: 12px;
+}
+.checkin-times label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: #98a094;
+}
+.checkin-times input {
+  min-height: 36px;
+  padding: 4px 8px;
+  font-size: 13px;
+  width: 108px;
+}
+.checkin-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+}
+.checkin-meta .sleep-text {
+  margin: 0;
+  font-size: 11.5px;
+  color: #7a857a;
+}
+.checkin-meta .sleep-chip {
+  font-size: 10.5px;
+  padding: 2px 9px;
+}
+.checkin-part .error {
+  color: #a14b3c;
+  font-size: 11.5px;
+}
+@media (max-width: 520px) {
+  .checkin-save {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+/* Diet & gym week planner */
+.wellness-page {
+  max-width: 1080px;
+}
+.wellness-week-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  border: 1px solid #ffffffb8;
+  border-radius: 12px;
+  background: #fffdf5d9;
+}
+.wellness-week-nav span {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #34483c;
+  padding: 0 6px;
+  white-space: nowrap;
+}
+.wellness-lockbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  background: #fffdf5e6;
+  border: 1px solid #ffffffb8;
+}
+.wellness-lockbar > div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+.wellness-lockbar strong {
+  font-size: 13px;
+  color: #34483c;
+}
+.wellness-lock-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  background: #f0f2e6;
+  color: #526e50;
+}
+.wellness-card {
+  padding: 6px 0;
+  overflow: hidden;
+}
+.wellness-row {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  padding: 9px 18px;
+}
+.wellness-row + .wellness-row {
+  border-top: 1px solid #f1efe6;
+}
+.wellness-row.is-today {
+  background: #fbfbf3;
+}
+.wellness-head {
+  padding-top: 12px;
+  padding-bottom: 6px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #98a094;
+  border-bottom: 1px solid #eceade;
+}
+.wellness-day {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.wellness-day strong {
+  font-size: 13px;
+  color: #34483c;
+}
+.wellness-day > span {
+  font-size: 11px;
+  color: #98a094;
+}
+.wellness-field input {
+  width: 100%;
+  min-height: 38px;
+  padding: 7px 11px;
+  font-size: 13px;
+  border-radius: 10px;
+  border: 1px solid #e2e3d6;
+  background: #ffffff;
+  color: #34483c;
+}
+.wellness-field input:disabled {
+  background: #f6f5ec;
+  color: #7a857a;
+  cursor: not-allowed;
+}
+.wellness-footnote {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 12px 0 0;
+  font-size: 11.5px;
+  color: #7a857a;
+}
+@media (max-width: 700px) {
+  .wellness-row {
+    grid-template-columns: 74px minmax(0, 1fr);
+    grid-template-areas:
+      "day diet"
+      "day gym";
+    gap: 7px 10px;
+    padding: 11px 14px;
+  }
+  .wellness-head {
+    display: none;
+  }
+  .wellness-day {
+    grid-area: day;
+    align-self: start;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  .wellness-row > .wellness-field:nth-of-type(1) {
+    grid-area: diet;
+  }
+  .wellness-row > .wellness-field:nth-of-type(2) {
+    grid-area: gym;
+  }
+}

@@ -5287,3 +5287,112 @@ main:focus {
 .ai-import-modal .ai-shared-resource { border-bottom:1px solid #e7e1d8; padding-bottom:12px; }
 @media(max-width:640px) { .ai-import-modal.paste-review-modal .proposal-fields { grid-template-columns:1fr; } }
 @media(max-width:640px) { .ai-import-modal.paste-review-modal .proposal-fields > .field:last-child { max-width:none; grid-column:auto; } }
+
+/* Today check-ins: streak + sleep schedule (flat, palette unchanged) */
+.today-checkins {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+}
+.streak-card,
+.sleep-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+.streak-count {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+}
+.streak-confirm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+}
+.sleep-text {
+  margin: 0;
+  color: var(--ink);
+}
+.sleep-field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 10px;
+  width: 100%;
+}
+.sleep-field label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #7a857a;
+}
+.sleep-span {
+  color: #7a857a;
+  font-size: 13px;
+  padding-bottom: 6px;
+}
+.sleep-history {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.sleep-chip {
+  background: var(--cream);
+  border: 1px solid #e6e8dc;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: #7a857a;
+}
+.sleep-card .error {
+  color: #a14b3c;
+}
+@media(max-width:640px) {
+  .today-checkins { grid-template-columns: 1fr; }
+}
+
+/* Settings: one screen per tab, minimal scrolling */
+.settings-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 14px;
+}
+.settings-tabs button {
+  border: 1px solid #e6e8dc;
+  background: #ffffff;
+  color: #34483c;
+  border-radius: 999px;
+  padding: 7px 16px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.settings-tabs button.active {
+  background: #526e50;
+  border-color: #526e50;
+  color: #ffffff;
+}
+[hidden] { display: none !important; }
+
+/* Today check-ins live inside the right column, compact */
+.today-main .today-checkins {
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0 0 12px;
+}
+.today-main .streak-card,
+.today-main .sleep-card {
+  gap: 6px;
+}
+.today-main .streak-count { font-size: 17px; }
+.today-main .sleep-field { gap: 8px; align-items: end; }
+.today-main .sleep-field .btn { margin-left: auto; }
+@media(max-width:900px) {
+  .today-main .today-checkins { grid-template-columns: 1fr; }
+}

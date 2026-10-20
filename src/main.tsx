@@ -16,6 +16,8 @@ import { TodayPage, RevisionsPage } from "./pages/Planner";
 import { TestsPage } from "./pages/Tests";
 import { AnalyticsPage } from "./pages/Analytics";
 import { SettingsPage } from "./pages/Settings";
+import { PrivacyPage, TermsPage } from "./pages/Legal";
+import { WellnessPage } from "./pages/Wellness";
 import "./styles.css";
 import "./reference.css";
 import { AppHeader } from "./components/AppHeader";
@@ -26,6 +28,7 @@ import ResponsivePreview, {
 import { AccountBoundary, AuthProvider } from "./auth/AuthProvider";
 import { AuthPage } from "./auth/AuthPage";
 import "./auth/account.css";
+import "./world-background.css";
 class ErrorBoundary extends Component<
   { children: ReactNode },
   { error: boolean }
@@ -67,13 +70,13 @@ function Shell() {
   React.useLayoutEffect(() => {
     const root = shell.current;
     if (!root) return;
-    const header = root.querySelector<HTMLElement>(".site-header")!;
-    const notices = root.querySelector<HTMLElement>(".site-notices")!;
+    const header = root.querySelector<HTMLElement>(".site-header");
+    const notices = root.querySelector<HTMLElement>(".site-notices");
     const intro = root.querySelector<HTMLElement>(".world-introduction");
     const measure = () => {
       root.style.setProperty(
         "--site-header-height",
-        `${Math.ceil(header.getBoundingClientRect().height)}px`,
+        `${Math.ceil(header?.getBoundingClientRect().height ?? 0)}px`,
       );
       root.style.setProperty(
         "--world-intro-height",
@@ -81,27 +84,30 @@ function Shell() {
       );
       root.style.setProperty(
         "--site-notices-height",
-        `${Math.ceil(notices.getBoundingClientRect().height)}px`,
+        `${Math.ceil(notices?.getBoundingClientRect().height ?? 0)}px`,
       );
     };
     const observer = new ResizeObserver(measure);
-    observer.observe(header);
-    observer.observe(notices);
+    if (header) observer.observe(header);
+    if (notices) observer.observe(notices);
     if (intro) observer.observe(intro);
     measure();
     return () => observer.disconnect();
   }, [location.pathname, data.preferences.worldMode]);
   const immersive =
     location.pathname === "/" && data.preferences.worldMode === "3d";
+  const authRoute = ["/login", "/reset-password", "/auth/callback"].includes(
+    location.pathname,
+  );
   return (
     <div
       ref={shell}
-      className={`app-shell reference-shell ${immersive ? "immersive-shell" : ""} ${demo ? "demo-shell" : ""} ${blocked ? "blocked-shell" : ""}`}
+      className={`app-shell reference-shell ${immersive ? "immersive-shell" : ""} ${demo ? "demo-shell" : ""} ${blocked ? "blocked-shell" : ""} ${authRoute ? "auth-shell" : ""}`}
     >
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <AppHeader />
+      {!authRoute && <AppHeader />}
       <div className="site-notices">
         {demo && (
           <div className="demo-banner">
@@ -129,11 +135,14 @@ function Shell() {
           <Route path="/today" element={<TodayPage />} />
           <Route path="/revisions" element={<RevisionsPage />} />
           <Route path="/tests" element={<TestsPage />} />
+          <Route path="/wellness" element={<WellnessPage />} />
           <Route path="/analytics" element={<AnalyticsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/login" element={<AuthPage />} />
           <Route path="/auth/callback" element={<AuthPage />} />
           <Route path="/reset-password" element={<AuthPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
           <Route
             path="*"
             element={
@@ -152,7 +161,7 @@ function Shell() {
         <span>
           <Sprout size={15} />A little every day goes a long way.
         </span>
-        <span>Local-first. Quietly yours.</span>
+        <span>Private by default. Quietly yours.</span>
       </footer>
       <div
         aria-live="polite"

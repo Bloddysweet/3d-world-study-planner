@@ -1,13 +1,67 @@
 import { addDays, emptyData } from "../domain/model";
-import type { AppData } from "../domain/model";
+import type { AppData, Subject } from "../domain/model";
 import {
   addTasks,
   completeTask,
   rateRevision,
   recordTest,
 } from "../domain/engine";
+
+// Example content lives only in the opt-in demo sandbox. Production
+// workspaces start from emptyData() with no seeded subjects.
+export function demoSubjects(): Subject[] {
+  return [
+    {
+      id: "maths",
+      name: "SSC Mathematics",
+      color: "#5576ce",
+      theme: "maths",
+      archived: false,
+    },
+    {
+      id: "reasoning",
+      name: "SSC Reasoning",
+      color: "#9672c5",
+      theme: "reasoning",
+      archived: false,
+    },
+    {
+      id: "english",
+      name: "English & Vocabulary",
+      color: "#c89b49",
+      theme: "english",
+      archived: false,
+    },
+    {
+      id: "gk",
+      name: "GK & General Studies",
+      color: "#4c9a95",
+      theme: "gk",
+      archived: false,
+    },
+    {
+      id: "dsa",
+      name: "Data Structures & Algorithms",
+      color: "#6d9b61",
+      theme: "dsa",
+      archived: false,
+    },
+    {
+      id: "software",
+      name: "Software Development",
+      color: "#cb8268",
+      theme: "software",
+      archived: false,
+    },
+  ];
+}
+
+export function seededData(): AppData {
+  return { ...emptyData(), subjects: demoSubjects() };
+}
+
 export function demoData(date: string): AppData {
-  let s = emptyData();
+  let s = seededData();
   const topics: [string, string][] = [
     ["maths", "Percentage"],
     ["maths", "Time & Work"],

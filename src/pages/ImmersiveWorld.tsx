@@ -162,8 +162,7 @@ export function ImmersiveWorld() {
       className={`page world-experience ${entered ? "is-exploring" : ""} ${selected ? "has-selection" : ""}`}
     >
       <div className="world-atmosphere" aria-hidden="true" />
-      {subjects.length > 0 && (
-        <SceneGuard fallback={fallback}>
+      <SceneGuard fallback={fallback}>
           <Suspense
             fallback={
               <div className="immersive-loading">
@@ -183,8 +182,7 @@ export function ImmersiveWorld() {
               immersive
             />
           </Suspense>
-        </SceneGuard>
-      )}
+      </SceneGuard>
       <div className="world-hud-left">
         <div className="world-introduction">
           <h1 className="world-overline">

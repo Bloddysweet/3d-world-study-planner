@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { emptyData } from "./model";
+import { seededData as emptyData } from "../data/demo";
 import { parseTargets } from "./parser";
 describe("local target proposals", () => {
   it("reads subject headings, explicit topic/task/duration and priority", () => {

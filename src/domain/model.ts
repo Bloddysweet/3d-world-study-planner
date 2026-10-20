@@ -149,6 +149,32 @@ export const testSchema = z
         message: "Each topic can appear once per test",
       });
   });
+const hhmm = z
+  .string()
+  .regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Use 24h HH:MM times");
+export const sleepEntrySchema = z.object({
+  date: day,
+  bedtime: hhmm,
+  wake: hhmm,
+  minutes: z.number().int().min(15).max(960),
+});
+export const streakSchema = z.object({
+  count: z.number().int().min(0).max(20000),
+  lastOn: day.nullable(),
+});
+export const wellnessDaySchema = z.object({
+  day,
+  diet: z.string().max(300),
+  gym: z.string().max(300),
+});
+export const wellnessWeekSchema = z.object({
+  weekStart: day,
+  locked: z.boolean(),
+  days: z.array(wellnessDaySchema).max(7),
+});
+export const wellnessSchema = z.object({
+  weeks: z.array(wellnessWeekSchema).max(520),
+});
 export const preferencesSchema = z.object({
   dailyMinutes: z.number().int().min(15).max(1440),
   revisionMinutes: z.number().int().min(1).max(240),
@@ -173,10 +199,28 @@ export const dataSchema = z
     reviews: z.array(reviewSchema).max(100000),
     tests: z.array(testSchema).max(20000),
     preferences: preferencesSchema,
+    streak: streakSchema.default({ count: 0, lastOn: null }),
+    sleep: z.array(sleepEntrySchema).max(20000).default([]),
+    wellness: wellnessSchema.default({ weeks: [] }),
   })
   .superRefine((s, ctx) => {
     const error = (message: string) =>
       ctx.addIssue({ code: "custom", message });
+    if (new Set(s.sleep.map((a) => a.date)).size !== s.sleep.length)
+      error("Only one sleep entry per date is allowed");
+    if (
+      new Set(s.wellness.weeks.map((w) => w.weekStart)).size !==
+      s.wellness.weeks.length
+    )
+      error("Only one wellness entry per week is allowed");
+    if (
+      s.wellness.weeks.some(
+        (w) =>
+          new Set(w.days.map((d) => d.day)).size !== w.days.length ||
+          w.days.some((d) => d.day < w.weekStart || d.day > addDays(w.weekStart, 6)),
+      )
+    )
+      error("Wellness days must be unique and inside their week");
     for (const key of [
       "subjects",
       "topics",
@@ -243,6 +287,9 @@ export type Revision = z.infer<typeof revisionSchema>;
 export type Review = z.infer<typeof reviewSchema>;
 export type TestResult = z.infer<typeof testSchema>;
 export type Preferences = z.infer<typeof preferencesSchema>;
+export type SleepEntry = z.infer<typeof sleepEntrySchema>;
+export type Streak = z.infer<typeof streakSchema>;
+export type WellnessWeek = z.infer<typeof wellnessWeekSchema>;
 export type AppData = z.infer<typeof dataSchema>;
 export type Rating = (typeof ratings)[number];
 export type Theme = (typeof themes)[number];
@@ -281,55 +328,15 @@ export const normalize = (s: string) =>
 export function emptyData(): AppData {
   return {
     version: 1,
-    subjects: [
-      {
-        id: "maths",
-        name: "SSC Mathematics",
-        color: "#5576ce",
-        theme: "maths",
-        archived: false,
-      },
-      {
-        id: "reasoning",
-        name: "SSC Reasoning",
-        color: "#9672c5",
-        theme: "reasoning",
-        archived: false,
-      },
-      {
-        id: "english",
-        name: "English & Vocabulary",
-        color: "#c89b49",
-        theme: "english",
-        archived: false,
-      },
-      {
-        id: "gk",
-        name: "GK & General Studies",
-        color: "#4c9a95",
-        theme: "gk",
-        archived: false,
-      },
-      {
-        id: "dsa",
-        name: "Data Structures & Algorithms",
-        color: "#6d9b61",
-        theme: "dsa",
-        archived: false,
-      },
-      {
-        id: "software",
-        name: "Software Development",
-        color: "#cb8268",
-        theme: "software",
-        archived: false,
-      },
-    ],
+    subjects: [],
     topics: [],
     tasks: [],
     revisions: [],
     reviews: [],
     tests: [],
+    streak: { count: 0, lastOn: null },
+    sleep: [],
+    wellness: { weeks: [] },
     preferences: {
       dailyMinutes: 210,
       revisionMinutes: 20,

@@ -30,9 +30,12 @@ export function cameraDistance(
 ) {
   const extent = focused ? 6 : count > 1 ? islandRadius(count) + 5 : 7;
   const aspect = Math.max(1, width) / Math.max(1, height);
+  // Portrait screens need some extra distance, but the raw 1/aspect a tall
+  // phone produces (~2.2x) shrinks the islands into a smudge. Clamp it.
+  const portrait = Math.min(1.35, Math.max(1, 1 / Math.min(1, aspect)));
   return Math.min(
     190,
-    (extent / Math.tan((21 * Math.PI) / 180) / Math.min(1, aspect)) * 1.18,
+    (extent / Math.tan((21 * Math.PI) / 180)) * portrait * 1.18,
   );
 }
 /** Zoom is relative to the fitted view, not a fixed far-away camera distance. */

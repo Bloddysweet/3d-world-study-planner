@@ -11,7 +11,7 @@ import {
   readRequestBody,
 } from "./targets-api";
 import type { AiConfig } from "./targets-api";
-import { emptyData } from "../src/domain/model";
+import { seededData as emptyData } from "../src/data/demo";
 import { catalogueFor } from "../src/domain/ai-targets";
 import { samplePaste, expectedPlan } from "../tests/fixtures/study-targets";
 const config: AiConfig = {

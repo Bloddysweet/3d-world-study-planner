@@ -40,6 +40,8 @@ import {
   today,
 } from "../domain/model";
 import type { Revision, Task } from "../domain/model";
+import { saveSleep, sleepFor, sleepMinutes, sleepTrend } from "../domain/sleep";
+import { saveStreak, streakStatus } from "../domain/streak";
 import {
   Chip,
   Empty,
@@ -490,12 +492,21 @@ export function RevisionRow({
   );
 }
 export function TodayPage() {
-  const { data, date } = useApp(),
+  const { data, date, update, notify } = useApp(),
     { open } = useDialog(),
     plan = dailyPlan(data, date),
     [tab, setTab] = useState<"plan" | "done">("plan"),
     [paste, setPaste] = useState("");
   const exam = useMemo(() => revisionExamPlan(data, date), [data, date]);
+  const streak = streakStatus(data, date);
+  const [studied, setStudied] = useState(streak.studiedToday);
+  const savedSleep = sleepFor(data, date);
+  const [bedtime, setBedtime] = useState(savedSleep?.bedtime ?? "23:00");
+  const [wake, setWake] = useState(savedSleep?.wake ?? "07:00");
+  const [sleepErr, setSleepErr] = useState("");
+  const sleepPreview = sleepMinutes(bedtime, wake);
+  const trend = useMemo(() => sleepTrend(data, date), [data, date]);
+  const lastNight = sleepFor(data, date);
   const completed = data.tasks.filter(
     (t) => t.completedOn === date && activeTopic(data, t.topicId),
   );
@@ -616,6 +627,128 @@ export function TodayPage() {
           </section>
         </aside>
         <div className="today-main">
+          <section className="panel checkin-card" aria-label="Daily check-in">
+            <div className="checkin-part">
+              <div className="checkin-head">
+                <span className="checkin-icon">
+                  <CheckCircle2 size={16} />
+                </span>
+                <div className="checkin-titles">
+                  <h2>Study streak</h2>
+                  <p>
+                    {streak.count > 0
+                      ? `${streak.count}-day streak`
+                      : "Start your streak"}
+                  </p>
+                </div>
+              </div>
+              <div className="checkin-row">
+                <label className="checkin-toggle">
+                  <input
+                    type="checkbox"
+                    checked={studied}
+                    onChange={(e) => setStudied(e.target.checked)}
+                  />
+                  <span>I studied today</span>
+                </label>
+                <button
+                  className="btn primary checkin-save"
+                  disabled={!studied}
+                  onClick={() => {
+                    update((s) => saveStreak(s, date));
+                    notify("Streak saved.");
+                  }}
+                >
+                  <Check size={14} />
+                  Save streak
+                </button>
+              </div>
+            </div>
+            <div className="checkin-part">
+              <div className="checkin-head">
+                <span className="checkin-icon">
+                  <Clock3 size={16} />
+                </span>
+                <div className="checkin-titles">
+                  <h2>Sleep schedule</h2>
+                  <p>
+                    {lastNight
+                      ? `Last night: ${duration(lastNight.minutes)}`
+                      : "Log last night’s sleep"}
+                  </p>
+                </div>
+                {sleepPreview && (
+                  <span className="checkin-duration">
+                    ≈ {duration(sleepPreview)}
+                  </span>
+                )}
+              </div>
+              <div className="checkin-row checkin-times">
+                <label>
+                  <span>Bedtime</span>
+                  <input
+                    type="time"
+                    value={bedtime}
+                    onChange={(e) => {
+                      setBedtime(e.target.value);
+                      setSleepErr("");
+                    }}
+                  />
+                </label>
+                <label>
+                  <span>Wake up</span>
+                  <input
+                    type="time"
+                    value={wake}
+                    onChange={(e) => {
+                      setWake(e.target.value);
+                      setSleepErr("");
+                    }}
+                  />
+                </label>
+                <button
+                  className="btn primary checkin-save"
+                  onClick={() => {
+                    const result = saveSleep(data, { date, bedtime, wake });
+                    if (!result.ok) return setSleepErr(result.error);
+                    update(() => result.data);
+                    setSleepErr("");
+                    notify("Sleep saved for this morning.");
+                  }}
+                >
+                  Save sleep
+                </button>
+              </div>
+              {sleepErr && (
+                <small className="error" role="alert">
+                  {sleepErr}
+                </small>
+              )}
+              <div className="checkin-meta">
+                {trend.window.length > 0 && (
+                  <div className="sleep-history">
+                    {trend.window
+                      .slice(-7)
+                      .reverse()
+                      .map((s) => (
+                        <span
+                          className="sleep-chip"
+                          key={s.date}
+                          title={`${displayDate(s.date)} · ${s.bedtime}–${s.wake} · ${duration(s.minutes)}`}
+                        >
+                          {displayDate(s.date)}: {duration(s.minutes)}
+                        </span>
+                      ))}
+                  </div>
+                )}
+                <p className="sleep-text">
+                  {trend.nights
+                    ? `7-night average: ${duration(trend.average!)} · ${trend.nights} night${trend.nights === 1 ? "" : "s"} logged.`
+                    : "7-night average appears once you log a night."}
+                </p>
+              </div>
+            </div>
+          </section>
           <div className="today-budget panel">
             <div>
               <strong>{duration(plan.total)}</strong> planned of{" "}

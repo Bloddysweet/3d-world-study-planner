@@ -557,7 +557,8 @@ export function TestsPage() {
   const { data } = useApp(),
     { open } = useDialog(),
     [expanded, setExpanded] = useState<string | null>(null),
-    [formKey, setFormKey] = useState(0);
+    [formKey, setFormKey] = useState(0),
+    [tab, setTab] = useState<"journal" | "exam">("journal");
   const ready = data.topics.filter(
     (t) =>
       !subjectFor(data, t.id)?.archived &&
@@ -577,8 +578,28 @@ export function TestsPage() {
           </button>
         }
       />
-      <RevisionExamPanel />
-      <div className="tests-layout">
+      <nav className="section-tabs" aria-label="Tests sections">
+        {(
+          [
+            ["journal", "Journal"],
+            ["exam", "Revision exam"],
+          ] as const
+        ).map(([key, label]) => (
+          <button
+            key={key}
+            type="button"
+            className={tab === key ? "active" : ""}
+            aria-current={tab === key ? "page" : undefined}
+            onClick={() => setTab(key)}
+          >
+            {label}
+          </button>
+        ))}
+      </nav>
+      <div hidden={tab !== "exam"}>
+        <RevisionExamPanel />
+      </div>
+      <div className="tests-layout" hidden={tab !== "journal"}>
         <section className="test-journal-column">
           <TestForm
             key={formKey}

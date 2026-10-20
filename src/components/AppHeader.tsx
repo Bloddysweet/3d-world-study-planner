@@ -7,6 +7,7 @@ import {
   ClipboardPaste,
   Compass,
   LayoutList,
+  Leaf,
   Menu,
   RevisionIcon,
   Settings2,
@@ -25,6 +26,7 @@ const navigation = [
   { to: "/today", label: "Today", icon: LayoutList },
   { to: "/revisions", label: "Revisions", icon: RevisionIcon },
   { to: "/tests", label: "Tests", icon: ClipboardCheck },
+  { to: "/wellness", label: "Wellness", icon: Leaf },
   { to: "/analytics", label: "Analytics", icon: BarChart3 },
   { to: "/settings", label: "Settings", icon: Settings2 },
 ];

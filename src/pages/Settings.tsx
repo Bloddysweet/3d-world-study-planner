@@ -194,6 +194,9 @@ export function SettingsPage() {
     [gaps, setGaps] = useState(data.preferences.gaps.join(", ")),
     [error, setError] = useState(""),
     [backupError, setBackupError] = useState("");
+  const [tab, setTab] = useState<
+    "study" | "revision" | "tests" | "world" | "subjects" | "data"
+  >("study");
   const previousPreferences = useRef(data.preferences);
   useEffect(() => {
     const previous = previousPreferences.current;
@@ -232,6 +235,28 @@ export function SettingsPage() {
         }
       />
       <AccountPanel />
+      <nav className="settings-tabs" aria-label="Settings sections">
+        {(
+          [
+            ["study", "Study"],
+            ["revision", "Revision"],
+            ["tests", "Tests"],
+            ["world", "World"],
+            ["subjects", "Subjects"],
+            ["data", "Your data"],
+          ] as const
+        ).map(([key, label]) => (
+          <button
+            key={key}
+            type="button"
+            className={tab === key ? "active" : ""}
+            aria-current={tab === key ? "page" : undefined}
+            onClick={() => setTab(key)}
+          >
+            {label}
+          </button>
+        ))}
+      </nav>
       <div className="settings-dashboard">
         <form
           className="settings-preferences"
@@ -251,7 +276,10 @@ export function SettingsPage() {
             notify("Study preferences saved. Existing due dates kept.");
           }}
         >
-          <section className="panel settings-section study-time-card">
+          <section
+            className="panel settings-section study-time-card"
+            hidden={tab !== "study"}
+          >
             <h2 className="settings-card-title">
               <span>
                 <Clock3 size={19} />
@@ -319,7 +347,7 @@ export function SettingsPage() {
               />
             </Field>
           </section>
-          <section className="panel settings-section revision-settings-card">
+          <section className="panel settings-section revision-settings-card" hidden={tab !== "revision"}>
             <h2 className="settings-card-title">
               <span>
                 <RevisionIcon size={19} />
@@ -393,7 +421,7 @@ export function SettingsPage() {
               affect future ratings, not existing due dates.
             </p>
           </section>
-          <section className="panel settings-section test-settings-card">
+          <section className="panel settings-section test-settings-card" hidden={tab !== "tests"}>
             <h2 className="settings-card-title">
               <span>
                 <ClipboardCheck size={19} />
@@ -457,7 +485,7 @@ export function SettingsPage() {
               saved for analytics without changing schedules.
             </div>
           </section>
-          <section className="panel settings-section world-settings-card">
+          <section className="panel settings-section world-settings-card" hidden={tab !== "world"}>
             <h2 className="settings-card-title">
               <span>
                 <Palette size={19} />
@@ -500,7 +528,10 @@ export function SettingsPage() {
             </p>
           </section>
         </form>
-        <section className="panel settings-section subjects-settings">
+        <section
+          className="panel settings-section subjects-settings"
+          hidden={tab !== "subjects"}
+        >
           <SectionTitle
             title="Subjects (islands)"
             action={
@@ -579,7 +610,10 @@ export function SettingsPage() {
             <p className="muted">No subjects yet. Add as many as you need.</p>
           )}
         </section>
-        <section className="panel settings-section">
+        <section
+          className="panel settings-section"
+          hidden={tab !== "data"}
+        >
           <SectionTitle title="Your data" />
           <div className={`storage-status ${blocked ? "warning" : ""}`}>
             <ShieldCheck size={21} />

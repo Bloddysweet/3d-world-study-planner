@@ -100,6 +100,10 @@ describe("production same-origin hosting", () => {
     expect(await status.json()).toEqual({
       configured: false,
       requiresAccessCode: true,
+      missing: [
+        "OPENROUTER_API_KEY",
+        "AI_IMPORT_ACCESS_CODE (16+ characters)",
+      ],
     });
     expect(status.headers.get("cache-control")).toBe("no-store");
     const health = await fetch(base + "/healthz");
